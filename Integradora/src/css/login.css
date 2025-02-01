@@ -1,0 +1,20 @@
+.logoSis{
+    max-width: 10em;
+    max-height: 20em;
+}
+
+.myContainer{
+    align-items: center;
+    background-color: white;
+    font-family: 'Oswald', sans-serif; /* Fuente predeterminada */
+    margin: 2em;
+    padding: 3rem;
+}
+
+.myContainer > h1{
+    color: black;
+}
+
+form{
+    flex-wrap: wrap;
+}
