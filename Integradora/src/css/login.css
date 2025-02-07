@@ -1,6 +1,6 @@
 .logoSis{
     max-width: 8em;
-    max-height: 16em;
+    max-height: 14em;
 }
 
 .myContainer{
@@ -8,7 +8,9 @@
     font-family: 'Oswald', sans-serif; /* Fuente predeterminada */
     padding: 3rem;
     border-radius: .2em;
-    align-self: center;
+    align-self: center; 
+    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.5);
+    max-width: 500px;
 }
 
 .myContainer > h1{
@@ -81,18 +83,6 @@ a:active {
     position: relative;
     display: inline-block;
     justify-content: center;
-}
-  
-.input-contenedor i {
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: linear-gradient(135deg, var(--color-domin-2-1), var(--color-acento-2-1)); 
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
 }
 
 #iconico1{

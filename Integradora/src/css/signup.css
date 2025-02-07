@@ -1,0 +1,160 @@
+.signup-foto{
+    background-color: var(--color-domin-1-1);
+    border-radius: .25rem;
+    height: 500px;
+}
+
+#selPict{
+    width: 10em;
+    height: 10em;
+    border-radius: 50%;
+}
+
+.signup-picture{
+    align-items: center;
+    padding: 1em;
+}
+
+.myContainer2{
+    background-color: white;
+    font-family: 'Oswald', sans-serif; /* Fuente predeterminada */
+    border-radius: .2em;
+    align-items: center; 
+    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.5);
+    width: 500px;
+    padding: 1.5em;
+    min-width: 320px;
+}
+
+#h1{
+    color: black;
+}
+
+.signup-form{
+    max-width: 350px;
+}
+
+@media(min-width: 900px){
+    .myContainer2{
+        width: 750px;
+    }
+}
+
+@media(max-width: 768px){
+    .myContainer2{
+        max-width: 300px;
+    }
+    
+    .input-wrapper{
+        max-width: 230px;
+    }
+}
+
+@media(min-width: 769px ) and (max-width: 899px){
+    .signup-form{
+        max-width: 500px;
+    }
+}
+
+.input-wrapper{
+    position: relative;
+    width: 100%;
+    margin: auto;
+}
+
+#input-icon-1{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-40%);
+    left: 8px;
+}
+
+#input-icon-2{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 12px;
+}
+
+#input-icon-3{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 12px;
+}
+
+#input-icon-4{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 12px;
+}
+
+.input{
+    box-sizing: border-box;
+    padding: 15px 15px 15px 40px;
+    width: 100%;
+
+    min-height: 4em;
+    border: none;
+    border-radius: 5px;
+    background: var(--color-base-1-3);
+    font-family: "Oswald", "Sans-serif";
+    color: black;
+    cursor: pointer;
+}
+
+#sendSignup{
+    width: 100%;
+}
+
+.foto{
+    width: 180px;
+    position: relative;
+    margin: auto;
+}
+
+.botonDiv{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 4em;
+    height: 4em;
+    background-color: var(--color-acento-1-1);
+    border-radius: 50%;
+    line-height: 2.1em;
+    overflow: hidden;
+    text-align: center;
+}
+
+i{
+    transform: scale(2);
+    padding-top: 1em
+}
+
+.botonCam{
+    position: absolute;
+    transform: scale(3);
+    opacity: 0;
+}
+
+.botonCam ::-webkit-file-upload-button{
+    cursor: pointer;
+}
+
+.input{
+    accent-color: var(--color-domin-2-1);
+}
+
+.input:focus{
+    border-color: var(--color-domin-2-1);
+    border-style: dashed;
+}
+
+.input:active{
+    border-color: var(--color-domin-2-1);
+}
+
+.input:required{
+    border-color: var(--color-domin-2-1);
+}

@@ -28,17 +28,17 @@ function Login() {
 
     const handleSubmit = (e) => {
     e.preventDefault();
-    if (user.email === '' || user.passw === '') {
-        setIconState("hover-wrong");
-    } else {
-        setIconState("reveal");
-        Swal.fire({
-        icon: "success",
-        title: "Datos guardados:",
-        text: `Correo: ${user.email}, Contraseña: ${user.passw}`,
-        });
-    }
-    setUser({ email: '', passw: '' });
+      if (user.email === '' || user.passw === '') {
+          setIconState("hover-wrong");
+      } else {
+          setIconState("reveal");
+          Swal.fire({
+          icon: "success",
+          title: "Datos guardados:",
+          text: `Correo: ${user.email}, Contraseña: ${user.passw}`,
+          });
+      }
+      setUser({ email: '', passw: '' });
     };
 
   return (
@@ -46,7 +46,7 @@ function Login() {
     <script src="https://cdn.lordicon.com/lordicon.js"></script>
       <div className="myContainer">
         <img src={miImagen} alt="Logo del sistema" className="logoSis" />
-        <h1>Iniciar sesión</h1>
+        <h1 className="h1">Iniciar sesión</h1>
         <form action="POST" className="login">
         <div className="input-contenedor">
         <lord-icon
