@@ -2,18 +2,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&display=swap");
 
 h1, h2, h3, h4, h5 {
-    font-family: 'Nunito';/* Para títulos */
+    font-family: 'Nunito' !important;/* Para títulos */
     font-weight: bolder;
+    color: var(--color-base-3-1);
 }
 
-body {
-    font-family: 'Oswald', sans-serif; /* Fuente predeterminada */
-    margin: 2em;
+    body {
+        font-family: 'Oswald', sans-serif  !important; /* Fuente predeterminada */
     }
 
-    h1, h2, h3, h4, h5 {
-    font-family: 'Nunito';/* Para títulos */
-    font-weight: bolder;
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Nunito';/* Para títulos */
+        font-weight: bolder;
+        color: var(--color-base-3-1);
     }
 
     h1{
@@ -41,6 +42,10 @@ body {
 
     h5{
         font-size: 1rem;
+    }
+
+    h6{
+        font-size: .8em;
     }
 
     @media screen and (max-width: 768px) {
@@ -82,4 +87,9 @@ body {
 
     .body-big{
         font-size: 30px;
+    }
+
+    .non-h-text{
+        font-family: 'Nunito';/* Para títulos */
+        letter-spacing: .25em;
     }

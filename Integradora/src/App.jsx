@@ -4,6 +4,7 @@ import viteLogo from '/vite.svg'
 
 import Login from './components/login'
 import Signup from './components/signup'
+import AdminDashboard from './components/headerAdmin'
 
 import './App.css'
 

@@ -1,7 +1,18 @@
+:root{
+    background-image: linear-gradient(135deg, rgb(233, 233, 233), rgb(179, 189, 198));
+    background-repeat: no-repeat;
+}
+
+body{
+    background-image: linear-gradient(135deg, rgb(233, 233, 233), rgb(179, 189, 198));
+    background-repeat: no-repeat;
+}
+
 .signup-foto{
     background-color: var(--color-domin-1-1);
     border-radius: .25rem;
     height: 500px;
+    color: white;
 }
 
 #selPict{
@@ -20,14 +31,17 @@
     font-family: 'Oswald', sans-serif; /* Fuente predeterminada */
     border-radius: .2em;
     align-items: center; 
-    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.4);
     width: 500px;
-    padding: 1.5em;
+    padding: 1.75em;
     min-width: 320px;
 }
 
 #h1{
-    color: black;
+    color: var(--color-base-3-1);
+    margin-bottom: auto;
+    text-align: center;
+    font-weight: bolder;
 }
 
 .signup-form{
@@ -47,6 +61,11 @@
     
     .input-wrapper{
         max-width: 230px;
+    }
+
+    #h1{
+        font-size: 2.65rem;
+        letter-spacing: .02em;
     }
 }
 
@@ -106,6 +125,7 @@
 
 #sendSignup{
     width: 100%;
+    margin-bottom: auto;
 }
 
 .foto{
@@ -136,6 +156,12 @@ i{
     position: absolute;
     transform: scale(3);
     opacity: 0;
+    top: 10px;
+    left: 120px;
+}
+
+.justificado{
+    text-align: justify;
 }
 
 .botonCam ::-webkit-file-upload-button{
@@ -157,4 +183,11 @@ i{
 
 .input:required{
     border-color: var(--color-domin-2-1);
+}
+
+.line{
+    background-color: var(--color-base-3-1);
+    width: 90%;
+    height: .05em;
+    margin-inline: auto;
 }

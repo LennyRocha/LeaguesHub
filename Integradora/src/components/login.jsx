@@ -4,7 +4,6 @@ import miImagen from "../img/logo1.png";
 
 import "../css/login.css";
 import "../css/fonts.css";
-import "../js/iconLottie";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import Swal from 'sweetalert2'
 
@@ -44,9 +43,9 @@ function Login() {
   return (
     <>
     <script src="https://cdn.lordicon.com/lordicon.js"></script>
-      <div className="myContainer">
+      <section className="myContainer">
         <img src={miImagen} alt="Logo del sistema" className="logoSis" />
-        <h1 className="h1">Iniciar sesión</h1>
+        <h1 className="_h1">Iniciar sesión</h1>
         <form action="POST" className="login">
         <div className="input-contenedor">
         <lord-icon
@@ -88,12 +87,16 @@ function Login() {
             onChange={handleChangePass}
           />
         </div>
-        <br />
-          <a href="#">¿Olvidaste tu contraseña?</a>
-          <input type="submit" name="envio" id="sendLogin" onClick={handleSubmit}/>
+          <p className="link-left">
+            <a href="#" className="loginLink">¿Olvidaste tu contraseña?</a>
+          </p>
+          <input type="submit" name="envio" id="sendLogin" onClick={handleSubmit} value="Acceder"/>
           <br />
+          <br />
+          <hr className="line"/>
+          <p id="pLink" className="body-small">¿No tienes cuenta? <b><a href="" className="loginLink">Registrate</a></b></p>
         </form>
-      </div>
+      </section>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.10/lottie.min.js"></script>
       {/* a href="https://lordicon.com/">Icons by Lordicon.com</a> */}
     </>

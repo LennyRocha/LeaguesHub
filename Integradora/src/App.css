@@ -1,7 +1,7 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
   text-align: center;
 }
 
@@ -32,6 +32,12 @@
     animation: logo-spin infinite 20s linear;
   }
 }
+
+/*@media(max-width: 320px){
+  body{
+      overflow: scroll !important;  
+  }
+}*/
 
 .card {
   padding: 2em;

@@ -5,7 +5,6 @@ import Grid from '@mui/material/Grid2';
 
 import "../css/signup.css";
 import "../css/fonts.css";
-import "../js/iconLottie";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import Swal from 'sweetalert2'
 
@@ -47,9 +46,23 @@ function Signup(){
     return (
         <>
         <Grid container spacing={{ xs: 2, md: 2 }} columns={{ xs: 4, sm: 6, md: 12 }} className="myContainer2">
+            <Grid key={3} size={{ xs: 4, sm: 6, md: 6 }} className="signup-foto">
+                <div className="signup-picture">
+                    <div className="foto">
+                        <img src="https://www.meme-arsenal.com/memes/a513f913ef43476bd2b494da4e599cbc.jpg" alt="Foto de perfil" id="selPict"/>
+                        <div className="botonDiv">
+                            <input type="file" className="botonCam" accept="image/*"/>
+                            <i className="fa fa-camera"></i>
+                        </div>
+                    </div>
+                    <h3 className="h3">¡Crea tu cuenta!</h3>
+                    <p className="body-small justificado">Regístrate aquí, y registra a tu equipo posteriormente, espera la respuesta de los administradores para ingresar a tu equipo a los torneos de la liguilla.</p>
+                </div>
+            </Grid>
             <Grid key={3} size={{ xs: 4, sm: 6, md: 6 }}>
                 <div className="signup-form">
-                    <h2 id="h1" className="h1">Registrate</h2>
+                    <h1 id="h1">¡Registrate!</h1>
+                    <hr className="line" />
                     <form action="" method="post">
                         <div className="input-wrapper">
                             <input type="text" className="input" placeholder="Nombre de usuario" required name="name" onChange={handleChange}/>
@@ -105,19 +118,6 @@ function Signup(){
                         <br />
                         <button type="submit" id="sendSignup" onClick={handleSubmit}>Confirnar registro</button>
                     </form>
-                </div>
-            </Grid>
-            <Grid key={3} size={{ xs: 4, sm: 6, md: 6 }} className="signup-foto">
-                <div className="signup-picture">
-                    <div className="foto">
-                        <img src="https://www.meme-arsenal.com/memes/a513f913ef43476bd2b494da4e599cbc.jpg" alt="Foto de perfil" id="selPict"/>
-                        <div className="botonDiv">
-                            <input type="file" className="botonCam" accept="image/*"/>
-                            <i className="fa fa-camera"></i>
-                        </div>
-                    </div>
-                    <h3 className="h3">¡Crea tu cuenta!</h3>
-                    <p className="body-small">Regístrate aquí, y registra a tu equipo posteriormente, espera la respuesta de los administradores para ingresar a tu equipo a los torneos de la liguilla.</p>
                 </div>
             </Grid>
         </Grid>

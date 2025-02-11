@@ -1,20 +1,35 @@
+:root{
+    background-image: linear-gradient(135deg, rgb(233, 233, 233), rgb(179, 189, 198));
+    background-repeat: no-repeat;
+}
+
+body{
+    background-image: linear-gradient(135deg, rgb(233, 233, 233), rgb(179, 189, 198));
+    background-repeat: no-repeat;
+}
+
 .logoSis{
     max-width: 8em;
     max-height: 14em;
 }
 
+._h1{
+    font-weight: bolder;
+}
+
 .myContainer{
     background-color: white;
     font-family: 'Oswald', sans-serif; /* Fuente predeterminada */
-    padding: 3rem;
+    padding: 2.5rem;
     border-radius: .2em;
     align-self: center; 
-    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.5);
-    max-width: 500px;
+    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.4);
+    max-width: 490px;
+    min-width: 250px;
 }
 
 .myContainer > h1{
-    color: black;
+    color: var(--color-base-3-1);;
 }
 
 form{
@@ -27,27 +42,59 @@ form{
     margin: .5em 0;
 }
 
+.link-left{
+    text-align: left;
+    margin-left: 1em;
+}
+
+@media (max-width: 768px){
+    .myContainer{
+        margin: .4rem;
+        max-width: 320px;
+    }
+
+    .input-contenedor input {
+        max-width: 230px;
+        padding-left: 20px;
+        margin-inline: auto;
+    }
+}
+
+@media (max-width: 375px){        
+    html{
+        width: fit-content;
+    }
+}
+
+/* Enlace default */
+.loginLink {
+    color: var(--color-acento-2-1);
+}
+
 /* Enlace no visitado */
-a:link {
+.loginLink:link {
     color: var(--color-acento-2-1);
 }
   
 /* Enlace visitado */
-a:visited {
-    color: var(--color-acento-1-5);
+.loginLink:visited {
+   color: var(--color-acento-1-5);
 }
 
 /* Enlace cuando el cursor pasa sobre él */
-a:hover {
+.loginLink:hover {
     color: var(--color-acento-2-5);
 }
   
 /* Enlace cuando está siendo clickeado */
-a:active {
+.loginLink:active {
     color: var(--color-domin-2-4);
 }
-  
 
+#pLink{
+    color: var(--color-base-3-1);
+}
+  
 #sendLogin{
     margin: 5px;
     display: inline-block;
@@ -68,7 +115,7 @@ a:active {
     font-weight: bold;
     text-transform: uppercase;
     font-family: 'Oswald', sans-serif;
-    width: 90%;
+    width: 100%;
 }
 
 #sendLogin:hover{
@@ -109,4 +156,12 @@ a:active {
     font-family: "Oswald", "Sans-serif";
     color: black;
     cursor: pointer;
+    font-size: large;
 }  
+
+.line{
+    background-color: var(--color-base-3-1);
+    width: 90%;
+    height: .05em;
+    margin-inline: auto;
+}
