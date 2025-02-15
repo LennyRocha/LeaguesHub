@@ -185,9 +185,16 @@ i{
     border-color: var(--color-domin-2-1);
 }
 
-.line{
-    background-color: var(--color-base-3-1);
+.line2{
+    background-color: var(--color-base-3-5);
     width: 90%;
-    height: .05em;
+    height: 1px;
+    border-radius: .01rem;
     margin-inline: auto;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.white{
+    color: white;
 }

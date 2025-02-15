@@ -4,14 +4,14 @@ import viteLogo from '/vite.svg'
 
 import Login from './components/login'
 import Signup from './components/signup'
-import AdminDashboard from './components/headerAdmin'
+import Perfil from './components/perfil'
 
 import './App.css'
 
 function App() {
   return (
     <>
-      <Signup/>
+      <Perfil/>
     </>
   )
 }

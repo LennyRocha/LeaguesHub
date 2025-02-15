@@ -55,14 +55,14 @@ function Signup(){
                             <i className="fa fa-camera"></i>
                         </div>
                     </div>
-                    <h3 className="h3">¡Crea tu cuenta!</h3>
+                    <h3 className="h3 white">¡Crea tu cuenta!</h3>
                     <p className="body-small justificado">Regístrate aquí, y registra a tu equipo posteriormente, espera la respuesta de los administradores para ingresar a tu equipo a los torneos de la liguilla.</p>
                 </div>
             </Grid>
             <Grid key={3} size={{ xs: 4, sm: 6, md: 6 }}>
                 <div className="signup-form">
                     <h1 id="h1">¡Registrate!</h1>
-                    <hr className="line" />
+                    <hr className="line2" />
                     <form action="" method="post">
                         <div className="input-wrapper">
                             <input type="text" className="input" placeholder="Nombre de usuario" required name="name" onChange={handleChange}/>
