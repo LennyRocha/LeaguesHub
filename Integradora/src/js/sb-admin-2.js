@@ -12,12 +12,17 @@ import "bootstrap";
     $("#sidebarToggle, #sidebarToggleTop").on('click', function() {
       $("body").toggleClass("sidebar-toggled");
       $(".sidebar").toggleClass("toggled");
+      
       if ($(".sidebar").hasClass("toggled")) {
-        $('.sidebar .collapse').collapse('hide'); // ← Aquí estaba fallando
+        // Animar el ocultamiento del collapse en 350 ms
+        $('.sidebar .collapse').slideToggle(500);
+      } else {
+        // Animar la expansión del collapse en 350 ms
+        $('.sidebar .collapse').slideToggle(500);
       }
     });
-  });  
-
+  });
+  
   // Close any open menu accordions when window is resized below 768px
   $(window).resize(function() {
     if ($(window).width() < 768) {

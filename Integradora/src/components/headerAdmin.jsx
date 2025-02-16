@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import miImagen from "../img/logo1.png";
 
 import "../css/sb-admin-2.css";
 import "../css/fonts.css";
@@ -9,10 +10,67 @@ import "../js/sb-admin-2";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "@popperjs/core";
 
+import lottie from "lottie-web";
+import { defineElement } from "@lordicon/element";
+// define "lord-icon" custom element with default properties
+defineElement(lottie.loadAnimation);
+
 import Admin1 from "./componentesAdmin/Admin1";
+import Admin2 from "./componentesAdmin/Admin2";
+import Admin3 from "./componentesAdmin/Admin3";
+import { Margin } from "@mui/icons-material";
 
 function AdminDashboard() {
   const [userName, setUserName] = useState("Usuario");
+  const [activeComponent, setActiveComponent] = useState("home");
+
+  const week = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+
+  const [timeStr, setTimeStr] = useState("");
+  const [dateStr, setDateStr] = useState("");
+
+  // Función para agregar ceros a la izquierda
+  const zeroPadding = (num, digit) => {
+    return String(num).padStart(digit, "0");
+  };
+
+  // useEffect se encarga de actualizar la hora cada segundo
+  useEffect(() => {
+    function updateTime() {
+      const now = new Date();
+      setTimeStr(
+        `${zeroPadding(now.getHours(), 2)}:${zeroPadding(
+          now.getMinutes(),
+          2
+        )}:${zeroPadding(now.getSeconds(), 2)}`
+      );
+      setDateStr(
+        `${now.getFullYear()}-${zeroPadding(
+          now.getMonth() + 1,
+          2
+        )}-${zeroPadding(now.getDate(), 2)} ${week[now.getDay()]}`
+      );
+    }
+
+    updateTime(); // Inicializa con el valor actual
+    const intervalId = setInterval(updateTime, 1000);
+
+    // Limpiar el intervalo cuando el componente se desmonte
+    return () => clearInterval(intervalId);
+  }, []); // Se ejecuta una sola vez al montar el componente
+
+  const renderComponent = () => {
+    switch (activeComponent) {
+      case "home":
+        return <Admin1 />;
+      case "equipos":
+        return <Admin2 />;
+      case "torneos":
+        return <Admin3 />;
+      default:
+        return <Admin1 />;
+    }
+  };
   return (
     <>
       <div id="wrapper">
@@ -25,30 +83,47 @@ function AdminDashboard() {
             className="sidebar-brand d-flex align-items-center justify-content-center"
             href="/"
           >
-            <div className="sidebar-brand-icon rotate-n-15">
-              <i className="fas fa-laugh-wink"></i>
+            <div className="sidebar-brand-icon">
+              <img src={miImagen} alt="" width={'50em'} height={'50em'} />
+              {/*<i className="fas fa-laugh-wink"></i>*/}
             </div>
             <div className="sidebar-brand-text mx-3 non-h-text">Menú</div>
           </a>
 
           <hr className="sidebar-divider my-0" />
 
-          <li className="nav-item active">
-            <a className="nav-link" href="/admin">
+          <li
+            className={`nav-item ${activeComponent === "home" ? "active" : ""}`}
+          >
+            <a className="nav-link" onClick={() => setActiveComponent("home")}>
               <i className="fa-solid fa-house fap"></i>
               <span>Inicio</span>
             </a>
           </li>
 
-          <li className="nav-item">
-            <a className="nav-link" href="/admin">
+          <li
+            className={`nav-item ${
+              activeComponent === "equipos" ? "active" : ""
+            }`}
+          >
+            <a
+              className="nav-link"
+              onClick={() => setActiveComponent("equipos")}
+            >
               <i className="fa-solid fa-shield fap"></i>
               <span>Equipos</span>
             </a>
           </li>
 
-          <li className="nav-item">
-            <a className="nav-link" href="/admin">
+          <li
+            className={`nav-item ${
+              activeComponent === "torneos" ? "active" : ""
+            }`}
+          >
+            <a
+              className="nav-link"
+              onClick={() => setActiveComponent("torneos")}
+            >
               <i className="fa-solid fa-trophy fap"></i>
               <span>Torneos</span>
             </a>
@@ -84,19 +159,21 @@ function AdminDashboard() {
             ></button>
           </div>
 
-          <div className="sidebar-card d-none d-lg-flex">
-            <img
-              className="sidebar-card-illustration mb-2"
-              src="img/undraw_rocket.svg"
-              alt="..."
-            />
-            <p className="text-center mb-2">
-              <strong>SB Admin Pro</strong> is packed with premium features,
-              components, and more!
-            </p>
-            <a className="btn btn-success btn-sm" href="/admin">
+          <div className="sidebar-card d-none d-lg-flex clock">
+            <lord-icon
+              src="https://cdn.lordicon.com/lewtedlh.json"
+              trigger="loop"
+              stroke="bold"
+              state="loop-roll"
+              colors="primary:#242424,secondary:#c71f16"
+              style={{width:'3.5rem',height:'3.5rem',MarginBottom:20}}
+            ></lord-icon>
+            <p className="text-center text-white">Fin del torneo</p>
+            <p className="text-center mb-2 date">{dateStr}</p>
+            <p className="text-center mb-2 time">{timeStr}</p>
+            {/*<a className="btn btn-success btn-sm" href="/admin">
               Upgrade to Pro!
-            </a>
+            </a>*/}
           </div>
         </ul>
         {/* Content Wrapper */}
@@ -411,7 +488,7 @@ function AdminDashboard() {
                 </li>
               </ul>
             </nav>
-            <Admin1 />
+            <div style={{ width: "100%" }}>{renderComponent()}</div>
           </div>
 
           {/* Footer */}
