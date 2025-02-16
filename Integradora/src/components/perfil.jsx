@@ -5,6 +5,8 @@ import "../css/perfil.css";
 import "../css/fonts.css";
 import PerfilAppBar from "./perfil/PerfilHeader";
 import { TextField } from "@mui/material";
+import lottie from "lottie-web";
+import { defineElement } from "@lordicon/element";
 
 export default function Perfil() {
   const [preview, setPreview] = useState(
@@ -48,6 +50,7 @@ export default function Perfil() {
           </div>
         </div>
         <form action="" id="profForm">
+        <h4 className="userType">Tipo de usuario: <b className="role0">Administrador</b></h4>
           <div className="row container-fluid">
             <h4>Datos personales</h4>
             <div className="col-md-4">

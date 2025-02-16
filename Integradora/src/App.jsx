@@ -5,6 +5,7 @@ import viteLogo from '/vite.svg'
 import Login from './components/login'
 import Signup from './components/signup'
 import Perfil from './components/perfil'
+import Password from './components/password'
 
 import './App.css'
 

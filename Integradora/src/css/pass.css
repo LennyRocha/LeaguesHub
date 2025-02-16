@@ -1,0 +1,103 @@
+#pass_container {
+  background-color: white;
+  max-width: 1200px !important;
+  width: 100%;
+  height: auto;
+  align-items: center;
+  justify-content: center;
+  padding: 1em;
+  border-radius: 3px;
+}
+
+#noPassImg {
+  width: 80%;
+  aspect-ratio: 1/1;
+}
+
+.myCol {
+  padding: 0.5em;
+}
+
+.texto {
+  text-align: justify;
+  padding: 0 1em;
+}
+
+#h1-pass {
+  padding: 0.5rem;
+  font-weight: bolder;
+  font-size: 3rem;
+}
+
+#mini-form {
+  display: flex;
+  flex-direction: column;
+}
+
+#textCol {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#imgCol {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.newPassInput {
+  width: 100%;
+}
+
+.input-cont input {
+  padding-left: 50px;
+  width: 90%;
+  min-height: 4em;
+  border: none;
+  border-radius: 5px;
+  background: var(--color-base-1-3);
+  font-family: "Oswald", "Sans-serif";
+  color: black;
+  cursor: pointer;
+  font-size: large;
+}
+
+.input-cont {
+  position: relative;
+  display: inline-block;
+  justify-content: center;
+}
+
+#iconPass {
+  position: absolute;
+  left: 7%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#sendMail {
+  width: 91%;
+  border-radius: 5px;
+  align-self: center;
+  margin-top: 5px;
+  padding: 1rem;
+  background-color: var(--color-base-3-1);
+}
+
+@media (max-width: 768px) {
+  #iconPass {
+    left: 7%;
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .input-cont input {
+    padding-left: 3rem;
+  }
+
+  #noPassImg {
+    justify-content: center;
+    align-items: center;
+  }
+}

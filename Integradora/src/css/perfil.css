@@ -43,6 +43,10 @@
     justify-content: flex-end !important;
     gap: 1em;
   }
+
+  .userType{
+    margin-left: 1rem;
+  }
 }
 
 @media screen and (min-width: 992px) {
@@ -71,7 +75,7 @@ h4 {
 #selPictu {
   width: 10em;
   height: 10em;
-  border-radius: 50%;
+  border-radius: 25%;
   border: 1.5px solid var(--color-domin-2-3);
 }
 
@@ -160,7 +164,7 @@ i {
   width: 100%;
   min-height: 150px;
   padding: 40px 0px;
-  background-image: url("../assets/campo.jpg");
+  background-image: url("../assets/images/campo.jpg");
   background-repeat: no-repeat;
   background-position: center;
   background-clip: border-box;
@@ -211,4 +215,20 @@ i {
   background-color: var(--color-base-1-2);
   border-color: var(--color-acento-1-1) !important;
   color: var(--color-acento-1-1);
+}
+
+.role0{
+  color: var(--color-base-1-5);
+}
+
+.role1{
+  color: var(--color-domin-1-1);
+}
+
+.role2{
+  color: var(--color-acento-2-1);
+}
+
+.role3{
+  color: var(--color-acento-3-1);
 }
