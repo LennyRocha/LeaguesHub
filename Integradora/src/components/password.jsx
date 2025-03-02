@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "../css/pass.css";
@@ -6,8 +6,8 @@ import lottie from "lottie-web";
 import { defineElement } from "@lordicon/element";
 import Swal from "sweetalert2";
 
-export default function Password() {
-    const [iconState, setIconState] = useState("loop");
+export default function Password({ cambiarComponente }) {
+  const [iconState, setIconState] = useState("loop");
   const handleSubmit = (e) => {
     e.preventDefault();
     if (e.target.value === "") {
@@ -54,7 +54,17 @@ export default function Password() {
                 inputMode="email"
               />
             </div>
-            <input type="submit" value={"Recuperar mi contraseña"} id="sendMail" />
+            <input
+              type="submit"
+              value={"Recuperar mi contraseña"}
+              id="sendMail"
+            />
+            <br />
+            <p>
+              <a className="loginLink" onClick={() => cambiarComponente("A")}>
+                Regresar
+              </a>
+            </p>
           </form>
         </div>
       </div>

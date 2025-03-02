@@ -18,7 +18,8 @@ defineElement(lottie.loadAnimation);
 import Admin1 from "./componentesAdmin/Admin1";
 import Admin2 from "./componentesAdmin/Admin2";
 import Admin3 from "./componentesAdmin/Admin3";
-import { Margin } from "@mui/icons-material";
+import Admin4 from "./componentesAdmin/Admin4";
+import Admin5 from "./componentesAdmin/Admin5";
 
 function AdminDashboard() {
   const [userName, setUserName] = useState("Usuario");
@@ -67,6 +68,10 @@ function AdminDashboard() {
         return <Admin2 />;
       case "torneos":
         return <Admin3 />;
+      case "campos":
+        return <Admin4 />;
+      case "arbitros":
+        return <Admin5 />;
       default:
         return <Admin1 />;
     }
@@ -84,7 +89,7 @@ function AdminDashboard() {
             href="/"
           >
             <div className="sidebar-brand-icon">
-              <img src={miImagen} alt="" width={'50em'} height={'50em'} />
+              <img src={miImagen} alt="" width={"50em"} height={"50em"} />
               {/*<i className="fas fa-laugh-wink"></i>*/}
             </div>
             <div className="sidebar-brand-text mx-3 non-h-text">Menú</div>
@@ -129,15 +134,21 @@ function AdminDashboard() {
             </a>
           </li>
 
-          <li className="nav-item">
-            <a className="nav-link" href="/admin">
+          <li className={`nav-item ${activeComponent === "campos" ? "active" : ""}`}>
+            <a
+              className="nav-link"
+              onClick={() => setActiveComponent("campos")}
+            >
               <i className="fa-solid fa-futbol fap"></i>
               <span>Campos</span>
             </a>
           </li>
 
-          <li className="nav-item">
-            <a className="nav-link" href="/admin">
+          <li className={`nav-item ${activeComponent === "arbitros" ? "active" : ""}`}>
+            <a
+              className="nav-link"
+              onClick={() => setActiveComponent("arbitros")}
+            >
               <i className="fa-solid fa-hand-paper fap"></i>
               <span>Arbitros</span>
             </a>
@@ -145,8 +156,15 @@ function AdminDashboard() {
 
           <li className="nav-item">
             <a className="nav-link" href="/admin">
-              <i className="fa-solid fa-book fap"></i>
-              <span>Incidencias</span>
+              <i className="fa-solid fa-wallet fap"></i>
+              <span>Pagos</span>
+            </a>
+          </li>
+
+          <li className="nav-item">
+            <a className="nav-link" href="/admin">
+              <i className="fa-solid fa-newspaper fap"></i>
+              <span>Convocatorias</span>
             </a>
           </li>
 
@@ -165,8 +183,8 @@ function AdminDashboard() {
               trigger="loop"
               stroke="bold"
               state="loop-roll"
-              colors="primary:#242424,secondary:#c71f16"
-              style={{width:'3.5rem',height:'3.5rem',MarginBottom:20}}
+              colors="primary:#333333,secondary:#9a0000"
+              style={{ width: "3.5rem", height: "3.5rem", MarginBottom: 20 }}
             ></lord-icon>
             <p className="text-center text-white">Fin del torneo</p>
             <p className="text-center mb-2 date">{dateStr}</p>

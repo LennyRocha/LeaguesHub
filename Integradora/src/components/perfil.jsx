@@ -8,7 +8,7 @@ import { TextField } from "@mui/material";
 import lottie from "lottie-web";
 import { defineElement } from "@lordicon/element";
 
-export default function Perfil() {
+export default function Perfil({ cambiarComponente }) {
   const [preview, setPreview] = useState(
     "https://www.meme-arsenal.com/memes/a513f913ef43476bd2b494da4e599cbc.jpg"
   );

@@ -191,10 +191,14 @@ i{
     height: 1px;
     border-radius: .01rem;
     margin-inline: auto;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    margin-top: .5rem;
+    margin-bottom: .5rem;
 }
 
 .white{
     color: white;
+}
+
+.marT{
+    margin-top: 1rem;
 }

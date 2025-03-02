@@ -46,6 +46,8 @@
   --color-domin-2-4: #FF2625;
   --color-domin-2-5: #FF5958;
 
+  --color-domin-3-1: #7B241C;
+
   --color-acento-1-1: #D35400;
   --color-acento-1-2: #F96E00;
   --color-acento-1-3: #FF8B07;
@@ -59,6 +61,7 @@
   --color-acento-2-5: #00B8FF;
 
   --color-acento-3-1: #3CB371;
+  --color-acento-4-1: #FFC300;
 }
 
 a {

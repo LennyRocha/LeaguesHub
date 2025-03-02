@@ -1,6 +1,5 @@
 import jQuery from "jquery";
-window.$ = window.jQuery = jQuery; // Registrar jQuery globalmente antes de Bootstrap
-
+window.$ = window.jQuery = jQuery;
 import "bootstrap";
 
 
@@ -15,10 +14,10 @@ import "bootstrap";
       
       if ($(".sidebar").hasClass("toggled")) {
         // Animar el ocultamiento del collapse en 350 ms
-        $('.sidebar .collapse').slideToggle(500);
+        $('.sidebar .collapse').slideToggle(100);
       } else {
         // Animar la expansión del collapse en 350 ms
-        $('.sidebar .collapse').slideToggle(500);
+        $('.sidebar .collapse').slideToggle(100);
       }
     });
   });

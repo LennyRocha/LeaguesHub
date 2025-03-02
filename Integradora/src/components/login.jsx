@@ -13,7 +13,7 @@ import { defineElement } from "@lordicon/element";
 // define "lord-icon" custom element with default properties
 defineElement(lottie.loadAnimation);
 
-function Login() {
+function Login({ cambiarComponente }) {
     const [user, setUser] = useState({ email: '', passw: '' });
     const [iconState, setIconState] = useState("loop");
 
@@ -88,13 +88,13 @@ function Login() {
           />
         </div>
           <p className="link-left">
-            <a href="#" className="loginLink">¿Olvidaste tu contraseña?</a>
+            <a className="loginLink" onClick={() => cambiarComponente("C")}>¿Olvidaste tu contraseña?</a>
           </p>
           <input type="submit" name="envio" id="sendLogin" onClick={handleSubmit} value="Acceder"/>
           <br />
           <br />
           <hr className="line"/>
-          <p id="pLink" className="body-small">¿No tienes cuenta? <b><a href="" className="loginLink">Registrate</a></b></p>
+          <p id="pLink" className="body-small">¿No tienes cuenta? <b><a className="loginLink" onClick={() => cambiarComponente("B")}>Registrate</a></b></p>
         </form>
       </section>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.10/lottie.min.js"></script>
