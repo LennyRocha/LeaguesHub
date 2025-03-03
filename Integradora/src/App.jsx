@@ -6,7 +6,8 @@ import Login from './components/login'
 import Signup from './components/signup'
 import Perfil from './components/perfil'
 import Password from './components/password'
-import Acces from './components/Acces'
+import Usuario0 from './components/UsuarioHeader'
+import UsuarioMain from './components/UsuarioCero/UsuarioMain'
 
 import './App.css'
 
@@ -15,7 +16,7 @@ function App() {
   const renderizarComponente = () => {
     switch (componenteActual) {
       case "A":
-        return <Login cambiarComponente={setComponenteActual} />;
+        return <UsuarioMain cambiarComponente={setComponenteActual} />;
       case "B":
         return <Signup cambiarComponente={setComponenteActual} />;
       case "C":
@@ -23,13 +24,16 @@ function App() {
       case "D":
         return <Perfil cambiarComponente={setComponenteActual} />;
       default:
-        return <Login cambiarComponente={setComponenteActual} />;
+        return <UsuarioMain cambiarComponente={setComponenteActual} />;
     }
   };
 
   return (
     <>
+      <Usuario0 id="header" />
+      <div id='rootApp'>
       {renderizarComponente()}
+      </div>
     </>
   )
 }

@@ -1,10 +1,10 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import Acces from './components/Acces'
+import ContextoAcceso from './components/contextoAcceso'
 import './index.css'
 
 createRoot(document.getElementById('authRoot')).render(
     <StrictMode>
-        <Acces />
+        <ContextoAcceso />
     </StrictMode>
 )

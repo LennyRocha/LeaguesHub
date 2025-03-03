@@ -12,7 +12,7 @@ import { defineElement } from "@lordicon/element";
 // define "lord-icon" custom element with default properties
 defineElement(lottie.loadAnimation);
 
-export default function Acces() {
+export default function Acces({ cambiarComponente }) {
   const [preview, setPreview] = useState(
     "https://www.meme-arsenal.com/memes/a513f913ef43476bd2b494da4e599cbc.jpg"
   );
@@ -174,7 +174,7 @@ export default function Acces() {
             />
           </div>
 
-          <a href="#" className="loginLink">
+          <a onClick={() => cambiarComponente("B")} className="loginLink">
             ¿Olvidaste tu contraseña?
           </a>
           <button type="submit" id="sendLogin">
@@ -216,6 +216,9 @@ export default function Acces() {
             <button className="ghost" id="signUp" onClick={swapScreen1}>
               Registrate
             </button>
+            <a href="/" className="loginLink">
+              Volver
+            </a>
           </div>
         </div>
       </div>

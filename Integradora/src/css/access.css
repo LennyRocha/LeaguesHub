@@ -6,6 +6,8 @@
   justify-content: center;
   display: flex;
   min-width: 320px;
+  max-width: 800px;
+  gap: 10px;
 }
 
 body {
@@ -295,6 +297,10 @@ button.ghost {
   border-color: #fff;
 }
 
+button.ghost:hover {
+  border-color: var(--color-acento-3-1);
+}
+
 .form-container {
   position: absolute;
   top: 0;
@@ -354,6 +360,7 @@ button.ghost {
 .overlay-right {
   right: 0;
   transform: translateX(0);
+  gap: 5px;
 }
 
 .overlay-left {

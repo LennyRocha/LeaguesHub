@@ -1,0 +1,45 @@
+.texto-blanco{
+    color: white;
+}
+
+.sticky-header {
+    position: -webkit-sticky !important; /* Para compatibilidad con Safari */
+    position: sticky !important;
+    top: 0 !important;
+    background-color: #f8f9fa; /* Color de fondo del header */
+    z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
+}  
+
+header{
+    background-color: var(--color-base-3-1);
+}
+
+.nav-link:active{
+    color: var(--color-acento-3-1) !important;
+}
+
+.nav-link:hover{
+    color: var(--color-acento-1-4) !important;
+    background-color: var(--color-domin-1-2);
+    border-radius: 10%;
+}
+
+.nav-link:focus{
+    color: var(--color-acento-4-1);
+}
+
+.link-secondary{
+    color: var(--color-acento-1-2) !important;
+}
+
+.red-b{
+    background-color: var(--color-domin-1-1);
+    color: white;
+
+}
+
+.red-b:hover{
+    background-color: var(--color-domin-1-5);
+    color: white;
+    transition: all .25s;
+}

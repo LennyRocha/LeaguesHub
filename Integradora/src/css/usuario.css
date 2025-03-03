@@ -1,0 +1,175 @@
+#main{
+    box-sizing: border-box;
+}
+
+.rowTeams{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+    gap: 2rem;
+    overflow: auto;
+    padding: 1rem;
+}
+
+.rowTeams {
+    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer y Edge */
+}
+
+.rowTeams::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari y Edge */
+}
+  
+
+.partidoFilter{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.partidoFilter :nth-child(2), 
+.partidoFilter :nth-child(3){
+    background-color: white;
+    color: var(--color-base-3-1);
+    border-radius: .25rem;
+}
+
+.partidoRow{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    overflow-y: hidden;
+    gap: .5rem;
+    height: 100%;
+    padding: 1.5rem;
+    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer y Edge */
+}
+
+.partidoRow::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari y Edge */
+}
+  
+.partidoDataRow{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1em
+}
+
+.partidoCard{
+    background-color: white;
+    gap: 1em;
+    padding: .5rem;
+    align-items: center;
+    cursor: pointer;
+}
+
+.partidoCard:hover{
+    transform: scale(1.1);
+    transition: all .25s;
+}
+
+.centered{
+    align-self: center !important;
+}
+
+.img{
+    width: 100%;
+    height: 500px !important;
+    margin-top: 50px;
+}
+
+.overlay-dk {
+    position: absolute;
+    bottom: 0;
+    background: rgba(51, 51, 51, 0.5); /* Fondo oscuro y transparente */
+    color: #f1f1f1; /* Color del texto */
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    height: 125px;
+}
+
+#theBest{
+    background-color: white;
+}
+
+.myThead{
+    background-color: var(--color-domin-1-1);
+    color: white;
+}
+
+.myThead th{
+    padding: 1rem;
+}
+
+.imgCell{
+    max-width: 36px;
+}
+
+.over-auto{
+    overflow: auto !important;
+    max-height: 1000px;
+}
+
+.jg{
+    color: var(--color-acento-3-1) !important;
+}
+
+.je{
+    color: var(--color-acento-2-1) !important;
+}
+
+.jp{
+    color: var(--color-domin-1-1) !important;
+}
+
+.diff{
+    background-color: rgb(0, 77, 115, 0.5) !important;
+    color: white !important;
+}
+
+.pts{
+    background-color: rgb(154, 0, 0, 0.5) !important;
+    color: white !important;
+}
+
+.goles{
+    background-color: rgb(60, 179, 113, 0.5) !important;
+    color: white !important;
+}
+
+.mj{
+    background-color: rgb(255, 195, 0, 0.5) !important;
+    color: white !important;
+}
+
+.jugadorCell{
+    width: 700px !important;
+}
+
+.jugadorTh{
+    text-align: start;
+}
+
+#clasif{
+    background-color: white;
+    padding: 5px;
+    width: 100%;
+}
+
+#goleo{
+    background-color: white;
+    padding: 5px;
+    width: 100%;
+}
+
+td{
+    background-color: var(--color-base-2-5) !important;
+    border-color: var(--color-base-2-1);
+}

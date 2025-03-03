@@ -506,6 +506,7 @@ function AdminDashboard() {
                 </li>
               </ul>
             </nav>
+            {/* Contenido */}
             <div style={{ width: "100%" }}>{renderComponent()}</div>
           </div>
 
