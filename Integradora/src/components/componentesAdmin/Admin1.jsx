@@ -1,12 +1,33 @@
 import React, { useState } from "react";
 import Calendar from "react-calendar";
+import Swal from "sweetalert2";
 
 function Admin1() {
   const [date, setDate] = useState(new Date());
 
+  const partidos = [
+    { date: new Date(2025, 2, 15), description: "Final de la Copa" },
+    { date: new Date(2025, 2, 20), description: "Semifinal Liga" },
+    { date: new Date(2025, 2, 25), description: "Amistoso vs Tigres" },
+  ];  
+
   const handleDateChange = (newDate) => {
     setDate(newDate);
     console.log(newDate);
+
+    // Buscar si la fecha seleccionada tiene un partido
+    const partido = partidos.find(
+      (p) => p.date.toDateString() === newDate.toDateString()
+    );
+
+    if (partido) {
+      Swal.fire({
+        title: "Partido programado",
+        text: partido.description,
+        icon: "info",
+        confirmButtonText: "OK",
+      });
+    }
   };
 
   return (
@@ -283,6 +304,14 @@ function Admin1() {
                   value={date}
                   className="calendar"
                   minDate={new Date()}
+                  showNeighboringMonth={false}
+                  tileClassName={({ date }) =>
+                    partidos.some(
+                      (p) => p.date.toDateString() === date.toDateString()
+                    )
+                      ? "highlight"
+                      : ""
+                  }
                 />
                 <p>
                   Fecha seleccionada:{" "}

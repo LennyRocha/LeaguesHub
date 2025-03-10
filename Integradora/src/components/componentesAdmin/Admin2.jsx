@@ -1,40 +1,164 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import "bootstrap";
 
 export default function Admin2() {
-  const week = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
-  
-  const [timeStr, setTimeStr] = useState('');
-  const [dateStr, setDateStr] = useState('');
 
-  // Función para agregar ceros a la izquierda
-  const zeroPadding = (num, digit) => {
-    return String(num).padStart(digit, '0');
-  };
-
-  // useEffect se encarga de actualizar la hora cada segundo
   useEffect(() => {
-    function updateTime() {
-      const now = new Date();
-      setTimeStr(
-        `${zeroPadding(now.getHours(), 2)}:${zeroPadding(now.getMinutes(), 2)}:${zeroPadding(now.getSeconds(), 2)}`
-      );
-      setDateStr(
-        `${now.getFullYear()}-${zeroPadding(now.getMonth() + 1, 2)}-${zeroPadding(now.getDate(), 2)} ${week[now.getDay()]}`
-      );
-    }
-
-    updateTime(); // Inicializa con el valor actual
-    const intervalId = setInterval(updateTime, 1000);
-
-    // Limpiar el intervalo cuando el componente se desmonte
-    return () => clearInterval(intervalId);
-  }, []); // Se ejecuta una sola vez al montar el componente
+  }, []);
 
   return (
     <div>
-      <div className="clock">
-        <h2 className="date">{dateStr}</h2>
-        <h2 className="time">{timeStr}</h2>
+      <div className="container-fluid">
+        <div className="d-sm-flex align-items-center justify-content-between mb-4">
+          <h2 className="mb-0">Dueños de equipos</h2>
+        </div>
+        <div className="myDuenoGrid">
+
+          <div className="dueno-container bg-light">
+            <div className="dueno-head-row">
+              <div className="_row">
+                <img
+                  className="img_dueno"
+                  src="https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
+                  alt="..."
+                />
+                <h5>Nombre</h5>
+              </div>
+              <a className="link">
+                <p>Inhabilitar</p>
+              </a>
+            </div>
+            <div className="divider"></div>
+            <div className="mini-grid">
+              <div className="para_alla">
+                <p>Status</p>
+                <p>Correo electrónico</p>
+                <p>Torneos jugados</p>
+                <p>Torneos ganados</p>
+                <p>Adeudos</p>
+                <p>Equipos</p>
+              </div>
+              <div className="para_aca">
+                <p>Activo</p>
+                <p>dueno@example.com</p>
+                <p>10</p>
+                <p>1</p>
+                <p>N/A</p>
+                <p>3</p>
+              </div>
+            </div>
+            <a className="link">Ver equipos</a>
+          </div>
+
+                    <div className="dueno-container bg-light">
+            <div className="dueno-head-row">
+              <div className="_row">
+                <img
+                  className="img_dueno"
+                  src="https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
+                  alt="..."
+                />
+                <h5>Nombre</h5>
+              </div>
+              <a className="link">
+                <p>Inhabilitar</p>
+              </a>
+            </div>
+            <div className="divider"></div>
+            <div className="mini-grid">
+              <div className="para_alla">
+                <p>Status</p>
+                <p>Correo electrónico</p>
+                <p>Torneos jugados</p>
+                <p>Torneos ganados</p>
+                <p>Adeudos</p>
+                <p>Equipos</p>
+              </div>
+              <div className="para_aca">
+                <p>Activo</p>
+                <p>dueno@example.com</p>
+                <p>10</p>
+                <p>1</p>
+                <p>N/A</p>
+                <p>3</p>
+              </div>
+            </div>
+            <a className="link">Ver equipos</a>
+          </div>
+
+                    <div className="dueno-container bg-light">
+            <div className="dueno-head-row">
+              <div className="_row">
+                <img
+                  className="img_dueno"
+                  src="https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
+                  alt="..."
+                />
+                <h5>Nombre</h5>
+              </div>
+              <a className="link">
+                <p>Inhabilitar</p>
+              </a>
+            </div>
+            <div className="divider"></div>
+            <div className="mini-grid">
+              <div className="para_alla">
+                <p>Status</p>
+                <p>Correo electrónico</p>
+                <p>Torneos jugados</p>
+                <p>Torneos ganados</p>
+                <p>Adeudos</p>
+                <p>Equipos</p>
+              </div>
+              <div className="para_aca">
+                <p>Activo</p>
+                <p>dueno@example.com</p>
+                <p>10</p>
+                <p>1</p>
+                <p>N/A</p>
+                <p>3</p>
+              </div>
+            </div>
+            <a className="link">Ver equipos</a>
+          </div>
+
+          <div className="dueno-container bg-light">
+            <div className="dueno-head-row">
+              <div className="_row">
+                <img
+                  className="img_dueno"
+                  src="https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
+                  alt="..."
+                />
+                <h5>Nombre</h5>
+              </div>
+              <a className="link">
+                <p>Inhabilitar</p>
+              </a>
+            </div>
+            <div className="divider"></div>
+            <div className="mini-grid">
+              <div className="para_alla">
+                <p>Status</p>
+                <p>Correo electrónico</p>
+                <p>Torneos jugados</p>
+                <p>Torneos ganados</p>
+                <p>Adeudos</p>
+                <p>Equipos</p>
+              </div>
+              <div className="para_aca">
+                <p>Activo</p>
+                <p>dueno@example.com</p>
+                <p>10</p>
+                <p>1</p>
+                <p>N/A</p>
+                <p>3</p>
+              </div>
+            </div>
+            <a className="link">Ver equipos</a>
+          </div>
+          
+        </div>
       </div>
     </div>
   );

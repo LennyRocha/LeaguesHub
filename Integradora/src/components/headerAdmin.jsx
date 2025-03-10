@@ -48,10 +48,10 @@ function AdminDashboard() {
         )}:${zeroPadding(now.getSeconds(), 2)}`
       );
       setDateStr(
-        `${now.getFullYear()}-${zeroPadding(
+        `${week[now.getDay()]}, ${now.getFullYear()}-${zeroPadding(
           now.getMonth() + 1,
           2
-        )}-${zeroPadding(now.getDate(), 2)} ${week[now.getDay()]}`
+        )}-${zeroPadding(now.getDate(), 2)}`
       );
     }
 
@@ -121,8 +121,8 @@ function AdminDashboard() {
               className="nav-link"
               onClick={() => setActiveComponent("equipos")}
             >
-              <i className="fa-solid fa-shield fap"></i>
-              <span>Equipos</span>
+              <i className="fa-solid fa-user fap"></i>
+              <span>Dueños</span>
             </a>
           </li>
 
@@ -211,8 +211,7 @@ function AdminDashboard() {
               colors="primary:#333333,secondary:#9a0000"
               style={{ width: "3.5rem", height: "3.5rem", MarginBottom: 20 }}
             ></lord-icon>
-            <p className="text-center text-white">Fin del torneo</p>
-            <p className="text-center mb-2 date">{dateStr}</p>
+            <p className="text-center text-white mb-0 mt-1">{dateStr}</p>
             <p className="text-center mb-2 time">{timeStr}</p>
             {/*<a className="btn btn-success btn-sm" href="/admin">
               Upgrade to Pro!
@@ -532,14 +531,16 @@ function AdminDashboard() {
               </ul>
             </nav>
             {/* Contenido */}
-            <div style={{ width: "100%" }}>{renderComponent()}</div>
+            <div style={{ width: "100%", marginBottom: '1rem' }}>{renderComponent()}</div>
           </div>
 
           {/* Footer */}
-          <footer className="sticky-footer bg-white">
+          <footer className="sticky-footer bg-base">
             <div className="container my-auto">
               <div className="copyright text-center my-auto">
-                <span>Copyright &copy; Your Website 2024</span>
+                <span>Copyright &copy; Leagues Hub 2025</span>
+                <br />
+                <a href="https://lordicon.com/">Icons by Lordicon.com</a>
               </div>
             </div>
           </footer>

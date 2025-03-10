@@ -58,6 +58,8 @@ export default function UsuarioFooter() {
       <p>&copy; 2025 Leagueshub, Inc. All rights reserved.</p>
       <br></br>
       <p><a href="https://www.utez.edu.mx/">&copy; UTEZ</a></p>
+      <br></br>
+      <a href="https://lordicon.com/">Icons by Lordicon.com</a>
     </div>
   </footer>
 </div>

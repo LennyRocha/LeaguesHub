@@ -93,6 +93,10 @@ hr {
 
 /* De aquí */
 
+.bg-base{
+  background-color: var(--color-base-3-1);
+}
+
 .card-text {
   font-family: "Nunito" !important;
 }
@@ -331,6 +335,12 @@ hr {
   border-color: var(--color-domin-1-1) !important;
 }
 
+.highlight{
+  background-color: var(--danger) !important;
+  color: white !important;
+  border-color: var(--color-domin-1-1) !important;
+}
+
 .react-calendar :not(.react-calendar__navigation) button:hover {
   background: var(--color-base-2-5);
   border-color: var(--color-domin-3-1);
@@ -447,6 +457,46 @@ hr {
   cursor: pointer;
 }
 
+.slide-btn{
+  display: inline-block;
+  padding: 0.9rem 1.8rem;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-base-1-2);
+  letter-spacing: 1px;
+  border: 3px solid var(--color-domin-1-3);
+  cursor: pointer;
+  position: relative;
+  background-color: transparent;
+  text-decoration: none;
+  z-index: 1;
+  overflow: hidden;
+  font-family: inherit;
+  width: 100%;
+}
+
+.slide-btn::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--color-domin-1-3);
+  transition: all 0.3s;
+  z-index: -1;
+  transform: translateX(-100%);
+}
+
+.slide-btn:hover{
+  border-color: var(--color-domin-1-1);
+}
+
+.slide-btn:hover:before{
+  transform: translateX(0);
+  cursor: pointer;
+}
+
 .botonDiv{
   bottom: 0;
   right: 0;
@@ -485,10 +535,40 @@ hr {
   cursor: pointer;
 }
 
+.form-div{
+  padding: 1rem;
+  border-radius: 5px;
+}
 
+.rowInp{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px
+}
 
-.txtAr .MuiInputLabel-root {
+.button-group{
+  display: flex;
+  gap: 3px
+}
+
+@media (min-width: 426px) and (max-width: 991px) {
+  .posterConvoc{
+    width: 25%;
+  }
+}
+
+.div-margin{
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+}
+
+.txtAr{
+  font-family: 'Oswald', sans-serif !important;
+}
+
+.txtAr .MuiInputLabel-root, .MuiInputBase-input {
   color: var(--color-base-3-1); /* Color por defecto */
+  font-family: 'Oswald', sans-serif !important;
 }
 
 /* Cambiar el color del label cuando el TextField está enfocado */
@@ -512,6 +592,10 @@ hr {
 }
 /* Pendiente por revisar */
 
+.txtCon{
+  background-color: var(--color-base-1-2);
+}
+
 .arbitro-card form {
   display: flex;
   flex-direction: column;
@@ -530,6 +614,96 @@ hr {
 
 .no-cell{
   font-family: 'Oswald', sans-serif !important;
+}
+
+.myDuenoGrid{
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 1rem
+}
+
+.dueno-container{
+  width: 100%;
+  padding: .75rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  border-radius: .5rem;
+  box-shadow: 4px 4px 8px rgba(51, 51, 51, 0.5);
+}
+
+.dueno-head-row{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center !important;
+}
+
+.divider{
+  width: 100%;
+  align-self: center;
+  height: 0.1mm;
+  opacity: .5;
+  background-color: var(--color-base-2-1);
+  margin-top: 3px;
+  margin-bottom: .5em;
+  border-radius: .5em;
+}
+
+._row{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+
+.img_dueno{
+  width: 15%;
+  border-radius: 50%;
+}
+
+.mini-grid{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+  width: 100%;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+.para_aca{
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+
+.para_alla{
+  color: var(--color-base-3-1);
+}
+
+/* Enlace default */
+.link {
+  color: var(--color-acento-2-1);
+}
+
+/* Enlace no visitado */
+.link:link {
+  color: var(--color-acento-2-1);
+}
+
+/* Enlace visitado */
+.link:visited {
+ color: var(--color-acento-1-5);
+}
+
+/* Enlace cuando el cursor pasa sobre él */
+.link:hover {
+  color: var(--color-acento-2-5);
+}
+
+/* Enlace cuando está siendo clickeado */
+.link:active {
+  color: var(--color-domin-2-4);
 }
 
 /* A aquí */
