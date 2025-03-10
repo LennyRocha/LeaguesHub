@@ -4,11 +4,12 @@ import "../../css/usuario.css";
 
 export default function UsuarioTabla2({jugadores}) {
   return (
-    <div className="my-5" id="goleo">
-      <h1>Tablas de Goleo</h1>
+    <div className="my-5">
+      <h1 id="goleo">Tablas de Goleo</h1>
       <div className="over-auto">
         <table className="table">
           <thead className="myThead">
+            <tr>
             <th>POS</th>
             <th>EQUIPO</th>
             <th>FOTO</th>
@@ -17,6 +18,7 @@ export default function UsuarioTabla2({jugadores}) {
             <th>GOLES</th>
             <th>PTS</th>
             <th>MJ</th>
+            </tr>
           </thead>
           <tbody>
             {jugadores.map((j, index) => {
@@ -29,12 +31,13 @@ export default function UsuarioTabla2({jugadores}) {
                       alt="Chivas"
                       width={30}
                       height={30}
+                      className="img-back-no"
                     />
                   </td>
                   <td className="imgCell">
                     <img
                       src={j.img}
-                      alt="Chivas"
+                      alt={j.nombre}
                       width={30}
                       height={30}
                     />

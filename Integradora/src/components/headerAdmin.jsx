@@ -20,6 +20,8 @@ import Admin2 from "./componentesAdmin/Admin2";
 import Admin3 from "./componentesAdmin/Admin3";
 import Admin4 from "./componentesAdmin/Admin4";
 import Admin5 from "./componentesAdmin/Admin5";
+import Admin6 from "./componentesAdmin/Admin6";
+import Admin7 from "./componentesAdmin/Admin7";
 
 function AdminDashboard() {
   const [userName, setUserName] = useState("Usuario");
@@ -72,6 +74,10 @@ function AdminDashboard() {
         return <Admin4 />;
       case "arbitros":
         return <Admin5 />;
+      case "pagos":
+        return <Admin6 />;
+      case "publicidad":
+        return <Admin7 />;
       default:
         return <Admin1 />;
     }
@@ -134,7 +140,11 @@ function AdminDashboard() {
             </a>
           </li>
 
-          <li className={`nav-item ${activeComponent === "campos" ? "active" : ""}`}>
+          <li
+            className={`nav-item ${
+              activeComponent === "campos" ? "active" : ""
+            }`}
+          >
             <a
               className="nav-link"
               onClick={() => setActiveComponent("campos")}
@@ -144,7 +154,11 @@ function AdminDashboard() {
             </a>
           </li>
 
-          <li className={`nav-item ${activeComponent === "arbitros" ? "active" : ""}`}>
+          <li
+            className={`nav-item ${
+              activeComponent === "arbitros" ? "active" : ""
+            }`}
+          >
             <a
               className="nav-link"
               onClick={() => setActiveComponent("arbitros")}
@@ -154,15 +168,26 @@ function AdminDashboard() {
             </a>
           </li>
 
-          <li className="nav-item">
-            <a className="nav-link" href="/admin">
+          <li
+            className={`nav-item ${
+              activeComponent === "pagos" ? "active" : ""
+            }`}
+          >
+            <a className="nav-link" onClick={() => setActiveComponent("pagos")}>
               <i className="fa-solid fa-wallet fap"></i>
               <span>Pagos</span>
             </a>
           </li>
 
-          <li className="nav-item">
-            <a className="nav-link" href="/admin">
+          <li
+            className={`nav-item ${
+              activeComponent === "publicidad" ? "active" : ""
+            }`}
+          >
+            <a
+              className="nav-link"
+              onClick={() => setActiveComponent("publicidad")}
+            >
               <i className="fa-solid fa-newspaper fap"></i>
               <span>Convocatorias</span>
             </a>

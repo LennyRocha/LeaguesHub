@@ -5,11 +5,13 @@
 .rowTeams{
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: center;
     width: 100%;
     gap: 2rem;
     overflow: auto;
     padding: 1rem;
+    padding-top: 2px !important;
+    margin-top: -30px;
 }
 
 .rowTeams {
@@ -44,7 +46,8 @@
     overflow-y: hidden;
     gap: .5rem;
     height: 100%;
-    padding: 1.5rem;
+    padding-top: 1.5rem !important;
+    padding: 1px;
     scrollbar-width: none;  /* Firefox */
     -ms-overflow-style: none;  /* Internet Explorer y Edge */
 }
@@ -63,15 +66,41 @@
 
 .partidoCard{
     background-color: white;
-    gap: 1em;
-    padding: .5rem;
     align-items: center;
     cursor: pointer;
+    border-radius: 10px;
+    width: 250px;
 }
 
-.partidoCard:hover{
+.partidoCardBody{
+    gap: 1em;
+    padding: .5rem;
+}
+
+/* .partidoCard:hover{
     transform: scale(1.1);
     transition: all .25s;
+} */
+
+.partidoCardHeader{
+    padding: .75rem;
+    gap: 3px;
+    display: flex;
+    flex-direction: row;
+    background-color: var(--color-domin-2-3);
+    height: 75px;
+    justify-content: center;
+    align-items: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    width: 100%;
+}
+
+.partidoCardHeader h5{
+    color: white;
+    font-weight: bold;
+    text-align:center;
+    margin-top: .25rem;
 }
 
 .centered{
@@ -80,32 +109,40 @@
 
 .img{
     width: 100%;
-    height: 500px !important;
+    height: 400px !important;
     margin-top: 50px;
 }
 
 .overlay-dk {
     position: absolute;
     bottom: 0;
-    background: rgba(51, 51, 51, 0.5); /* Fondo oscuro y transparente */
+    /*background: rgba(51, 51, 51, 0.5); /* Fondo oscuro y transparente */
+    background: linear-gradient(to top, rgba(255, 0, 0, 0.6), rgba(255, 0, 0, 0)); 
     color: #f1f1f1; /* Color del texto */
     width: 100%;
     text-align: center;
     padding: 10px;
-    height: 125px;
+    height: 150px;
 }
 
 #theBest{
     background-color: white;
+    border-radius: 20px;
+    margin: 5px;
 }
 
-.myThead{
-    background-color: var(--color-domin-1-1);
-    color: white;
+.bestCol{
+    padding-top: 1rem;
+}
+
+.img-back-no{
+    background: transparent;
 }
 
 .myThead th{
     padding: 1rem;
+    background-color: var(--color-domin-1-1);
+    color: white;
 }
 
 .imgCell{
@@ -157,19 +194,56 @@
     text-align: start;
 }
 
-#clasif{
-    background-color: white;
-    padding: 5px;
+#clasif table{
     width: 100%;
+    margin-top: 10px;
 }
 
 #goleo{
-    background-color: white;
-    padding: 5px;
     width: 100%;
 }
 
 td{
-    background-color: var(--color-base-2-5) !important;
     border-color: var(--color-base-2-1);
+}
+
+/* Enlace default */
+.loginLink {
+    color: var(--color-acento-2-1);
+}
+
+/* Enlace no visitado */
+.loginLink:link {
+    color: var(--color-acento-2-1);
+}
+  
+/* Enlace visitado */
+.loginLink:visited {
+   color: var(--color-acento-1-5);
+}
+
+/* Enlace cuando el cursor pasa sobre él */
+.loginLink:hover {
+    color: var(--color-acento-2-5);
+}
+  
+/* Enlace cuando está siendo clickeado */
+.loginLink:active {
+    color: var(--color-domin-2-4);
+}
+
+.accordion-header button:focus{
+    background-color: var(--color-domin-1-5) !important;
+    border-color: var(--color-acento-1-5) !important;
+    transition: all 0.25s ease-in-out !important;
+}
+
+.accordion-item .accordion-header .accordion-button:not(.collapsed){
+    background-color: var(--color-domin-1-1) !important;
+    color: white;
+}
+
+.accordion-button:focus{
+    border-color: var(--color-acento-1-5);
+    box-shadow: 0 0 0 0.25rem rgba(51, 51, 51, 0.25);;
 }

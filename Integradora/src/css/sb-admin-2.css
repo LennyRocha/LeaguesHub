@@ -173,11 +173,12 @@ hr {
 .duenoCard img {
   border-radius: 5%;
   cursor: grab;
+  margin-top: .25rem;
 }
 
 .duenoCard:hover {
-  transform: scale(1.2);
-  transition: all 0.25s;
+  /* transform: scale(1.2);
+  transition: all 0.25s; */
   background: var(--color-base-1-1);
   cursor: grab;
 }
@@ -374,6 +375,161 @@ hr {
 
 .react-calendar__navigation__label {
   font-weight: bold !important;
+}
+
+.arbitro-card{
+  min-height: 1px;
+  padding: 1.25rem;
+}
+
+.img{
+  height: 60%;
+  z-index: -1;
+}
+
+.txtAr .MuiInputLabel-root {
+  color: var(--color-base-1-5); /* Color por defecto */
+}
+
+.txtAr:focus-within{
+  border-color: var(--color-domin-2-3) !important;
+}
+
+.txtAr .MuiOutlinedInput-root:hover fieldset {
+  border-color: var(--color-domin-2-3);
+}
+
+.txtAr .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: var(--color-domin-2-3) !important;
+}
+
+.bg-red{
+  background-color: var(--color-domin-3-1) !important;
+}
+
+.bg-red h5{
+  color: white !important;
+}
+
+#submitArb{
+  display: inline-block;
+  padding: 0.9rem 1.8rem;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-base-1-2);
+  letter-spacing: 1px;
+  border: 3px solid var(--color-domin-1-3);
+  cursor: pointer;
+  position: relative;
+  background-color: transparent;
+  text-decoration: none;
+  z-index: 1;
+  overflow: hidden;
+  font-family: inherit;
+  width: 100%;
+}
+
+#submitArb::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--color-domin-1-3);
+  transition: all 0.3s;
+  z-index: -1;
+  transform: translateX(-100%);
+}
+
+#submitArb:hover:before{
+  transform: translateX(0);
+  cursor: pointer;
+}
+
+.botonDiv{
+  bottom: 0;
+  right: 0;
+  width: 4em;
+  height: 4em;
+  border-radius: 50%;
+  line-height: 2.1em;
+  overflow: hidden;
+  text-align: center;
+  align-self: flex-start;
+  z-index: 1050;
+  margin-top: -3.5rem;
+}
+
+.fotoContainer{
+  width: 60%;
+}
+
+.botonDiv i{
+  transform: scale(3.5);
+  margin-top: 1.25rem;
+  color:var(--color-domin-1-2);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.botonCam{
+  transform: scale(3);
+  opacity: 0;
+  top: 10px;
+  left: 120px;
+  cursor: pointer;
+}
+
+.botonCam ::-webkit-file-upload-button{
+  cursor: pointer;
+}
+
+
+
+.txtAr .MuiInputLabel-root {
+  color: var(--color-base-3-1); /* Color por defecto */
+}
+
+/* Cambiar el color del label cuando el TextField está enfocado */
+.txtAr .MuiInputLabel-root.Mui-focused {
+  color: var(--color-domin-2-2) !important;
+}
+
+/* Cuando es readonly */
+.txtField.readonly .MuiInputLabel-root {
+  color: var(--color-acento-1-1) !important;
+}
+
+.txtField.readonly .MuiOutlinedInput-root fieldset {
+  border-color: var(--color-acento-1-1) !important;
+}
+
+.txtField.readonly .MuiInputBase-input {
+  background-color: var(--color-base-1-2);
+  border-color: var(--color-acento-1-1) !important;
+  color: var(--color-acento-1-1);
+}
+/* Pendiente por revisar */
+
+.arbitro-card form {
+  display: flex;
+  flex-direction: column;
+  align-items: center !important;
+}
+
+.myThead{
+  background-color: var(--color-domin-1-1);
+}
+
+.cell{
+  font-family: 'Oswald', sans-serif !important;
+  font-weight: bold !important;
+  color: white !important;
+}
+
+.no-cell{
+  font-family: 'Oswald', sans-serif !important;
 }
 
 /* A aquí */

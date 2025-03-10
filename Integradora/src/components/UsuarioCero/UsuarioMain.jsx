@@ -6,6 +6,7 @@ import UsuarioDestac from "./UsuarioDestac";
 import UsuarioTabla1 from "./UsuarioTabla1";
 import UsuarioTabla2 from "./UsuarioTabla2";
 import "../../css/usuario.css";
+import 'bootstrap'
 
 const jugadoresPrueba = [
   {
@@ -295,10 +296,10 @@ const partidosPrueba = [
   },
 ];
 
-export default function UsuarioMain() {
+export default function UsuarioMain({ cambiarComponente }) {
   return (
     <div id="main">
-      <div className="rowTeams">
+      <div className="rowTeams" id="inicio">
         {equipos.map((e, index) => {
           return (
             <div key={e.equipoId}>
@@ -306,51 +307,60 @@ export default function UsuarioMain() {
                 <img
                   src={`https://lh3.googleusercontent.com/d/1L4y6YuAZuIYWEOlWr0sBKmoutcMFyG54=s220`}
                   alt={e.nombre}
-                  width={50}
-                  height={50}
+                  width={40}
+                  height={40}
                 />
               </Tooltip>
             </div>
           );
         })}
       </div>
-      <div className="partidoFilter">
+      {/*<div className="partidoFilter">
         <h2>Filtrar: </h2>
         <button>Actuales</button>
         <button>Anteriores</button>
-      </div>
-      <div className="partidoRow">
+      </div>*/}
+      <div className="partidoRow" id="partidos">
         {partidosPrueba.map((p, index) => {
           return (
             <div className="partidoCard" key={p.id}>
-              <h5>Jornada 25</h5>
-              <div className="partidoDataRow">
-                <b>{p.fecha}</b>
-                <b>16:30hrs</b>
+              <div className="partidoCardHeader">
+                <img
+                  src={`https://lh3.googleusercontent.com/d/1L4y6YuAZuIYWEOlWr0sBKmoutcMFyG54=s220`}
+                  alt="LogoTor"
+                  width={40}
+                  height={40}
+                />
+                <h5>{p.lugar}</h5>
               </div>
-              <div className="partidoDataRow">
-                <div>
-                  <img
-                    src={p.equipo1.img}
-                    width={30}
-                    height={30}
-                    alt="Local"
-                  />
-                  <p>{p.equipo1.nombre}</p>
+              <div className="partidoCardBody">
+                <div className="partidoDataRow">
+                  <b>Dom, 9 de Marzo</b>
                 </div>
-                <h3>-</h3>
-                <div>
-                  <img
-                    src={p.equipo2.img}
-                    width={30}
-                    height={30}
-                    alt="Visitante"
-                  />
-                  <p>{p.equipo2.nombre}</p>
+                <div className="partidoDataRow">
+                  <div>
+                    <img
+                      src={`https://lh3.googleusercontent.com/d/1L4y6YuAZuIYWEOlWr0sBKmoutcMFyG54=s220`}
+                      alt="Local"
+                      width={40}
+                      height={40}
+                    />
+                    <p>{p.equipo1.nombre}</p>
+                  </div>
+                  <h6>16:30hrs</h6>
+                  <div>
+                    <img
+                      src={`https://lh3.googleusercontent.com/d/1L4y6YuAZuIYWEOlWr0sBKmoutcMFyG54=s220`}
+                      width={40}
+                      height={40}
+                      alt="Visitante"
+                    />
+                    <p>{p.equipo2.nombre}</p>
+                  </div>
                 </div>
+                {/*<p>{p.lugar}</p>*/}
+                <a className="loginLink" href="#info-torneo" onClick={() => cambiarComponente("E")}>Ver mas ➡️</a>
               </div>
-              <p>{p.lugar}</p>
-              <h3 className="centered">{p.estado}</h3>
             </div>
           );
         })}

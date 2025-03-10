@@ -13,6 +13,8 @@ import { defineElement } from "@lordicon/element";
 defineElement(lottie.loadAnimation);
 
 export default function Acces({ cambiarComponente }) {
+  const [emptyField, setEmptyField] = useState('');
+
   const [preview, setPreview] = useState(
     "https://www.meme-arsenal.com/memes/a513f913ef43476bd2b494da4e599cbc.jpg"
   );
@@ -23,51 +25,140 @@ export default function Acces({ cambiarComponente }) {
       const reader = new FileReader();
       reader.onload = () => setPreview(reader.result);
       reader.readAsDataURL(file);
-      console.log(file.name);
+      console.log(file.name, file);
     }
   };
 
-  const [user, setUser] = useState({
+  const [userL, setUserL] = useState({
+    email: "",
+    passw: "",
+  });
+
+  const [userS, setUserS] = useState({
     email: "",
     passw: "",
     name: "",
     pass2: "",
+    img: ''
   });
-  const [iconState, setIconState] = useState("in-reveal");
-  const [iconTrigger, setIconTrigger] = useState("loop");
+
+  //Login
+  const handleChangeMailL = (e) => {
+    setUserL({ ...userL, email: e.target.value });
+    console.log(e.target.value)
+  };
+
+  const handleChangePassL = (e) => {
+    setUserL({ ...userL, passw: e.target.value }); 
+  };
+
+  //Sign up
+  const handleChangeName = (e) => {
+    setUserS({ ...userS, [e.target.name]: e.target.value }); 
+  };
 
   const handleChangeMail = (e) => {
-    setUser({ ...user, email: e.target.value });
+    setUserS({ ...userS, [e.target.name]: e.target.value }); 
+    console.log(e.target.value)
   };
 
   const handleChangePass = (e) => {
-    setUser({ ...user, passw: e.target.value });
+    setUserS({ ...userS, [e.target.name]: e.target.value }); 
   };
 
-  const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+  const handleChangePass2 = (e) => {
+    setUserS({ ...userS, [e.target.name]: e.target.value }); 
   };
 
-  const handleSubmit = (e) => {
+  const handleChangeImg = async (e) => {
+    if(preview !== "https://www.meme-arsenal.com/memes/a513f913ef43476bd2b494da4e599cbc.jpg"){
+      setUserS({ ...userS, img: preview });
+    }
+  };
+
+  const handleSubmit1 = (e) => {
     e.preventDefault();
-    if (user.passw !== user.pass2) {
-      setIconState("hover-lashes");
-      setIconTrigger("morph");
+    if (userL.passw === "" || userL.email === "" || emptyField !== '') {
       Swal.fire({
-        icon: "Error",
-        title: "Contraseña incorrecta",
-        text: `Las contraseñas no coinciden`,
+        icon: "error",
+        title: "Campos vacios",
+        text: `El campo ${emptyField} está vacío`,
+        customClass: {
+          confirmButton: 'btn-confirm',
+          cancelButton: 'btn-cancel',
+          denyButton: 'btn-deny'
+        }
       });
     } else {
-      setIconState("in-reveal");
-      setIconTrigger("loop");
       Swal.fire({
         icon: "success",
         title: "Datos guardados:",
-        text: `Nombre: ${user.name}, Correo: ${user.email}, Contraseña: ${user.passw}`,
+        text: `Correo: ${userL.email}, Contraseña: ${userL.passw}`,
+        customClass: {
+          confirmButton: 'btn-confirm',
+          cancelButton: 'btn-cancel',
+          denyButton: 'btn-deny'
+        }
+      });
+      window.location.href = '/admin'
+    }
+    setUserL({ email: "", passw: ""});
+    e.target.reset();
+    setEmptyField('');
+  };
+
+  const handleSubmit2 = (e) => {
+    e.preventDefault();
+    handleChangeImg();
+    if (userS.passw !== userS.pass2) {
+      Swal.fire({
+        icon: "error",
+        title: "Contraseña incorrecta",
+        text: `Las contraseñas no coinciden`,
+        customClass: {
+          confirmButton: 'btn-confirm',
+          cancelButton: 'btn-cancel',
+          denyButton: 'btn-deny'
+        }
+      });
+    } else if (userS.passw === "" || userS.pass2 === "" || userS.email === "" || userS.name === "") {
+      console.log(userS)
+      Swal.fire({
+        icon: "error",
+        title: "Campos vacios",
+        text: `El campo ${emptyField} está vacío`,
+        customClass: {
+          confirmButton: 'btn-confirm',
+          cancelButton: 'btn-cancel',
+          denyButton: 'btn-deny'
+        }
+      });
+    } else if (preview === "https://www.meme-arsenal.com/memes/a513f913ef43476bd2b494da4e599cbc.jpg") {
+      Swal.fire({
+        icon: "error",
+        title: "Imagen no seleccionada",
+        text: `Elige una imagen para continuar`,
+        customClass: {
+          confirmButton: 'btn-confirm',
+          cancelButton: 'btn-cancel',
+          denyButton: 'btn-deny'
+        }
+      });
+    }else {
+      Swal.fire({
+        icon: "success",
+        title: "Datos guardados:",
+        text: `Nombre: ${userS.name}, Correo: ${userS.email}, Contraseña: ${userS.passw}`,
+        customClass: {
+          confirmButton: 'btn-confirm',
+          cancelButton: 'btn-cancel',
+          denyButton: 'btn-deny'
+        }
       });
     }
-    setUser({ email: "", passw: "", name: "", pass2: "" });
+    setUserS({ email: "", passw: "", name: "", pass2: "", img: '' });
+    e.target.reset();
+    setEmptyField('');
   };
 
   const swapScreen1 = () => {
@@ -85,46 +176,50 @@ export default function Acces({ cambiarComponente }) {
   return (
     <div className="container" id="container">
       <div className="form-container sign-up-container">
-        <form action="#">
+        <form onSubmit={handleSubmit2}>
           <h3 className="bld">Crea tu Cuenta</h3>
           <div className="input-containere">
             <i className="fa fa-user icon" aria-hidden="true" id="orange"></i>
             <input
               type="text"
-              name="nombre"
+              name="name"
               required
               placeholder="Nombre"
               class="inp"
+              onInput={handleChangeName}
             />
           </div>
           <div className="input-containere">
             <i className="fa fa-envelope icon" aria-hidden="true" id="red"></i>
             <input
               type="email"
-              name="email1"
+              name="email"
               required
               placeholder="Correo electrónico"
               class="inp"
+              onInput={handleChangeMail}
             />
           </div>
           <div className="input-containere">
             <i className="fa fa-lock icon" aria-hidden="true" id="orange"></i>
             <input
               type="password"
-              name="nombre"
+              name="passw"
               required
               placeholder="Contraseña"
               class="inp"
+              onInput={handleChangePass}
             />
           </div>
           <div className="input-containere">
             <i className="fa fa-lock icon" aria-hidden="true" id="red"></i>
             <input
               type="password"
-              name="nombre"
+              name="pass2"
               required
               placeholder="Confirmar contraseña"
               class="inp"
+              onInput={handleChangePass2}
             />
           </div>
           <button type="submit" id="sendSignup">
@@ -133,44 +228,30 @@ export default function Acces({ cambiarComponente }) {
         </form>
       </div>
       <div className="form-container sign-in-container">
-        <form action="Index3.html">
+        <form onSubmit={handleSubmit1}>
           <h3 className="bld">Iniciar Sesión</h3>
           <div className="input-containere">
-            <lord-icon
-              id="iconicoA1"
-              src="/icons/mail-icon.json"
-              trigger="loop"
-              stroke="bold"
-              state="reveal"
-              colors="primary:#9A0000,secondary:#004D73"
-              style={{ width: "1.5em", height: "1.5em" }}
-            ></lord-icon>
+          <i className="fa fa-user icon" aria-hidden="true" id="red"></i>
             <input
               type="email"
               name="email1"
               required
               placeholder="Correo electónico"
               class="inp"
-              onChange={handleChangeMail}
+              id="mail1"
+              onInput={handleChangeMailL}
             />
           </div>
           <div className="input-containere">
-            <lord-icon
-              id="iconicoA2"
-              src="/icons/huella-icon.json"
-              trigger="loop"
-              stroke="bold"
-              state={iconState}
-              colors="primary:#9A0000,secondary:#004D73"
-              style={{ width: "1.5em", height: "1.5em" }}
-            ></lord-icon>
+          <i className="fa fa-lock icon" aria-hidden="true" id="red"></i>
             <input
               type="password"
               name="pswrd1"
               required
               placeholder="Contraseña"
               class="inp"
-              onChange={handleChangePass}
+              id="pass1"
+              onInput={handleChangePassL}
             />
           </div>
 

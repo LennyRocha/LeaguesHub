@@ -64,6 +64,22 @@
   --color-acento-4-1: #FFC300;
 }
 
+#admin{
+  width: 100%;
+}
+
+.btn-confirm{
+  background-color: var(--color-acento-3-1);
+}
+
+.btn-cancel{
+  background-color: var(--color-domin-1-5);
+}
+
+.btn-deny{
+  background-color: var(--color-acento-2-3);
+}
+
 a {
   font-weight: 500;
   color: #646cff;

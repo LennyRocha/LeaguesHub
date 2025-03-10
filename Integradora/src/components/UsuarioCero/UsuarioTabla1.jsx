@@ -4,11 +4,21 @@ import "../../css/usuario.css";
 
 export default function UsuarioTabla1 (equipos) {
   return (
-    <div className='my-5' id='clasif'>
-        <h1>Tablas de Clasificación</h1>
+    <div className='my-5'>
+        <h1 id='clasif'>Tablas de Clasificación</h1>
+        <div className="partidoFilter">
+        <h2>Filtrar: </h2>
+        <select>
+          <option>General</option>
+          <option>Torneo 1</option>
+          <option>Torneo 2</option>
+          <option>Torneo 3</option>
+        </select>
+      </div>
         <div className="over-auto">
         <table className='table'>
             <thead className='myThead'>
+                <tr>
                 <th>POS</th>
                 <th></th>
                 <th>EQUIPO</th>
@@ -20,6 +30,7 @@ export default function UsuarioTabla1 (equipos) {
                 <th>GC</th>
                 <th>DIFF</th>
                 <th>PTS</th>
+                </tr>
             </thead>
             <tbody>
                 <tr>
