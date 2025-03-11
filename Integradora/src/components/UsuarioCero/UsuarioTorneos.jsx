@@ -8,7 +8,7 @@ export default function UsuarioTorneos({ cambiarComponente }) {
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
-            <a href="/">Inicio</a>
+            <a href="/" className="loginLink">Inicio</a>
           </li>
           <li class="breadcrumb-item active" aria-current="page">
             Torneos

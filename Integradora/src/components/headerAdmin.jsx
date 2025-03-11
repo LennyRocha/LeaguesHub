@@ -22,6 +22,7 @@ import Admin4 from "./componentesAdmin/Admin4";
 import Admin5 from "./componentesAdmin/Admin5";
 import Admin6 from "./componentesAdmin/Admin6";
 import Admin7 from "./componentesAdmin/Admin7";
+import Admin8 from "./componentesAdmin/Admin8";
 
 function AdminDashboard() {
   const [userName, setUserName] = useState("Usuario");
@@ -67,7 +68,7 @@ function AdminDashboard() {
       case "home":
         return <Admin1 />;
       case "equipos":
-        return <Admin2 />;
+        return <Admin2 cambiarComponent={setActiveComponent} />;
       case "torneos":
         return <Admin3 />;
       case "campos":
@@ -78,6 +79,8 @@ function AdminDashboard() {
         return <Admin6 />;
       case "publicidad":
         return <Admin7 />;
+      case "dueno":
+        return <Admin8 cambiarComponent={setActiveComponent}/>;
       default:
         return <Admin1 />;
     }
@@ -114,7 +117,7 @@ function AdminDashboard() {
 
           <li
             className={`nav-item ${
-              activeComponent === "equipos" ? "active" : ""
+              activeComponent === "equipos" || activeComponent === "dueno"  ? "active" : ""
             }`}
           >
             <a
@@ -531,7 +534,9 @@ function AdminDashboard() {
               </ul>
             </nav>
             {/* Contenido */}
-            <div style={{ width: "100%", marginBottom: '1rem' }}>{renderComponent()}</div>
+            <div style={{ width: "100%", marginBottom: "1rem" }}>
+              {renderComponent()}
+            </div>
           </div>
 
           {/* Footer */}

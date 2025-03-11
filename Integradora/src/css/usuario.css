@@ -22,7 +22,10 @@
 .rowTeams::-webkit-scrollbar {
     display: none;  /* Chrome, Safari y Edge */
 }
-  
+ 
+.rowTeams div{
+    flex: 0 0 auto;
+}
 
 .partidoFilter{
     display: flex;
@@ -70,6 +73,7 @@
     cursor: pointer;
     border-radius: 10px;
     width: 250px;
+    flex: 0 0 auto;
 }
 
 .partidoCardBody{
@@ -235,6 +239,7 @@ td{
 .accordion-header button:focus{
     background-color: var(--color-domin-1-5) !important;
     border-color: var(--color-acento-1-5) !important;
+    color: var(--color-acento-1-5);
     transition: all 0.25s ease-in-out !important;
 }
 

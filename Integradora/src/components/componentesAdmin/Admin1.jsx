@@ -128,7 +128,7 @@ function Admin1() {
           <div className="col-lg-6 mb-4">
             <div className="card shadow mb-4">
               <div className="card-header py-3">
-                <h5 className="m-0 font-weight-bold">Solicitudes de equipos</h5>
+                <h5 className="m-0 font-weight-bold ml-3">Solicitudes de equipos</h5>
               </div>
               <div className="card-body col-solids">
 
@@ -143,7 +143,7 @@ function Admin1() {
                   />
                   <div className="duenoSolid">
                   <b className="body-small">Francisco Pulido</b>
-                  <h5>Equipo: Nombre</h5>
+                  <h5 className="m-0 ml-2">Equipo: Nombre</h5>
                   </div>
                   </div>
                   <div className="derecha">
@@ -163,7 +163,7 @@ function Admin1() {
                   />
                   <div className="duenoSolid">
                   <b className="body-small">Francisco Pulido</b>
-                  <h5>Equipo: Nombre</h5>
+                  <h5 className="m-0 ml-2">Equipo: Nombre</h5>
                   </div>
                   </div>
                   <div className="derecha">
@@ -183,7 +183,7 @@ function Admin1() {
                   />
                   <div className="duenoSolid">
                   <b className="body-small">Francisco Pulido</b>
-                  <h5>Equipo: Nombre</h5>
+                  <h5 className="m-0 ml-2">Equipo: Nombre</h5>
                   </div>
                   </div>
                   <div className="derecha">
@@ -203,7 +203,7 @@ function Admin1() {
                   />
                   <div className="duenoSolid">
                   <b className="body-small">Francisco Pulido</b>
-                  <h5>Equipo: Nombre</h5>
+                  <h5 className="m-0 ml-2">Equipo: Nombre</h5>
                   </div>
                   </div>
                   <div className="derecha">
@@ -223,7 +223,7 @@ function Admin1() {
                   />
                   <div className="duenoSolid">
                   <b className="body-small">Francisco Pulido</b>
-                  <h5>Equipo: Nombre</h5>
+                  <h5 className="m-0 ml-2">Equipo: Nombre</h5>
                   </div>
                   </div>
                   <div className="derecha">
@@ -243,7 +243,7 @@ function Admin1() {
                   />
                   <div className="duenoSolid">
                   <b className="body-small">Francisco Pulido</b>
-                  <h5>Equipo: Nombre</h5>
+                  <h5 className="m-0 ml-2">Equipo: Nombre</h5>
                   </div>
                   </div>
                   <div className="derecha">
@@ -263,7 +263,7 @@ function Admin1() {
                   />
                   <div className="duenoSolid">
                   <b className="body-small">Francisco Pulido</b>
-                  <h5>Equipo: Nombre</h5>
+                  <h5 className="m-0 ml-2">Equipo: Nombre</h5>
                   </div>
                   </div>
                   <div className="derecha">
@@ -283,7 +283,7 @@ function Admin1() {
                   />
                   <div className="duenoSolid">
                   <b className="body-small">Francisco Pulido</b>
-                  <h5>Equipo: Nombre</h5>
+                  <h5 className="m-0 ml-2">Equipo: Nombre</h5>
                   </div>
                   </div>
                   <div className="derecha">
@@ -296,7 +296,7 @@ function Admin1() {
             </div>
             <div className="card shadow mb-4 col-calendar">
               <div className="card-header py-3">
-                <h5 className="m-0 font-weight-bold">Proximos partidos</h5>
+                <h5 className="m-0 font-weight-bold ml-3">Proximos partidos</h5>
               </div>
               <div className="card-body">
                 <Calendar
@@ -313,7 +313,7 @@ function Admin1() {
                       : ""
                   }
                 />
-                <p>
+                <p className="ml-3">
                   Fecha seleccionada:{" "}
                   {date.toLocaleDateString("es-ES", {
                     weekday: "long",
@@ -328,7 +328,7 @@ function Admin1() {
           <div className="col-lg-6 mb-4">
             <div className="card shadow mb-4">
               <div className="card-header py-3">
-                <h5 className="m-0 font-weight-bold">Dueños de equipos</h5>
+                <h5 className="m-0 font-weight-bold ml-3">Equipos registrados</h5>
               </div>
               <div className="card-body h-100 col-duenos">
                 <div className="duenoGrid">
@@ -340,8 +340,8 @@ function Admin1() {
                       src="https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
                       alt="..."
                     />
-                    <h3 className="duenoTeamsName">Fulano</h3>
-                    <h5 className="duenoTeamsTitle">X equipos</h5>
+                    <h3 className="duenoTeamsName">Equipo</h3>
+                    <h5 className="duenoTeamsTitle">X jugadores</h5>
                   </div>
 
                   <div className="duenoCard">
@@ -351,8 +351,8 @@ function Admin1() {
                       src="https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
                       alt="..."
                     />
-                    <h3 className="duenoTeamsName">Fulano</h3>
-                    <h4 className="duenoTeamsTitle">X equipos</h4>
+                    <h3 className="duenoTeamsName">Equipo</h3>
+                    <h5 className="duenoTeamsTitle">X jugadores</h5>
                   </div>
 
                   <div className="duenoCard">
@@ -362,8 +362,8 @@ function Admin1() {
                       src="https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
                       alt="..."
                     />
-                    <h3 className="duenoTeamsName">Fulano</h3>
-                    <h4 className="duenoTeamsTitle">X equipos</h4>
+                    <h3 className="duenoTeamsName">Equipo</h3>
+                    <h5 className="duenoTeamsTitle">X jugadores</h5>
                   </div>
 
                   <div className="duenoCard">
@@ -373,8 +373,8 @@ function Admin1() {
                       src="https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
                       alt="..."
                     />
-                    <h3 className="duenoTeamsName">Fulano</h3>
-                    <h4 className="duenoTeamsTitle">X equipos</h4>
+                    <h3 className="duenoTeamsName">Equipo</h3>
+                    <h5 className="duenoTeamsTitle">X jugadores</h5>
                   </div>
 
                   <div className="duenoCard">
@@ -384,8 +384,8 @@ function Admin1() {
                       src="https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
                       alt="..."
                     />
-                    <h3 className="duenoTeamsName">Fulano</h3>
-                    <h4 className="duenoTeamsTitle">X equipos</h4>
+                    <h3 className="duenoTeamsName">Equipo</h3>
+                    <h5 className="duenoTeamsTitle">X jugadores</h5>
                   </div>
 
                   <div className="duenoCard">
@@ -395,8 +395,8 @@ function Admin1() {
                       src="https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
                       alt="..."
                     />
-                    <h3 className="duenoTeamsName">Fulano</h3>
-                    <h4 className="duenoTeamsTitle">X equipos</h4>
+                    <h3 className="duenoTeamsName">Equipo</h3>
+                    <h5 className="duenoTeamsTitle">X jugadores</h5>
                   </div>
 
                   <div className="duenoCard">
@@ -406,8 +406,8 @@ function Admin1() {
                       src="https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
                       alt="..."
                     />
-                    <h3 className="duenoTeamsName">Fulano</h3>
-                    <h4 className="duenoTeamsTitle">X equipos</h4>
+                    <h3 className="duenoTeamsName">Equipo</h3>
+                    <h5 className="duenoTeamsTitle">X jugadores</h5>
                   </div>
 
                   <div className="duenoCard">
@@ -417,8 +417,8 @@ function Admin1() {
                       src="https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
                       alt="..."
                     />
-                    <h3 className="duenoTeamsName">Fulano</h3>
-                    <h4 className="duenoTeamsTitle">X equipos</h4>
+                    <h3 className="duenoTeamsName">Equipo</h3>
+                    <h5 className="duenoTeamsTitle">X jugadores</h5>
                   </div>
 
                   <div className="duenoCard">
@@ -428,8 +428,8 @@ function Admin1() {
                       src="https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
                       alt="..."
                     />
-                    <h3 className="duenoTeamsName">Fulano</h3>
-                    <h4 className="duenoTeamsTitle">X equipos</h4>
+                    <h3 className="duenoTeamsName">Equipo</h3>
+                    <h5 className="duenoTeamsTitle">X jugadores</h5>
                   </div>
 
                   <div className="duenoCard">
@@ -439,8 +439,8 @@ function Admin1() {
                       src="https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
                       alt="..."
                     />
-                    <h3 className="duenoTeamsName">Fulano</h3>
-                    <h4 className="duenoTeamsTitle">X equipos</h4>
+                    <h3 className="duenoTeamsName">Equipo</h3>
+                    <h5 className="duenoTeamsTitle">X jugadores</h5>
                   </div>
                 </div>
               </div>

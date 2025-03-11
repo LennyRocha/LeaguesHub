@@ -169,6 +169,18 @@ hr {
   padding: 0.5rem;
 }
 
+@media (max-width: 491px) {
+  .duenoGrid{
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 362px) {
+  .duenoGrid{
+    grid-template-columns: 1fr;
+  }
+}
+
 .duenoCard {
   border-radius: 5px;
   padding: 0.1rem;
@@ -219,6 +231,7 @@ hr {
   justify-content: center;
   gap: 0.5rem;
   padding: 2px;
+  height: 100%;
 }
 
 .derecha {
@@ -227,15 +240,36 @@ hr {
   gap: 0.5rem;
   padding: 2px;
   align-items: center;
+  height: 100%;
 }
 
 .solicitud {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
-  max-height: 75px;
+  flex-shrink: 1 1 auto;
   padding: 3px;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+  .solicitud{
+    flex-direction: column;
+    height: 100%  ;
+    gap: .5rem;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .col-duenos, .col-calendar, .col-solids{
+    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer y Edge */
+  }
+  
+  .solicitud::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari y Edge */
+  }
 }
 
 @media (min-width: 992px) and (max-width: 1145px) {
@@ -497,6 +531,76 @@ hr {
   cursor: pointer;
 }
 
+.slide-btn-sm{
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 1px;
+  border: 2px solid var(--color-domin-1-3);
+  cursor: pointer;
+  position: relative;
+  background-color: transparent;
+  text-decoration: none;
+  z-index: 1;
+  overflow: hidden;
+  font-family: inherit;
+  width: 80%;
+}
+
+.slide-btn-sm::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--color-domin-1-3);
+  transition: all 0.2s;
+  z-index: -1;
+  transform: translateX(-100%);
+}
+
+.slide-btn-sm:hover{
+  border-color: var(--color-domin-1-1);
+}
+
+.slide-btn-sm:hover:before{
+  transform: translateX(0);
+  cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+  .slide-btn-sm:before{
+    transform: translateX(0);
+  }
+
+  .slide-btn:before{
+    transform: translateX(0);
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .slide-btn-sm:before{
+    transform: translateX(0);
+    touch-action: manipulation;
+    border-color: var(--color-domin-1-3);
+  }
+
+  .slide-btn:before{
+    transform: translateX(0);
+    touch-action: manipulation;
+    border-color: var(--color-domin-1-3);
+  }
+
+  #submitArb:before{
+    transform: translateX(0);
+    touch-action: manipulation;
+    border-color: var(--color-domin-1-3);
+  }
+}
+
 .botonDiv{
   bottom: 0;
   right: 0;
@@ -538,6 +642,18 @@ hr {
 .form-div{
   padding: 1rem;
   border-radius: 5px;
+}
+
+._col{
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+@media (max-width: 576px)  {
+  .note-p{
+    margin-left: 2%;
+  }
 }
 
 .rowInp{
@@ -622,6 +738,18 @@ hr {
   gap: 1rem
 }
 
+@media (max-width: 1010px) {
+  .myDuenoGrid{
+    grid-template-columns: repeat(2,1fr);
+  }
+}
+
+@media (max-width: 620px) {
+  .myDuenoGrid{
+    grid-template-columns: 1fr;
+  }
+} 
+
 .dueno-container{
   width: 100%;
   padding: .75rem;
@@ -632,11 +760,46 @@ hr {
   box-shadow: 4px 4px 8px rgba(51, 51, 51, 0.5);
 }
 
+.dueno-container-2{
+  width: 200px;
+  height: calc(100% - 8px);
+  display: flex;
+  flex-direction: column;
+  padding: .75rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;  
+  border-radius: .5rem;
+  box-shadow: 4px 4px 8px rgba(51, 51, 51, 0.5);
+}
+
+.dueno-container-2 h5 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.temaImage {
+  width: 50%;
+  height: 50%;
+  image-orientation: flip;
+}
+
+.teamsVisible{
+  display: block;
+}
+
+.teamsInvisible{
+  display: none;
+}
+
 .dueno-head-row{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center !important;
+  padding-left: .25em;
+  padding-right: .5em;
 }
 
 .divider{
@@ -658,8 +821,9 @@ hr {
 }
 
 .img_dueno{
-  width: 15%;
+  width: 25%;
   border-radius: 50%;
+  margin-right: .5em;
 }
 
 .mini-grid{
@@ -667,8 +831,8 @@ hr {
   grid-template-columns: repeat(2, 1fr);
   gap: 5px;
   width: 100%;
-  padding-left: 3px;
-  padding-right: 3px;
+  padding-left: .5em;
+  padding-right: .5em;
 }
 
 .para_aca{
@@ -679,6 +843,177 @@ hr {
 
 .para_alla{
   color: var(--color-base-3-1);
+}
+
+.overf-auto{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  gap: .5rem;
+  height: 250px;
+  padding: 1px;
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer y Edge */
+  margin-bottom: 1rem;
+}
+
+.overf-auto::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari y Edge */
+}
+
+.over-card{
+  width: 100%;
+  height: 250px;
+}
+
+.players-grid{
+  display: grid;
+  grid-template-columns: repeat(5,1fr);
+  gap: 1rem;
+  padding: .5rem;
+}
+
+@media (max-width: 1020px) {
+  .players-grid{
+    grid-template-columns: repeat(4,1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .players-grid{
+    grid-template-columns: repeat(3,1fr);
+  }
+}
+
+@media (max-width: 805px) {
+  .players-grid{
+    grid-template-columns: repeat(2,1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .players-grid{
+    grid-template-columns: 1fr;
+  }
+}
+
+.front-head{
+  width: 100%;
+  height: 40%;
+  border-bottom-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  margin-bottom: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kard{
+  align-items: center;
+  cursor: pointer;
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+.face{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  backface-visibility: hidden;
+  transform: perspective(500px) rotateY(0deg);
+  transition: 1s ease-in-out;
+}
+
+.kard:hover .card-front,
+.kard.touch-active .card-front,
+.kard:active .card-front {
+  transform: perspective(500px) rotateY(180deg);
+  display: flex;
+}
+
+.kard:hover .card-back,
+.kard.touch-active .card-back,
+.kard:active .card-back {
+  transform: perspective(500px) rotateY(360deg);
+}
+
+.card-front{
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  border-radius: 5px;
+  gap: .5rem;
+}
+
+.h_tz{
+  transform: perspective(500px) translateZ(50px) !important;
+}
+
+.card-back{
+  background-color: var(--color-base-2-5);
+  transform: perspective(500px) rotateY(180deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+}
+
+.kard h2, h3, h4, h5, h6, b, p{
+  transform: perspective(500px) translateZ(50px);
+}
+
+.jugImg{
+  width: 60%;
+  height: 90%;
+  border-radius: 12%;
+  margin-bottom: -3rem;
+}
+
+.f-col{
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.aktive{
+  background-color: var(--color-domin-2-5);
+}
+
+.inactive{
+  background-color: var(--color-base-2-3);
+}
+
+.activeTxt{
+  color: var(--color-domin-2-1);
+  border: 1px solid var(--color-domin-2-1);
+}
+
+.inactiveTxt{
+  color: var(--color-base-2-1);
+  border: 1px solid var(--color-base-2-1);
+}
+
+.mini-alert{
+  width: 100%;
+  height: 2rem;
+  display: flex;
+  justify-content: center;
+  justify-self: end;
 }
 
 /* Enlace default */
