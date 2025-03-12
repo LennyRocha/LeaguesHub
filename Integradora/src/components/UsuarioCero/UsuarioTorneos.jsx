@@ -1,6 +1,7 @@
 import React from "react";
 import "bootstrap";
 import "../../css/usuario.css";
+import UsuarioMap from './UsuarioMap'
 
 export default function UsuarioTorneos({ cambiarComponente }) {
   return (
@@ -97,6 +98,9 @@ export default function UsuarioTorneos({ cambiarComponente }) {
           </div>
         </div>
       </div>
+      <br />
+      <UsuarioMap />
+      <br />
       <a className="loginLink" onClick={() => cambiarComponente("A")}>
         Regresar
       </a>

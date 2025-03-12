@@ -17,7 +17,6 @@ import Swal from "sweetalert2";
 import "bootstrap";
 import Banner1 from "../../assets/templates/Banner1.png";
 import Poster1 from "../../assets/templates/Publicidad1.png";
-import UsuarioCarrusel from "../UsuarioCero/UsuarioCarrusel";
 
 export default function Admin7() {
   return (

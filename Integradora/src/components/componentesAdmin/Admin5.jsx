@@ -66,7 +66,7 @@ export default function Admin5() {
         <div className="col-lg-4">
           <div className="card shadow mb-4">
             <div className="card-header py-3 bg-red">
-              <h5 className="m-0 font-weight-bold ml-2">{accion}</h5>
+            <p className=" font-weight-bold body-small text-white ml-1">{accion}</p>
             </div>
             <div className="arbitro-card">
               <form onSubmit={(e) => submitArbitro(e)}>
