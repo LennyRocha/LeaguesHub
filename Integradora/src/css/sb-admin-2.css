@@ -1112,6 +1112,23 @@ hr {
   color: var(--color-domin-2-4);
 }
 
+.table-overflow{
+  max-height: 250px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer y Edge */
+}
+
+.table-overflow::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari y Edge */
+}
+
+.map-frame{
+  padding: .5rem ;
+}
+
+
 /* A aquí */
 
 p {
