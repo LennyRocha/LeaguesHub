@@ -142,7 +142,7 @@ export default function Admin2({ cambiarComponent }) {
         </div>
         <br />
         <div className="ml-md-5 ml-sm-3 ml-xs-5 align-items-center justify-content-between mb-4 note-p">
-        <p><b>NOTA:</b> En caso de tener adeudos, consulte el menú de adeudos para mas información</p>
+        <p><b>NOTA:</b> En caso de tener adeudos, consulte el menú de pagos para mas información</p>
         </div>
       </div>
     </div>

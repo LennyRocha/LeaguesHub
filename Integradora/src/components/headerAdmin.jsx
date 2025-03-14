@@ -90,12 +90,11 @@ function AdminDashboard() {
       <div id="wrapper">
         {/* Sidebar */}
         <ul
-          className="navbar-nav bg-gradient sidebar sidebar-dark accordion"
+          className="navbar-nav bg-gradient sidebar sidebar-dark accordion bar-wrap"
           id="accordionSidebar"
         >
           <a
             className="sidebar-brand d-flex align-items-center justify-content-center"
-            href="/"
           >
             <div className="sidebar-brand-icon">
               <img src={miImagen} alt="" width={"50em"} height={"50em"} />
@@ -534,7 +533,7 @@ function AdminDashboard() {
               </ul>
             </nav>
             {/* Contenido */}
-            <div style={{ width: "100%", marginBottom: "1rem" }}>
+            <div style={{ width: "100%", marginBottom: "1rem"}}>
               {renderComponent()}
             </div>
           </div>

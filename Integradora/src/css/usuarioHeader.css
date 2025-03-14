@@ -3,11 +3,10 @@
 }
 
 .sticky-header {
-  position: -webkit-sticky !important; /* Para compatibilidad con Safari */
-  position: sticky !important;
   top: 0 !important;
   background-color: #f8f9fa; /* Color de fondo del header */
   z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
+  width: 100%;
 }
 
 .headerTitle {
@@ -26,10 +25,12 @@
 
 header {
   background-color: var(--color-base-3-1);
+  width: 100% !important;
 }
 
 footer {
   background-color: var(--color-base-3-1);
+  width: 100% !important;
 }
 
 footer > * {
@@ -55,12 +56,12 @@ footer > * {
 }
 
 .red-b {
-  background-color: var(--color-domin-1-1);
-  color: white;
+  background-color: var(--color-domin-1-1) !important;
+  color: white !important;
 }
 
 .red-b:hover {
-  background-color: var(--color-domin-1-5);
-  color: white;
-  transition: all 0.25s;
+  background-color: var(--color-domin-1-5) !important;
+  color: white !important;
+  transition: all 0.25s !important;
 }
