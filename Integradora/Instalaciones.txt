@@ -1,0 +1,31 @@
+# Instala Material UI y sus dependencias necesarias
+npm install @mui/material @emotion/react @emotion/styled
+# Opcionalmente, instala los iconos de Material UI
+npm install @mui/icons-material
+# axios
+npm i axios
+# bootstrap
+npm i bootstrap
+# sweet alert
+npm install sweetalert2
+# font awesome
+npm install @fortawesome/fontawesome-free 
+# lordicon
+npm install @lordicon/element
+# bootstrap popperjs
+@popperjs/core 
+# mapas
+@react-google-maps/api 
+npm install react-map-gl 
+# dotenv
+npm install dotenv 
+# jquery
+npm install jquery
+# lottie para ejecutar Lord icon
+npm install lottie-web 
+# react bootstrap
+npm install react-bootstrap 
+# calendario
+npm install react-calendar 
+# router
+npm install react-router-dom
