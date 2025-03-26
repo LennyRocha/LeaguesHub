@@ -67,7 +67,7 @@ function Login({ cambiarComponente }) {
             onChange={handleChangeMail}
           />
         </div>
-        <div class="input-contenedor">
+        <div className="input-contenedor">
         <lord-icon
             id="iconico2"
             src="/icons/huella-icon.json"

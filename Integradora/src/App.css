@@ -1,11 +1,14 @@
  #root {
-  width: 100% ;
+  width: 100%;
+  /* background: linear-gradient(270deg, #FFFFFF, #D3D3D3, #A9A9A9); */
 }
 
 #rootApp{
   max-width: 1200px !important;
   margin: 0 auto;
   text-align: center;
+  overflow: hidden;
+  /* background: linear-gradient(to right, #8999A7, #0094DF, #FF0000); */
 }
 
 body{
@@ -16,6 +19,7 @@ body{
   align-items: flex-start;
   overflow: auto;
   height: 100%;
+  width: 100%;
 }
 
 .logo {

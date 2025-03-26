@@ -1,22 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "bootstrap";
 import miImagen from "../img/logo1.png";
 import "../css/UsuarioHeader.css";
+import UsuarioMain from "./UsuarioCero/UsuarioMain";
+import UsuarioCarrusel from "./UsuarioCero/UsuarioCarrusel";
+import UsuarioDestac from "./UsuarioCero/UsuarioDestac";
+import UsuarioTabla1 from "./UsuarioCero/UsuarioTabla1";
+import UsuarioTabla2 from "./UsuarioCero/UsuarioTabla2";
+import UsuarioLista from "./UsuarioCero/UsuarioLista";
+import bootstrap from "bootstrap/dist/js/bootstrap.bundle.min";
 
 export default function Usuario0({ cambiarComponente }) {
   return (
     <div className="sticky-header">
-      <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom p-5 w-100">
-        <div className='headerTitle'>
-        <a
-          className="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none"
-        >
-          <img src={miImagen} width={40} height={50} alt="Logo" />
-        </a>
-        Leagues Hub
-        </div>
+      <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 px-3 mb-1 border-bottom p-1 w-100">
+          <a
+            className="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none"
+            id="logoHead"
+          >
+            <img src={miImagen} width={40} height={50} alt="Logo" />
+            <span class="fs-4">Leagues Hub</span>
+          </a>
 
-        <ul className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0" id="headerMain">
+        <ul
+          className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0"
+          id="headerMain"
+        >
           <li>
             <a href="#inicio" className="nav-link px-2 texto-blanco">
               Inicio
@@ -43,13 +52,14 @@ export default function Usuario0({ cambiarComponente }) {
             </a>
           </li>
         </ul>
-
         <div className="col-md-3 text-end">
           <a type="button" className="btn red-b" href="/acceso">
             Acceder
           </a>
         </div>
       </header>
+
+      <br />
     </div>
   );
 }

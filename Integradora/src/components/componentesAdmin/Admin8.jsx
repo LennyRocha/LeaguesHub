@@ -172,18 +172,18 @@ export default function Admin8({ cambiarComponent }) {
   return (
     <div>
       <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
+        <ol className="breadcrumb">
+          <li className="breadcrumb-item">
             <a onClick={() => cambiarComponent("home")} className="link">
               Inicio
             </a>
           </li>
-          <li class="breadcrumb-item">
+          <li className="breadcrumb-item">
             <a onClick={() => cambiarComponent("equipos")} className="link">
               Dueños
             </a>
           </li>
-          <li class="breadcrumb-item active" aria-current="page">
+          <li className="breadcrumb-item active" aria-current="page">
             Equipos
           </li>
         </ol>

@@ -1,12 +1,15 @@
 .rowTeams{
     display: flex;
     flex-direction: row;
-    justify-content: center;
     width: 100%;
     gap: 2rem;
     overflow: auto;
     padding: 1rem;
     padding-top: 2px !important;
+}
+
+.half-round{
+    border-radius: 50%;
 }
 
 .rowTeams {

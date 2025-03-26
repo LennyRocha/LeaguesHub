@@ -492,7 +492,7 @@ function AdminDashboard() {
                     aria-haspopup="true"
                     aria-expanded="false"
                   >
-                    <span class="mr-3 d-none d-lg-inline text-gray-600 small">
+                    <span className="mr-3 d-none d-lg-inline text-gray-600 small">
                       {userName} #0000000001
                     </span>
                     <img

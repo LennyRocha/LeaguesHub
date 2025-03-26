@@ -35,7 +35,7 @@ export default function Password({ cambiarComponente }) {
             restablecer su contraseña.
           </p>
           <form action="" id="mini-form">
-            <div class="input-cont">
+            <div className="input-cont">
               <lord-icon
                 id="iconPass"
                 src="/icons/correo-icon.json"

@@ -185,7 +185,7 @@ export default function Acces({ cambiarComponente }) {
               name="name"
               required
               placeholder="Nombre"
-              class="inp"
+              className="inp"
               onInput={handleChangeName}
             />
           </div>
@@ -196,7 +196,7 @@ export default function Acces({ cambiarComponente }) {
               name="email"
               required
               placeholder="Correo electrónico"
-              class="inp"
+              className="inp"
               onInput={handleChangeMail}
             />
           </div>
@@ -207,7 +207,7 @@ export default function Acces({ cambiarComponente }) {
               name="passw"
               required
               placeholder="Contraseña"
-              class="inp"
+              className="inp"
               onInput={handleChangePass}
             />
           </div>
@@ -218,7 +218,7 @@ export default function Acces({ cambiarComponente }) {
               name="pass2"
               required
               placeholder="Confirmar contraseña"
-              class="inp"
+              className="inp"
               onInput={handleChangePass2}
             />
           </div>
@@ -237,7 +237,7 @@ export default function Acces({ cambiarComponente }) {
               name="email1"
               required
               placeholder="Correo electónico"
-              class="inp"
+              className="inp"
               id="mail1"
               onInput={handleChangeMailL}
             />
@@ -249,7 +249,7 @@ export default function Acces({ cambiarComponente }) {
               name="pswrd1"
               required
               placeholder="Contraseña"
-              class="inp"
+              className="inp"
               id="pass1"
               onInput={handleChangePassL}
             />
