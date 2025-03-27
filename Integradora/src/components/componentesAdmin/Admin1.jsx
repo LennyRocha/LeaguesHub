@@ -7,34 +7,89 @@ import axios from "axios";
 function Admin1() {
   const [date, setDate] = useState(new Date());
 
-  // const partidos = [
-  //   { date: new Date(2025, 2, 15), description: "Final de la Copa" },
-  //   { date: new Date(2025, 2, 20), description: "Semifinal Liga" },
-  //   { date: new Date(2025, 2, 25), description: "Amistoso vs Tigres" },
-  // ];
+  const { getUserId, getUserRole, getToken, logout, api_url, getUrl } =
+    useContext(AuthContext);
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
-    console.log(newDate);
 
-    // Buscar si la fecha seleccionada tiene un partido
-    const partido = partidos.find(
-      (p) => p.date.toDateString() === newDate.toDateString()
+    // Convertir la fecha seleccionada a 'YYYY-MM-DD' en zona horaria local
+    const formattedNewDate = newDate.toLocaleDateString("sv-SE"); // Formato sueco (ISO-compatible)
+
+    console.log("Fecha seleccionada:", formattedNewDate);
+
+    // Buscar los partidos para la fecha seleccionada
+    const partidosDelDia = partidos.filter(
+      (p) => p.fechaPartido === formattedNewDate
     );
 
-    if (partido) {
+    console.log(partidosDelDia);
+
+    if (partidosDelDia.length > 0) {
+      console.log("Partidos del día:", partidosDelDia);
+
       Swal.fire({
-        title: "Partido programado",
-        text: partido.description,
+        title: `Partidos programados el ${formattedNewDate}`,
+        html: `
+          <div id='swalUi' style=" overflow-y: auto; padding: 0;">
+            ${partidosDelDia
+              .map(
+                (p) => `
+                <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #ddd;">
+                  <div>
+                    <strong>${p.torneo.nombreTorneo}</strong>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 10px; width: 100%; justify-content: center;">
+  <!-- Primer equipo (local) -->
+  <div style="text-align: center;">
+    <img
+      src="${getUrl(p.equipoLocal.logo)}"
+      alt="Local"
+      width="40"
+      height="40"
+      style="border-radius: 50%;"
+    />
+    <p>${p.equipoLocal.nombreEquipo}</p>
+  </div>
+
+  <!-- Hora del partido -->
+  <div style="display: flex; align-items: center;">
+    <h6 style="margin: 0;">${p.hora}</h6>
+  </div>
+
+  <!-- Segundo equipo (visitante) -->
+  <div style="text-align: center;">
+    <img
+      src="${getUrl(p.equipoVisitante.logo)}"
+      alt="Visitante"
+      width="40"
+      height="40"
+      style="border-radius: 50%;"
+    />
+    <p>${p.equipoVisitante.nombreEquipo}</p>
+  </div>
+</div>
+
+                </div>
+              `
+              )
+              .join("")}
+          </div>
+        `,
         icon: "info",
         confirmButtonText: "OK",
+        customClass: {
+          confirmButton: "btn-confirm",
+          cancelButton: "btn-cancel",
+          denyButton: "btn-deny",
+        },
       });
+    } else {
+      console.log("No hay partidos para esta fecha");
     }
   };
 
   const [progress, setProgress] = useState(0.25);
-  const { getUserId, getUserRole, getToken, logout, api_url, getUrl } =
-    useContext(AuthContext);
   const [modalSolid, setModalSolid] = useState(false);
   const [modalPartid, setModalPartid] = useState(false);
   const [torName, setTorName] = useState("");
@@ -113,13 +168,17 @@ function Admin1() {
         .get(`${api_url}/api/partidos/todos`)
         .then((res) => {
           setPartidos(res.data);
-
-          // Convertimos el array de partidos en el objeto marcado
           const newMarkedDates = res.data.reduce((acc, partido) => {
-            acc[partido.fechaPartido] = {
-              selected: true,
-              selectedColor: "green",
-            };
+            const formattedFechaPartido = new Date(partido.fechaPartido)
+              .toISOString()
+              .split("T")[0]; // 'YYYY-MM-DD'
+
+            if (!acc[formattedFechaPartido]) {
+              acc[formattedFechaPartido] = {
+                selected: true,
+                selectedColor: "green",
+              };
+            }
             return acc;
           }, {});
 
@@ -127,14 +186,6 @@ function Admin1() {
         })
         .catch((err) => {
           console.error(err);
-          if (err.response?.status === 403) {
-            Alert.alert(
-              "Sesión expirada",
-              "Por favor, inicia sesión nuevamente."
-            );
-            logout();
-            return;
-          }
           alert("Hubo un error al cargar los partidos, inténtalo nuevamente");
         })
         .finally(() => setLoadPartidos(false));
@@ -512,27 +563,31 @@ function Admin1() {
                 <h5 className="m-0 font-weight-bold ml-3">Proximos partidos</h5>
               </div>
               <div className="card-body">
-                <Calendar
-                  onChange={handleDateChange}
-                  value={date}
-                  className="calendar"
-                  minDate={new Date()}
-                  showNeighboringMonth={false}
-                  tileClassName={({ date }) =>
-                    partidos.some((p) => p.fechaPartido === date.toDateString())
-                      ? "highlight"
-                      : ""
-                  }
-                />
-                <p className="ml-3">
-                  Fecha seleccionada:{" "}
-                  {date.toLocaleDateString("es-ES", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </p>
+                {loadPartidos ? (
+                  <div className="centered-div">
+                    <div className="my-spinner"></div>
+                  </div>
+                ) : (
+                  <Calendar
+                    onChange={handleDateChange}
+                    value={date}
+                    className="calendar"
+                    minDate={new Date()} // Asegura que no se puedan seleccionar fechas pasadas
+                    showNeighboringMonth={false} // No mostrar días del mes anterior o siguiente
+                    tileClassName={({ date }) => {
+                      const dateString = date.toISOString().split("T")[0]; // 'YYYY-MM-DD'
+                      const todayString = new Date()
+                        .toISOString()
+                        .split("T")[0]; // Fecha de hoy
+
+                      if (dateString === todayString) {
+                        return "today-highlight"; // Clase especial para el día actual
+                      }
+
+                      return markedDates[dateString] ? "highlight" : "";
+                    }}
+                  />
+                )}
               </div>
             </div>
           </div>

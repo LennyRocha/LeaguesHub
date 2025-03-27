@@ -110,10 +110,13 @@ function AdminDashboard() {
         setExpire(true);
         console.log("El token ha expirado ❌");
         if (Notification.permission === "granted") {
-          new Notification("¡Hola!", {
+          const notif = new Notification("¡Hola!", {
             body: "El token ha expirado ❌",
             icon: miImagen,
           });
+          notif.onclick = () => {
+            window.open("http://localhost:5173/acceso", "_blank");
+          };
         }
       } else {
         setExpire(false);
