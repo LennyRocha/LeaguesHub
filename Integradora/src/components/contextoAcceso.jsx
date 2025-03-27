@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react';
-import Acces from './Acces';
+import Access from './Access';
 import Password from './password';
 
 export default function ContextoAcceso() {
@@ -8,11 +8,11 @@ export default function ContextoAcceso() {
   const renderizarComponente = () => {
     switch (componenteActual) {
       case "A":
-        return <Acces cambiarComponente={setComponenteActual} />;
+        return <Access cambiarComponente={setComponenteActual} />;
       case "B":
         return <Password cambiarComponente={setComponenteActual} />;
       default:
-        return <Acces cambiarComponente={setComponenteActual} />;
+        return <Access cambiarComponente={setComponenteActual} />;
     }
   };
   return (

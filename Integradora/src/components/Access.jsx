@@ -2,18 +2,41 @@ import React from "react";
 import miImagen from "../img/logo1.png";
 import Tooltip from "@mui/material/Tooltip";
 import { useEffect, useState } from "react";
+import { useContext } from "react";
 import "../css/access.css";
 import "../css/fonts.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import Swal from "sweetalert2";
+import { AuthContext } from "../context/AuthContext";
 
 import lottie from "lottie-web";
 import { defineElement } from "@lordicon/element";
-// define "lord-icon" custom element with default properties
 defineElement(lottie.loadAnimation);
 
-export default function Acces({ cambiarComponente }) {
-  const [emptyField, setEmptyField] = useState('');
+const Access = ({ cambiarComponente }) => {
+  const context = useContext(AuthContext);
+
+  const {
+    login,
+    isLoading,
+    setIsLoading,
+    failure,
+    saveToken,
+    getToken,
+    removeToken,
+    mensaje,
+    setMensaje,
+    setFailure,
+  } = useContext(AuthContext);
+
+  useEffect(() => {
+    console.log("Contexto recibido:", context);
+    console.log(context.login);
+    setFailure(false);
+    setMensaje('');
+  }, []);
+
+  const [emptyField, setEmptyField] = useState("");
 
   const [preview, setPreview] = useState(
     "https://www.meme-arsenal.com/memes/a513f913ef43476bd2b494da4e599cbc.jpg"
@@ -39,72 +62,94 @@ export default function Acces({ cambiarComponente }) {
     passw: "",
     name: "",
     pass2: "",
-    img: ''
+    img: "",
   });
 
   //Login
   const handleChangeMailL = (e) => {
     setUserL({ ...userL, email: e.target.value });
-    console.log(e.target.value)
+    console.log(e.target.value);
   };
 
   const handleChangePassL = (e) => {
-    setUserL({ ...userL, passw: e.target.value }); 
+    setUserL({ ...userL, passw: e.target.value });
   };
 
   //Sign up
   const handleChangeName = (e) => {
-    setUserS({ ...userS, [e.target.name]: e.target.value }); 
+    setUserS({ ...userS, [e.target.name]: e.target.value });
   };
 
   const handleChangeMail = (e) => {
-    setUserS({ ...userS, [e.target.name]: e.target.value }); 
-    console.log(e.target.value)
+    setUserS({ ...userS, [e.target.name]: e.target.value });
+    console.log(e.target.value);
   };
 
   const handleChangePass = (e) => {
-    setUserS({ ...userS, [e.target.name]: e.target.value }); 
+    setUserS({ ...userS, [e.target.name]: e.target.value });
   };
 
   const handleChangePass2 = (e) => {
-    setUserS({ ...userS, [e.target.name]: e.target.value }); 
+    setUserS({ ...userS, [e.target.name]: e.target.value });
   };
 
   const handleChangeImg = async (e) => {
-    if(preview !== "https://www.meme-arsenal.com/memes/a513f913ef43476bd2b494da4e599cbc.jpg"){
+    if (
+      preview !==
+      "https://www.meme-arsenal.com/memes/a513f913ef43476bd2b494da4e599cbc.jpg"
+    ) {
       setUserS({ ...userS, img: preview });
     }
   };
 
   const handleSubmit1 = (e) => {
     e.preventDefault();
-    if (userL.passw === "" || userL.email === "" || emptyField !== '') {
+    if (userL.passw === "" || userL.email === "" || emptyField !== "") {
       Swal.fire({
         icon: "error",
         title: "Campos vacios",
-        text: `El campo ${emptyField} está vacío`,
+        text: `             
+        ${
+          mensaje === "" || mensaje === undefined
+            ? "Algo salió mal, intentalo nuevamente"
+            : mensaje
+        }`,
         customClass: {
-          confirmButton: 'btn-confirm',
-          cancelButton: 'btn-cancel',
-          denyButton: 'btn-deny'
-        }
+          confirmButton: "btn-confirm",
+          cancelButton: "btn-cancel",
+          denyButton: "btn-deny",
+        },
       });
     } else {
-      Swal.fire({
-        icon: "success",
-        title: "Datos guardados:",
-        text: `Correo: ${userL.email}, Contraseña: ${userL.passw}`,
-        customClass: {
-          confirmButton: 'btn-confirm',
-          cancelButton: 'btn-cancel',
-          denyButton: 'btn-deny'
-        }
-      });
-      window.location.href = '/admin'
+      login(userL.email, userL.passw);
+      if (failure || mensaje) {
+        Swal.fire({
+          icon: "error",
+          title: "¡Denegado!",
+          text: `${
+            mensaje === "" || mensaje === undefined
+              ? "Algo salió mal, intentalo nuevamente"
+              : mensaje
+          }`,
+          customClass: {
+            confirmButton: "btn-confirm",
+            cancelButton: "btn-cancel",
+            denyButton: "btn-deny",
+          },
+        }).then((result) => {
+          setFailure(false);
+          setMensaje('');
+        });
+      } else {
+        window.location.href = "/admin";
+        setFailure(false);
+        setMensaje('');
+      }
+      //
     }
-    setUserL({ email: "", passw: ""});
+    setUserL({ email: "", passw: "" });
     e.target.reset();
-    setEmptyField('');
+    setEmptyField("");
   };
 
   const handleSubmit2 = (e) => {
@@ -116,49 +161,57 @@ export default function Acces({ cambiarComponente }) {
         title: "Contraseña incorrecta",
         text: `Las contraseñas no coinciden`,
         customClass: {
-          confirmButton: 'btn-confirm',
-          cancelButton: 'btn-cancel',
-          denyButton: 'btn-deny'
-        }
+          confirmButton: "btn-confirm",
+          cancelButton: "btn-cancel",
+          denyButton: "btn-deny",
+        },
       });
-    } else if (userS.passw === "" || userS.pass2 === "" || userS.email === "" || userS.name === "") {
-      console.log(userS)
+    } else if (
+      userS.passw === "" ||
+      userS.pass2 === "" ||
+      userS.email === "" ||
+      userS.name === ""
+    ) {
+      console.log(userS);
       Swal.fire({
         icon: "error",
         title: "Campos vacios",
         text: `El campo ${emptyField} está vacío`,
         customClass: {
-          confirmButton: 'btn-confirm',
-          cancelButton: 'btn-cancel',
-          denyButton: 'btn-deny'
-        }
+          confirmButton: "btn-confirm",
+          cancelButton: "btn-cancel",
+          denyButton: "btn-deny",
+        },
       });
-    } else if (preview === "https://www.meme-arsenal.com/memes/a513f913ef43476bd2b494da4e599cbc.jpg") {
+    } else if (
+      preview ===
+      "https://www.meme-arsenal.com/memes/a513f913ef43476bd2b494da4e599cbc.jpg"
+    ) {
       Swal.fire({
         icon: "error",
         title: "Imagen no seleccionada",
         text: `Elige una imagen para continuar`,
         customClass: {
-          confirmButton: 'btn-confirm',
-          cancelButton: 'btn-cancel',
-          denyButton: 'btn-deny'
-        }
+          confirmButton: "btn-confirm",
+          cancelButton: "btn-cancel",
+          denyButton: "btn-deny",
+        },
       });
-    }else {
+    } else {
       Swal.fire({
         icon: "success",
         title: "Datos guardados:",
         text: `Nombre: ${userS.name}, Correo: ${userS.email}, Contraseña: ${userS.passw}`,
         customClass: {
-          confirmButton: 'btn-confirm',
-          cancelButton: 'btn-cancel',
-          denyButton: 'btn-deny'
-        }
+          confirmButton: "btn-confirm",
+          cancelButton: "btn-cancel",
+          denyButton: "btn-deny",
+        },
       });
     }
-    setUserS({ email: "", passw: "", name: "", pass2: "", img: '' });
+    setUserS({ email: "", passw: "", name: "", pass2: "", img: "" });
     e.target.reset();
-    setEmptyField('');
+    setEmptyField("");
   };
 
   const swapScreen1 = () => {
@@ -231,7 +284,7 @@ export default function Acces({ cambiarComponente }) {
         <form onSubmit={handleSubmit1}>
           <h3 className="bld">Iniciar Sesión</h3>
           <div className="input-containere">
-          <i className="fa fa-user icon" aria-hidden="true" id="red"></i>
+            <i className="fa fa-user icon" aria-hidden="true" id="red"></i>
             <input
               type="email"
               name="email1"
@@ -243,7 +296,7 @@ export default function Acces({ cambiarComponente }) {
             />
           </div>
           <div className="input-containere">
-          <i className="fa fa-lock icon" aria-hidden="true" id="red"></i>
+            <i className="fa fa-lock icon" aria-hidden="true" id="red"></i>
             <input
               type="password"
               name="pswrd1"
@@ -305,4 +358,6 @@ export default function Acces({ cambiarComponente }) {
       </div>
     </div>
   );
-}
+};
+
+export default Access;

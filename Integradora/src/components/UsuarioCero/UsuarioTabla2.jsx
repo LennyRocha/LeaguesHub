@@ -72,18 +72,25 @@ export default function UsuarioTabla2() {
   return (
     <div className="my-5">
       <h1 id="goleo">Tablas de Goleo</h1>
+      <h2>Filtrar: </h2>
+      <select>
+        <option>General</option>
+        <option>Torneo 1</option>
+        <option>Torneo 2</option>
+        <option>Torneo 3</option>
+      </select>
       <div className="over-auto">
         <table className="table">
           <thead className="myThead">
             <tr>
-            <th>POS</th>
-            <th>EQUIPO</th>
-            <th>FOTO</th>
-            <th className="jugadorCell jugadorTh">JUGADOR</th>
-            <th>PARTIDOS</th>
-            <th>GOLES</th>
-            <th>PTS</th>
-            <th>MJ</th>
+              <th>POS</th>
+              <th>EQUIPO</th>
+              <th>FOTO</th>
+              <th className="jugadorCell jugadorTh">JUGADOR</th>
+              <th>PARTIDOS</th>
+              <th>GOLES</th>
+              <th>PTS</th>
+              <th>MJ</th>
             </tr>
           </thead>
           <tbody>
@@ -101,18 +108,13 @@ export default function UsuarioTabla2() {
                     />
                   </td>
                   <td className="imgCell">
-                    <img
-                      src={j.img}
-                      alt={j.nombre}
-                      width={30}
-                      height={30}
-                    />
+                    <img src={j.img} alt={j.nombre} width={30} height={30} />
                   </td>
                   <td className="jugadorTh">{j.nombre}</td>
                   <td className="diff">{j.partidos}</td>
                   <td className="goles">{j.goles}</td>
                   <td className="pts">+{j.goles * 3}</td>
-                  <td className="mj">{j. partidos * 90}</td>
+                  <td className="mj">{j.partidos * 90}</td>
                 </tr>
               );
             })}

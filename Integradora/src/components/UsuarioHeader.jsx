@@ -19,7 +19,7 @@ export default function Usuario0({ cambiarComponente }) {
             id="logoHead"
           >
             <img src={miImagen} width={40} height={50} alt="Logo" />
-            <span class="fs-4">Leagues Hub</span>
+            <span class="fs-4 text-white">Leagues Hub</span>
           </a>
 
         <ul

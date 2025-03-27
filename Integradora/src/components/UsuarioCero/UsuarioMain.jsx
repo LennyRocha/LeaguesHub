@@ -22,9 +22,13 @@ export default function UsuarioMain({ cambiarComponente }) {
   return (
     <div id="main">
       <UsuarioRow getUrl={transformarUrl} api={api} />
-      <UsuarioLista cambiarComponente={cambiarComponente} getUrl={transformarUrl} api={api} />
-      <UsuarioCarrusel />
-      <UsuarioTabla1 />
+      <UsuarioLista
+        cambiarComponente={cambiarComponente}
+        getUrl={transformarUrl}
+        api={api}
+      />
+      {/* <UsuarioCarrusel /> */}
+      <UsuarioTabla1 api={api} />
       <UsuarioDestac />
       <UsuarioTabla2 />
     </div>

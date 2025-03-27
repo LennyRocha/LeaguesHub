@@ -1,24 +1,90 @@
-import React from 'react'
-import 'bootstrap'
+import React, { useEffect, useState } from "react";
+import MiniLoadingScreen from "../MiniLoadingScreen";
+import "bootstrap";
 import "../../css/usuario.css";
+import axios from "axios";
 
-export default function UsuarioTabla1 (equipos) {
+export default function UsuarioTabla1({ api }) {
+  const [torneos, setTorneos] = useState([]);
+  const [partidos, setPartidos] = useState({});
+  const [equipos, setEquipos] = useState([]);
+  const [selectedTorneo, setSelectedTorneo] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [partidosCargados, setPartidosCargados] = useState(false);
+  const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 10;
+
+  useEffect(() => {
+    const fetchTorneos = async () => {
+      try {
+        const res = await axios.get(`${api}/api/torneos/iniciados`);
+        setTorneos(res.data);
+        console.log(res.data,'X')
+        if (res.data.length > 0) {
+          setSelectedTorneo(res.data[0].id);
+        }
+      } catch (e) {
+        setError("Error al cargar los torneos. Intenta de nuevo.");
+      }
+    };
+    fetchTorneos();
+  }, []);
+
+  useEffect(() => {
+    if (selectedTorneo) {
+      setLoading(true);
+      const fetchEquipos = async () => {
+        try {
+          const res = await axios.get(`${api}/api/tabla-clasificacion/${selectedTorneo}`);
+          setEquipos(res.data);
+        } catch (e) {
+          setError("Error al cargar la tabla de clasificación.");
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchEquipos();
+    }
+  }, [selectedTorneo]);
+
+  useEffect(() => {
+    if (selectedTorneo) {
+      const fetchPartidos = async () => {
+        try {
+          const res = await axios.get(`${api}/api/partidos/todos/portorneo/${selectedTorneo}`);
+          setPartidos((prev) => ({ ...prev, [selectedTorneo]: res.data }));
+        } catch (e) {
+          console.error("Error al cargar los partidos:", e);
+        }
+      };
+      fetchPartidos();
+    }
+  }, [selectedTorneo]);
+
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const displayedTeams = equipos.slice(startIndex, endIndex);
+
   return (
-    <div className='my-5'>
-        <h1 id='clasif'>Tablas de Clasificación</h1>
-        <div className="partidoFilter">
-        <h2>Filtrar: </h2>
-        <select>
-          <option>General</option>
-          <option>Torneo 1</option>
-          <option>Torneo 2</option>
-          <option>Torneo 3</option>
+    <div className="my-5">
+      <h1 id="clasif">Tablas de Clasificación</h1>
+      <div className="partidoFilter">
+        <select value={selectedTorneo} onChange={(e) => { setSelectedTorneo(e.target.value); setCurrentPage(0); }}>
+          <option value="">Selecciona un torneo</option>
+          {torneos.map((torneo) => (
+            <option key={torneo.id} value={torneo.id}>{torneo.nombreTorneo}</option>
+          ))}
         </select>
       </div>
+      {error && <p className="error-text">{error}</p>}
+      {loading ? (
+        <p>Cargando tabla de clasificación...</p>
+      ) : (
         <div className="over-auto">
-        <table className='table'>
-            <thead className='myThead'>
-                <tr>
+          <table className="table">
+            <thead className="myThead">
+              <tr>
                 <th>POS</th>
                 <th></th>
                 <th>EQUIPO</th>
@@ -30,38 +96,33 @@ export default function UsuarioTabla1 (equipos) {
                 <th>GC</th>
                 <th>DIFF</th>
                 <th>PTS</th>
-                </tr>
+              </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td className='imgCell'><img src="https://th.bing.com/th/id/OIP.EsWex0S9Lwksykh1kD00XQHaI3?rs=1&pid=ImgDetMain" alt="Chivas" width={30} height={30} /></td>
-                    <td>Equipo 1</td>
-                    <td>24</td>
-                    <td className='jg'>20</td>
-                    <td className='je'>3</td>
-                    <td className='jp'>1</td>
-                    <td>50</td>
-                    <td>49</td>
-                    <td className='diff'>1</td>
-                    <td className='pts'>+39</td>
+              {displayedTeams.map((team, index) => (
+                <tr key={team.id}>
+                  <td>{startIndex + index + 1}</td>
+                  <td className="imgCell"><img src={team.logo} alt={team.nombreEquipo} width={30} height={30} /></td>
+                  <td>{team.nombreEquipo}</td>
+                  <td>{team.partidosGanados + team.partidosEmpatados + team.partidosPerdidos}</td>
+                  <td className="jg">{team.partidosGanados}</td>
+                  <td className="je">{team.partidosEmpatados}</td>
+                  <td className="jp">{team.partidosPerdidos}</td>
+                  <td>{team.golesAFavor}</td>
+                  <td>{team.golesEnContra}</td>
+                  <td className="diff">{team.golesAFavor - team.golesEnContra}</td>
+                  <td className="pts">{team.puntos}</td>
                 </tr>
-                <tr>
-                    <td>1</td>
-                    <td className='imgCell'><img src="https://th.bing.com/th/id/OIP.EsWex0S9Lwksykh1kD00XQHaI3?rs=1&pid=ImgDetMain" alt="Chivas" width={30} height={30} /></td>
-                    <td>Equipo 1</td>
-                    <td>24</td>
-                    <td className='jg'>20</td>
-                    <td className='je'>3</td>
-                    <td className='jp'>1</td>
-                    <td>50</td>
-                    <td>49</td>
-                    <td className='diff'>1</td>
-                    <td className='pts'>+39</td>
-                </tr>
+              ))}
             </tbody>
-        </table>
+          </table>
+          <div className="pagination-container">
+            <button disabled={currentPage === 0} onClick={() => setCurrentPage(currentPage - 1)}>Anterior</button>
+            <span>Página {currentPage + 1} de {Math.ceil(equipos.length / itemsPerPage)}</span>
+            <button disabled={endIndex >= equipos.length} onClick={() => setCurrentPage(currentPage + 1)}>Siguiente</button>
+          </div>
         </div>
+      )}
     </div>
-  )
+  );
 }
