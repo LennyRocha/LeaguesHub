@@ -86,6 +86,41 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  function decodeToken(token) {
+    try {
+      console.log(token);
+
+      if (token !== null) {
+        const base64Url = token.split(".")[1]; // Extraer el payload (segunda parte del token)
+        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/"); // Corregir formato base64
+        const decodedPayload = JSON.parse(atob(base64)); // Decodificar el payload
+
+        // Convertir la fecha de expiración (exp) a formato legible
+        const expirationDate = new Date(decodedPayload.exp * 1000);
+        const currentDate = new Date();
+
+        console.log("Expiración del token:", expirationDate);
+
+        // Validar si el token ha expirado
+        if (expirationDate < currentDate) {
+          console.log("El token ha expirado.");
+        } else {
+          console.log("El token aún es válido.");
+        }
+
+        return expirationDate;
+      }
+    } catch (error) {
+      console.error("Error al decodificar el token:", error);
+      return null;
+    }
+  }
+
+  const getUrl = (url) => {
+    const match = url.match(/id=([^&]+)/); // Extrae el ID de la imagen
+    return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : url;
+  };
+
   const login = (username, password) => {
     validate(username.toLowerCase().trim(), password);
   };
@@ -116,6 +151,8 @@ export const AuthProvider = ({ children }) => {
         getUserEmail,
         getUserId,
         getUserRole,
+        decodeToken,
+        getUrl
       }}
     >
       {children}

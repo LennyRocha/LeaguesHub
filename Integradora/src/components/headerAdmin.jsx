@@ -1,8 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import miImagen from "../img/logo1.png";
+import LoadingScreen from "./LoadingScreen";
+import TokenPage from "./componentesExternos/TokenPage";
+import NoAuthPage from "./componentesExternos/NoAuthPage";
+import { AuthContext } from "../context/AuthContext";
 
 import "../css/sb-admin-2.css";
 import "../css/fonts.css";
@@ -32,6 +36,107 @@ function AdminDashboard() {
 
   const [timeStr, setTimeStr] = useState("");
   const [dateStr, setDateStr] = useState("");
+
+  const { getToken, decodeToken, getUserEmail, getUserRole } =
+    useContext(AuthContext);
+  const { logout, removeToken, removeUser } = useContext(AuthContext);
+
+  const [tokenData, setTokenData] = useState("");
+  const [expire, setExpire] = useState(false);
+  const [switcht, setSwitcht] = useState(false);
+  const [loadData, setLoadData] = useState(true);
+  const [correo, setCorreo] = useState("");
+  const [rol, setRol] = useState("");
+  const [noData, setNoData] = useState(false);
+  const tokenCheckInterval = 5 * 60 * 1000; // 5 minutos
+
+  // useRef para mantener el valor más reciente del token
+  const tokenRef = useRef("");
+
+  useEffect(() => {
+    let intervalId;
+
+    // Solicitar permisos para notificaciones
+    const requestNotificationPermission = () => {
+      if (Notification.permission !== "granted") {
+        Notification.requestPermission().then((permission) => {
+          if (permission === "granted") {
+            console.log("Permiso concedido para notificaciones");
+          }
+        });
+      }
+    };
+
+    // Llamada a la función de solicitud de permisos
+    requestNotificationPermission();
+
+    const fetchToken = async () => {
+      try {
+        setLoadData(true);
+        const fetchedToken = await getToken();
+        const rol = await getUserRole();
+        const correo = await getUserEmail();
+        if (fetchedToken) {
+          setTokenData(fetchedToken);
+          tokenRef.current = fetchedToken; // Actualizar el token más reciente
+          console.log(fetchedToken, "obtenido");
+          validateToken(fetchedToken);
+          setRol(rol);
+          setCorreo(correo);
+          setNoData(false);
+        } else {
+          console.log("Token no encontrado o está vacío.");
+          setNoData(true);
+        }
+      } catch (error) {
+        console.log("Error al obtener el token:", error);
+        setNoData(true);
+      } finally {
+        setLoadData(false);
+      }
+    };
+
+    const validateToken = (token) => {
+      if (!token) {
+        setExpire(true);
+        console.log("Token inválido ❌");
+        return;
+      }
+
+      const expirationDate = decodeToken(token);
+      const currentDate = new Date();
+
+      if (!expirationDate || expirationDate < currentDate) {
+        setExpire(true);
+        console.log("El token ha expirado ❌");
+        if (Notification.permission === "granted") {
+          new Notification("¡Hola!", {
+            body: "El token ha expirado ❌",
+            icon: miImagen,
+          });
+        }
+      } else {
+        setExpire(false);
+        console.log("Token válido ✅");
+        if (Notification.permission === "granted") {
+          new Notification("¡Hola!", {
+            body: "Token válido ✅",
+            icon: miImagen,
+          });
+        }
+      }
+    };
+
+    fetchToken(); // Ejecutar al montar el componente
+
+    // Verificar cada 5 minutos con el token más reciente
+    intervalId = setInterval(() => {
+      console.log("Revisando expiración del token...");
+      validateToken(tokenRef.current);
+    }, tokenCheckInterval);
+
+    return () => clearInterval(intervalId); // Limpiar intervalo al desmontar
+  }, [switcht]);
 
   // Función para agregar ceros a la izquierda
   const zeroPadding = (num, digit) => {
@@ -80,11 +185,30 @@ function AdminDashboard() {
       case "publicidad":
         return <Admin7 />;
       case "dueno":
-        return <Admin8 cambiarComponent={setActiveComponent}/>;
+        return <Admin8 cambiarComponent={setActiveComponent} />;
       default:
         return <Admin1 />;
     }
   };
+
+  if (loadData) {
+    return <LoadingScreen />;
+  }
+
+  if (noData) {
+    return <NoAuthPage />;
+  }
+
+  if (expire) {
+    return (
+      <TokenPage
+        removeToken={removeToken}
+        removeUser={removeUser}
+        logout={logout}
+      />
+    );
+  }
+
   return (
     <>
       <div id="wrapper">
@@ -93,9 +217,7 @@ function AdminDashboard() {
           className="navbar-nav bg-gradient sidebar sidebar-dark accordion bar-wrap"
           id="accordionSidebar"
         >
-          <a
-            className="sidebar-brand d-flex align-items-center justify-content-center"
-          >
+          <a className="sidebar-brand d-flex align-items-center justify-content-center">
             <div className="sidebar-brand-icon">
               <img src={miImagen} alt="" width={"50em"} height={"50em"} />
               {/*<i className="fas fa-laugh-wink"></i>*/}
@@ -116,7 +238,9 @@ function AdminDashboard() {
 
           <li
             className={`nav-item ${
-              activeComponent === "equipos" || activeComponent === "dueno"  ? "active" : ""
+              activeComponent === "equipos" || activeComponent === "dueno"
+                ? "active"
+                : ""
             }`}
           >
             <a
@@ -533,7 +657,7 @@ function AdminDashboard() {
               </ul>
             </nav>
             {/* Contenido */}
-            <div style={{ width: "100%", marginBottom: "1rem"}}>
+            <div style={{ width: "100%", marginBottom: "1rem" }}>
               {renderComponent()}
             </div>
           </div>

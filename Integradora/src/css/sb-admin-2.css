@@ -93,6 +93,26 @@ hr {
 
 /* De aquí */
 
+.blue-spinner{
+  border-left-color: #0d6efd !important;
+  border-right-color: #0d6efd !important;
+}
+
+.green-spinner{
+  border-left-color: #198754 !important;
+  border-right-color: #198754 !important;
+}
+
+.red-spinner{
+  border-left-color: #dc3545 !important;
+  border-right-color: #dc3545 !important;
+}
+
+.yellow-spinner{
+  border-left-color: #ffc107 !important;
+  border-right-color: #ffc107 !important;
+}
+
 #accordionSidebar{
   position: sticky;
   transition: all .25s ease-in-out;
@@ -214,8 +234,26 @@ hr {
   cursor: grab;
 }
 
+.centered-div{
+  width: 100%;
+  justify-content: center;
+  flex-direction: row;
+  display: flex;
+}
+
+#confirm{
+  font-weight: 600;
+}
+
 .duenoTeamsName {
   font-weight: 600;
+  text-align: center;
+  width: 90%;
+}
+
+.falloMess{
+  width: 100%;
+  text-align: center;
 }
 
 .duenoTeamsTitle {
