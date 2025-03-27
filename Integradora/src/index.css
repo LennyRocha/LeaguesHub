@@ -134,3 +134,27 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.my-spinner{
+  width: 40px;
+  height: 40px;
+  border: solid 6px var(--color-domin-2-1);
+  border-radius: 50%;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  animation: spin 1s infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    transform: rotate(180deg), scale(1.2);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

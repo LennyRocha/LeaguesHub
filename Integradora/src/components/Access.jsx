@@ -12,6 +12,7 @@ import { AuthContext } from "../context/AuthContext";
 import lottie from "lottie-web";
 import { defineElement } from "@lordicon/element";
 defineElement(lottie.loadAnimation);
+import axios from "axios";
 
 const Access = ({ cambiarComponente }) => {
   const context = useContext(AuthContext);
@@ -27,13 +28,15 @@ const Access = ({ cambiarComponente }) => {
     mensaje,
     setMensaje,
     setFailure,
+    api_url,
+    getUserRole,
   } = useContext(AuthContext);
+
+  const [loadPost, setLoadPost] = useState(false);
 
   useEffect(() => {
     console.log("Contexto recibido:", context);
     console.log(context.login);
-    setFailure(false);
-    setMensaje('');
   }, []);
 
   const [emptyField, setEmptyField] = useState("");
@@ -42,13 +45,16 @@ const Access = ({ cambiarComponente }) => {
     "https://www.meme-arsenal.com/memes/a513f913ef43476bd2b494da4e599cbc.jpg"
   );
 
+  const [selectedFile, setSelectedFile] = useState(null);
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
+      setSelectedFile(file); // Guarda el archivo seleccionado
       const reader = new FileReader();
-      reader.onload = () => setPreview(reader.result);
+      reader.onload = () => setPreview(reader.result); // Crea la vista previa
       reader.readAsDataURL(file);
-      console.log(file.name, file);
+      console.log("Archivo seleccionado:", file.name, file);
     }
   };
 
@@ -68,7 +74,6 @@ const Access = ({ cambiarComponente }) => {
   //Login
   const handleChangeMailL = (e) => {
     setUserL({ ...userL, email: e.target.value });
-    console.log(e.target.value);
   };
 
   const handleChangePassL = (e) => {
@@ -82,7 +87,6 @@ const Access = ({ cambiarComponente }) => {
 
   const handleChangeMail = (e) => {
     setUserS({ ...userS, [e.target.name]: e.target.value });
-    console.log(e.target.value);
   };
 
   const handleChangePass = (e) => {
@@ -102,7 +106,7 @@ const Access = ({ cambiarComponente }) => {
     }
   };
 
-  const handleSubmit1 = (e) => {
+  const handleSubmit1 = async (e) => {
     e.preventDefault();
     if (userL.passw === "" || userL.email === "" || emptyField !== "") {
       Swal.fire({
@@ -121,38 +125,33 @@ const Access = ({ cambiarComponente }) => {
         },
       });
     } else {
-      login(userL.email, userL.passw);
-      if (failure || mensaje) {
-        Swal.fire({
-          icon: "error",
-          title: "¡Denegado!",
-          text: `${
-            mensaje === "" || mensaje === undefined
-              ? "Algo salió mal, intentalo nuevamente"
-              : mensaje
-          }`,
-          customClass: {
-            confirmButton: "btn-confirm",
-            cancelButton: "btn-cancel",
-            denyButton: "btn-deny",
-          },
-        }).then((result) => {
-          setFailure(false);
-          setMensaje('');
-        });
-      } else {
-        window.location.href = "/admin";
-        setFailure(false);
-        setMensaje('');
+      try {
+        await login(userL.email, userL.passw);
+      } catch (error) {
+        console.log("Error")
+        console.log(error, error.response?.data?.message);
+        
+      Swal.fire({
+        icon: "error",
+        title: "¡Denegado!",
+        text:
+          error.response?.data?.message ||
+          "Algo salió mal, inténtalo nuevamente",
+        customClass: {
+          confirmButton: "btn-confirm",
+          cancelButton: "btn-cancel",
+          denyButton: "btn-deny",
+        },
+      });
       }
-      //
     }
     setUserL({ email: "", passw: "" });
     e.target.reset();
     setEmptyField("");
+    setIsLoading(false);
   };
 
-  const handleSubmit2 = (e) => {
+  const handleSubmit2 = async (e) => {
     e.preventDefault();
     handleChangeImg();
     if (userS.passw !== userS.pass2) {
@@ -198,16 +197,73 @@ const Access = ({ cambiarComponente }) => {
         },
       });
     } else {
-      Swal.fire({
-        icon: "success",
-        title: "Datos guardados:",
-        text: `Nombre: ${userS.name}, Correo: ${userS.email}, Contraseña: ${userS.passw}`,
-        customClass: {
-          confirmButton: "btn-confirm",
-          cancelButton: "btn-cancel",
-          denyButton: "btn-deny",
-        },
-      });
+      if (!selectedFile) {
+        Swal.fire({
+          icon: "error",
+          title: "Imagen no seleccionada",
+          text: `Elige una imagen para continuar`,
+          customClass: {
+            confirmButton: "btn-confirm",
+            cancelButton: "btn-cancel",
+            denyButton: "btn-deny",
+          },
+        });
+        return;
+      }
+
+      setLoadPost(true);
+
+      const formData = new FormData();
+
+      // Agregar los datos del dueño como un Blob para que el backend lo procese correctamente
+      const duenoData = new Blob(
+        [
+          JSON.stringify({
+            email: userS.email,
+            password: userS.passw,
+            nombreCompleto: userS.name,
+          }),
+        ],
+        { type: "application/json" }
+      );
+
+      formData.append("dueno", duenoData); // ✅ Ahora es un Blob con tipo JSON
+      formData.append("imagen", selectedFile); // ✅ Archivo correctamente adjuntado
+
+      try {
+        const response = await axios.post(`${api_url}/api/duenos`, formData, {
+          headers: {
+            // "Content-Type": "multipart/form-data",
+          },
+        });
+        console.log("Respuesta del servidor:", response.data);
+        Swal.fire({
+          icon: "success",
+          title: "¡OK!",
+          text: `Usuario creado exitosamente`,
+          customClass: {
+            confirmButton: "btn-confirm",
+            cancelButton: "btn-cancel",
+            denyButton: "btn-deny",
+          },
+        }).then(() => {
+          window.location.reload();
+        });
+      } catch (error) {
+        console.error("Error al subir:", error.response?.data || error.message);
+        Swal.fire({
+          icon: "error",
+          title: "¡Error de registro!",
+          text: `${error.response.data.message ? error.response.data.message : 'Ocurrió un error inesperado, intentalo nnuevamente'}`,
+          customClass: {
+            confirmButton: "btn-confirm",
+            cancelButton: "btn-cancel",
+            denyButton: "btn-deny",
+          },
+        });
+      } finally {
+        setLoadPost(false);
+      }
     }
     setUserS({ email: "", passw: "", name: "", pass2: "", img: "" });
     e.target.reset();
@@ -275,9 +331,13 @@ const Access = ({ cambiarComponente }) => {
               onInput={handleChangePass2}
             />
           </div>
-          <button type="submit" id="sendSignup">
-            Crear cuenta
-          </button>
+          {!loadPost ? (
+            <button type="submit" id="sendSignup">
+              Crear cuenta
+            </button>
+          ) : (
+            <div className="my-spinner mt-3"></div>
+          )}
         </form>
       </div>
       <div className="form-container sign-in-container">
@@ -311,9 +371,13 @@ const Access = ({ cambiarComponente }) => {
           <a onClick={() => cambiarComponente("B")} className="loginLink">
             ¿Olvidaste tu contraseña?
           </a>
-          <button type="submit" id="sendLogin">
-            Acceder
-          </button>
+          {!isLoading ? (
+            <button type="submit" id="sendLogin">
+              Acceder
+            </button>
+          ) : (
+            <div className="my-spinner mt-3"></div>
+          )}
         </form>
       </div>
       <div className="overlay-container">

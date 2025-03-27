@@ -148,7 +148,7 @@ h1 {
   padding: 1em;
 }
 
-span {
+._span {
   font-size: 12px;
 }
 
@@ -383,6 +383,10 @@ button.ghost:hover {
 .input-containere input {
   padding-left: 30px;
   overflow: hidden;
+}
+
+.input-containere input:focus {
+  border-color:var(--color-domin-2-1) !important;
 }
 
 .input-containere2 {
