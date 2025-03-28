@@ -23,6 +23,7 @@ const Access = ({ cambiarComponente }) => {
     setIsLoading,
     failure,
     saveToken,
+    saveUser,
     getToken,
     removeToken,
     mensaje,
@@ -125,24 +126,52 @@ const Access = ({ cambiarComponente }) => {
         },
       });
     } else {
+      setIsLoading(true);
       try {
-        await login(userL.email, userL.passw);
-      } catch (error) {
-        console.log("Error")
-        console.log(error, error.response?.data?.message);
-        
-      Swal.fire({
-        icon: "error",
-        title: "¡Denegado!",
-        text:
-          error.response?.data?.message ||
-          "Algo salió mal, inténtalo nuevamente",
-        customClass: {
-          confirmButton: "btn-confirm",
-          cancelButton: "btn-cancel",
-          denyButton: "btn-deny",
-        },
-      });
+        const res = await axios.post(`${api_url}/auth/login`, {
+          email: userL.email,
+          password: userL.passw,
+        });
+        saveToken(res.data.token);
+        saveUser(res.data.roles, res.data.id, res.data.correo);
+
+        switch (res.data.roles) {
+          case "ROLE_ADMIN":
+            window.location.href = "/admin";
+            break;
+          case "ROLE_ARBITRO":
+            window.location.href = "/arbitro";
+            break;
+          case "ROLE_DUENO":
+            window.location.href = "/dueno";
+            break;
+          default:
+            return;
+        }
+
+        //setUser({ role: res.data.roles.replace("ROLE_", "").toLowerCase() });
+
+        setFailure(false);
+      } catch (err) {
+        console.log(err, err.message);
+        if (err.response) {
+          setMensaje(err.response.data.message);
+          Swal.fire({
+            icon: "error",
+            title: "¡Denegado!",
+            text:
+              err.response?.data?.message ||
+              "Algo salió mal, inténtalo nuevamente",
+            customClass: {
+              confirmButton: "btn-confirm",
+              cancelButton: "btn-cancel",
+              denyButton: "btn-deny",
+            },
+          });
+        }
+        setFailure(true);
+      } finally {
+        setIsLoading(false);
       }
     }
     setUserL({ email: "", passw: "" });
@@ -254,7 +283,11 @@ const Access = ({ cambiarComponente }) => {
         Swal.fire({
           icon: "error",
           title: "¡Error de registro!",
-          text: `${error.response.data.message ? error.response.data.message : 'Ocurrió un error inesperado, intentalo nnuevamente'}`,
+          text: `${
+            error.response.data.message
+              ? error.response.data.message
+              : "Ocurrió un error inesperado, intentalo nnuevamente"
+          }`,
           customClass: {
             confirmButton: "btn-confirm",
             cancelButton: "btn-cancel",

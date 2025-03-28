@@ -7,6 +7,7 @@ import LoadingScreen from "./LoadingScreen";
 import TokenPage from "./componentesExternos/TokenPage";
 import NoAuthPage from "./componentesExternos/NoAuthPage";
 import { AuthContext } from "../context/AuthContext";
+import Swal from "sweetalert2";
 
 import "../css/sb-admin-2.css";
 import "../css/fonts.css";
@@ -193,6 +194,38 @@ function AdminDashboard() {
         return <Admin1 />;
     }
   };
+
+  useEffect(() => {
+    const handlePopState = (e) => {
+      window.history.pushState(null, "", window.location.href); // Mantiene la URL
+      console.log("Saliendo...");
+      Swal.fire({
+        title: "¿Salir?",
+        text: "¿Al hacer esto, su sesión se cerrará?",
+        showDenyButton: true,
+        confirmButtonText: "Quedarme",
+        denyButtonText: `Salir`,
+        customClass: {
+          confirmButton: "btn-confirm",
+          cancelButton: "btn-cancel",
+          denyButton: "btn-deny",
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire("Saved!", "", "success");
+        } else if (result.isDenied) {
+          logout();
+        }
+      });
+    };
+
+    window.history.pushState(null, "", window.location.href); // Para interceptar la acción
+    window.onpopstate = handlePopState;
+
+    return () => {
+      window.onpopstate = null; // Limpia el evento al desmontar el componente
+    };
+  }, []);
 
   if (loadData) {
     return <LoadingScreen />;

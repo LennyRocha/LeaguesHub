@@ -129,6 +129,17 @@ export const AuthProvider = ({ children }) => {
     removeToken();
     removeUser();
     setUser(null);
+    Swal.fire({
+      icon: "success",
+      title: "¡Adios!",
+      text:
+        "Has cerrado sesión, nos vemos luego",
+      customClass: {
+        confirmButton: "btn-confirm",
+        cancelButton: "btn-cancel",
+        denyButton: "btn-deny",
+      },
+    }).then((result) => window.location.href='/')
   };
 
   return (
@@ -141,6 +152,8 @@ export const AuthProvider = ({ children }) => {
         setIsLoading,
         failure,
         setFailure,
+        saveToken,
+        saveUser,
         getToken,
         getUserRole,
         getUserId,
@@ -152,7 +165,7 @@ export const AuthProvider = ({ children }) => {
         getUserId,
         getUserRole,
         decodeToken,
-        getUrl
+        getUrl,
       }}
     >
       {children}

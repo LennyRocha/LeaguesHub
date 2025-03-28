@@ -29,3 +29,7 @@ npm install react-bootstrap
 npm install react-calendar 
 # router
 npm install react-router-dom
+# react-hook-form
+npm i react-hook-form
+# yup
+npm i yup @hookform/resolvers
