@@ -14,8 +14,8 @@ import {
 import { Edit, Delete } from "@mui/icons-material";
 import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
@@ -59,13 +59,43 @@ export default function Admin5() {
   });
 
   //conectar el schema con el form
+  const [errors, setErrors] = useState({});
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
-  } = useForm({
-    resolver: yupResolver(arbitro),
-  });
+    formState: { isValid },
+  } = useForm({ mode: "onBlur" });
+
+  // Función para validar manualmente los campos
+  const validateFields = (data) => {
+    const errors = {};
+
+    // Validación de campo 'nombreCompleto'
+    if (!data.nombreCompleto) {
+      errors.nombreCompleto = "El nombre es requerido";
+    }
+
+    // Validación de campo 'email'
+    if (!data.email) {
+      errors.email = "El correo es requerido";
+    } else if (!/\S+@\S+\.\S+/.test(data.email)) {
+      errors.email = "Formato de correo inválido";
+    }
+
+    // Validación de campo 'password'
+    if (!data.password) {
+      errors.password = "Contraseña requerida";
+    }
+
+    // Validación de campo 'password2' (confirmación de contraseña)
+    if (!data.password2) {
+      errors.password2 = "Confirma tu contraseña";
+    } else if (data.password2 !== data.password) {
+      errors.password2 = "Las contraseñas no coinciden";
+    }
+
+    return errors;
+  };
 
   const desactivarArbitro = async (id, name) => {
     console.log(id);
@@ -132,10 +162,6 @@ export default function Admin5() {
   };
 
   useEffect(() => {
-    console.log(errors);
-  }, [errors]);
-
-  useEffect(() => {
     const getAbritros = async () => {
       const id = await getUserRole();
       const rolo = await getUserId();
@@ -158,7 +184,7 @@ export default function Admin5() {
           if (e.response.status === 403) {
             console.log("⚠ Token expirado, redirigiendo a login...");
             Alert.alert(
-              "Sesión expirada",
+              "Sesión expirada ⚠",
               "Por favor, inicia sesión nuevamente."
             );
             logout();
@@ -178,59 +204,66 @@ export default function Admin5() {
   );
 
   async function submitArbitro(data, image) {
-    setLoadArbit(true);
-    try {
-      const formData = new FormData();
-      const duenoData = new Blob(
-        [
-          JSON.stringify({
-            email: data.email,
-            password: data.password,
-            nombreCompleto: data.nombreCompleto,
-          }),
-        ],
-        { type: "application/json" }
-      );
+    const validationErrors = validateFields(data);
 
-      formData.append("arbitro", duenoData);
-      formData.append("imagen", selectedFile);
-      const response = await axios.post(`${api_url}/api/arbitros`, formData, {
-        headers: {
-          // "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${tokData}`,
-        },
-      });
-      console.log("Respuesta del servidor:", response.data);
-      Swal.fire({
-        icon: "success",
-        title: "¡OK!",
-        text: `Usuario creado exitosamente`,
-        customClass: {
-          confirmButton: "btn-confirm",
-          cancelButton: "btn-cancel",
-          denyButton: "btn-deny",
-        },
-      }).then(() => {
-        window.location.reload();
-      });
-    } catch (err) {
-      console.log(err, err.message);
-      if (err.response) {
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors); // Establecer errores en el estado
+      return;
+    } else {
+      setLoadArbit(true);
+      try {
+        const formData = new FormData();
+        const duenoData = new Blob(
+          [
+            JSON.stringify({
+              email: data.email,
+              password: data.password,
+              nombreCompleto: data.nombreCompleto,
+            }),
+          ],
+          { type: "application/json" }
+        );
+
+        formData.append("arbitro", duenoData);
+        formData.append("imagen", selectedFile);
+        const response = await axios.post(`${api_url}/api/arbitros`, formData, {
+          headers: {
+            // "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${tokData}`,
+          },
+        });
+        console.log("Respuesta del servidor:", response.data);
         Swal.fire({
-          icon: "error",
-          title: "¡Denegado!",
-          text:
-            err.response?.data?.message ||
-            "Algo salió mal, inténtalo nuevamente",
+          icon: "success",
+          title: "¡OK!",
+          text: `Usuario creado exitosamente`,
           customClass: {
             confirmButton: "btn-confirm",
             cancelButton: "btn-cancel",
             denyButton: "btn-deny",
           },
+        }).then(() => {
+          window.location.reload();
         });
+      } catch (err) {
+        console.log(err, err.message);
+        if (err.response) {
+          Swal.fire({
+            icon: "error",
+            title: "¡Denegado!",
+            text:
+              err.response?.data?.message ||
+              "Algo salió mal, inténtalo nuevamente",
+            customClass: {
+              confirmButton: "btn-confirm",
+              cancelButton: "btn-cancel",
+              denyButton: "btn-deny",
+            },
+          });
+        }
+      } finally {
+        setLoadArbit(false);
       }
-    } finally {
-      setLoadArbit(false);
     }
   }
 
@@ -309,7 +342,7 @@ export default function Admin5() {
                   id="arbName"
                   {...register("nombreCompleto")}
                 />
-                <p className="text-danger">{errors.nombreCompleto?.message}</p>
+                <p className="text-danger">{errors.nombreCompleto}</p>
                 <TextField
                   className="txtAr"
                   type="email"
@@ -321,7 +354,7 @@ export default function Admin5() {
                   id="arbMail"
                   {...register("email")}
                 />
-                <p className="text-danger">{errors.email?.message}</p>
+                <p className="text-danger">{errors.email}</p>
                 <TextField
                   className="txtAr"
                   type="password"
@@ -333,7 +366,7 @@ export default function Admin5() {
                   id="arbPass1"
                   {...register("password")}
                 />
-                <p className="text-danger">{errors.password?.message}</p>
+                <p className="text-danger">{errors.password}</p>
                 <TextField
                   className="txtAr"
                   type="password"
@@ -345,7 +378,7 @@ export default function Admin5() {
                   id="arbPass2"
                   {...register("password2")}
                 />
-                <p className="text-danger">{errors.password2?.message}</p>
+                <p className="text-danger">{errors.password2}</p>
                 {loadArbit ? (
                   <div className="my-spinner"></div>
                 ) : (

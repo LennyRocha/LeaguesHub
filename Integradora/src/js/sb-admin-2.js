@@ -3,12 +3,11 @@ window.$ = window.jQuery = jQuery;
 import "bootstrap/dist/js/bootstrap.bundle.min";
 
 document.addEventListener("DOMContentLoaded", function () {
-  const sidebarToggle = document.getElementById("sidebarToggle");
-  const sidebar = document.getElementById("accordionSidebar");
-
-  if (sidebarToggle && sidebar) {
-    sidebarToggle.addEventListener("click", function () {
-      sidebar.classList.toggle("toggled");
+  // Aquí se inicializan los elementos de Bootstrap
+  var collapseElement = document.getElementById('collapseExample');
+  if (collapseElement) {
+    var bsCollapse = new bootstrap.Collapse(collapseElement, {
+      toggle: false
     });
   }
 });
@@ -23,12 +22,10 @@ document.addEventListener("DOMContentLoaded", function () {
       $(".sidebar").toggleClass("toggled");
 
       if ($(".sidebar").hasClass("toggled")) {
-        // Animar el ocultamiento del collapse en 350 ms
-        $(".sidebar .collapse").slideToggle(100);
+        $(".sidebar .collapse").collapse("hide");
       } else {
-        // Animar la expansión del collapse en 350 ms
-        $(".sidebar .collapse").slideToggle(100);
-      }
+        $(".sidebar .collapse").collapse("show");
+      }      
     });
   });
 

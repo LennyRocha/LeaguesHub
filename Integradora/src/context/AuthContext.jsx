@@ -161,9 +161,6 @@ export const AuthProvider = ({ children }) => {
         mensaje,
         setMensaje,
         api_url,
-        getUserEmail,
-        getUserId,
-        getUserRole,
         decodeToken,
         getUrl,
       }}
