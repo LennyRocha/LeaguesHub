@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Tooltip from "@mui/material/Tooltip";
 import MiniLoadingScreen from "../MiniLoadingScreen";
 import axios from "axios";
 import "../../css/usuario.css";
@@ -9,58 +8,35 @@ export default function UsuarioLista({ cambiarComponente, getUrl, api }) {
   const [torneos, setTorneos] = useState([]);
   const [partidos, setPartidos] = useState({});
   const [loadData, setLoadData] = useState(true);
-  const [partidosCargados, setPartidosCargados] = useState(false);
 
-  async function getPartidos(id) {
+  const getPartidos = async (id) => {
     try {
-      const res = await axios.get(
-        `${api}/api/partidos/todos/portorneo/${id}`
-      );
-
-      if (res.data.length === 0) {
-        console.log("No hay partidos registrados todavía");
-        return;
-      }
-
-      setPartidos((prevPartidos) => ({
-        ...prevPartidos,
-        [id]: res.data,
+      const res = await axios.get(`${api}/api/partidos/todos/portorneo/${id}`);
+      const primerNoJugado = res.data.find((p) => !p.jugado);
+      setPartidos((prev) => ({
+        ...prev,
+        [id]: primerNoJugado ? [primerNoJugado] : [],
       }));
-
-      console.log(res.data, "K");
     } catch (e) {
-      console.error(e, e.response?.message);
+      console.error(e);
     }
-  }
+  };
+
+  const getTorneos = async () => {
+    try {
+      const res = await axios.get(`${api}/api/torneos`);
+      setTorneos(res.data);
+      await Promise.all(res.data.map((t) => getPartidos(t.id)));
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoadData(false);
+    }
+  };
 
   useEffect(() => {
-    const getTorneos = async () => {
-      try {
-        const res = await axios.get(`${api}/api/torneos`);
-
-        if (res.data.length === 0) {
-          console.log("No hay torneos registrados todavía");
-        } else {
-          setTorneos(res.data);
-          console.log(res.data, "Torneos");
-          await llenarLista(res.data);
-        }
-      } catch (e) {
-        console.error(e, e.response?.message);
-      }
-    };
-
     getTorneos();
   }, []);
-
-  async function llenarLista(lista) {
-    await Promise.all(lista.map((t) => getPartidos(t.id)));
-
-    console.log("Lista completa con partidos:", partidos);
-
-    setPartidosCargados(true);
-    setLoadData(false);
-  }
 
   return (
     <div className="partidoRow" id="partidos">
@@ -68,47 +44,52 @@ export default function UsuarioLista({ cambiarComponente, getUrl, api }) {
         <MiniLoadingScreen />
       ) : (
         torneos.map((p) => {
-          if (!partidos[p.id] || partidos[p.id].length === 0) {
-            return null; 
-          }
+          const partido = partidos[p.id]?.[0];
+          if (!partido) return null;
 
           return (
             <div className="partidoCard" key={p.id}>
               <div className="partidoCardHeader">
                 <img
                   src={getUrl(p.logoTorneo)}
-                  alt={p.nombreTorneo}
-                  width={40}
-                  height={40}
+                  alt="logo torneo"
+                  width={30}
+                  height={30}
                 />
                 <h5>{p.nombreTorneo}</h5>
               </div>
               <div className="partidoCardBody">
                 <div className="partidoDataRow">
-                  <b>{partidos[p.id][0].fechaPartido}</b>
+                  <b>{partido.fechaPartido}</b>
                 </div>
                 <div className="partidoDataRow">
                   <div>
                     <img
-                      src={getUrl(partidos[p.id][0].equipoLocal.logo)}
-                      alt="Local"
-                      width={40}
-                      height={40}
+                      src={getUrl(partido.equipoLocal.logo)}
+                      alt="local"
+                      width={30}
+                      height={30}
                     />
-                    <p>{partidos[p.id][0].equipoLocal.nombreEquipo}</p>
+                    <p>{partido.equipoLocal.nombreEquipo}</p>
                   </div>
-                  <h6>{partidos[p.id][0].hora}</h6>
+                  <h6>{partido.hora}</h6>
                   <div>
                     <img
-                      src={getUrl(partidos[p.id][0].equipoVisitante.logo)}
-                      alt="Visitante"
-                      width={40}
-                      height={40}
+                      src={getUrl(partido.equipoVisitante.logo)}
+                      alt="visitante"
+                      width={30}
+                      height={30}
                     />
-                    <p>{partidos[p.id][0].equipoVisitante.nombreEquipo}</p>
+                    <p>{partido.equipoVisitante.nombreEquipo}</p>
                   </div>
                 </div>
-                <a className="loginLink" href="#info-torneo" onClick={() => cambiarComponente("E")}>Ver más partidos ➡️</a>
+                <a
+                  className="loginLink"
+                  href="#info-torneo"
+                  onClick={() => cambiarComponente("MAP", p.id)}
+                >
+                  Ver más partidos ➡️
+                </a>
               </div>
             </div>
           );

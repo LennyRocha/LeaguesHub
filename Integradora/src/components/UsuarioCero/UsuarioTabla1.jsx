@@ -65,6 +65,11 @@ export default function UsuarioTabla1({ api }) {
   const startIndex = currentPage * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const displayedTeams = equipos.slice(startIndex, endIndex);
+  const transformarUrl = (url) => {
+    const match = url.match(/id=([^&]+)/);
+    return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : url;
+  };
+  
 
   return (
     <div className="my-5">
@@ -79,7 +84,7 @@ export default function UsuarioTabla1({ api }) {
       </div>
       {error && <p className="error-text">{error}</p>}
       {loading ? (
-        <p>Cargando tabla de clasificación...</p>
+        <MiniLoadingScreen />
       ) : (
         <div className="over-auto">
           <table className="table">
@@ -102,7 +107,7 @@ export default function UsuarioTabla1({ api }) {
               {displayedTeams.map((team, index) => (
                 <tr key={team.id}>
                   <td>{startIndex + index + 1}</td>
-                  <td className="imgCell"><img src={team.logo} alt={team.nombreEquipo} width={30} height={30} /></td>
+                  <td className="imgCell"><img src={transformarUrl(team.logo)} alt={team.nombreEquipo} width={30} height={30} /></td>
                   <td>{team.nombreEquipo}</td>
                   <td>{team.partidosGanados + team.partidosEmpatados + team.partidosPerdidos}</td>
                   <td className="jg">{team.partidosGanados}</td>
