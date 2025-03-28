@@ -40,36 +40,30 @@ function Admin1() {
                     <strong>${p.torneo.nombreTorneo}</strong>
                   </div>
                   <div style="display: flex; align-items: center; gap: 10px; width: 100%; justify-content: center;">
-  <!-- Primer equipo (local) -->
-  <div style="text-align: center;">
-    <img
-      src="${getUrl(p.equipoLocal.logo)}"
-      alt="Local"
-      width="40"
-      height="40"
-      style="border-radius: 50%;"
-    />
-    <p>${p.equipoLocal.nombreEquipo}</p>
-  </div>
-
-  <!-- Hora del partido -->
-  <div style="display: flex; align-items: center;">
-    <h6 style="margin: 0;">${p.hora}</h6>
-  </div>
-
-  <!-- Segundo equipo (visitante) -->
-  <div style="text-align: center;">
-    <img
-      src="${getUrl(p.equipoVisitante.logo)}"
-      alt="Visitante"
-      width="40"
-      height="40"
-      style="border-radius: 50%;"
-    />
-    <p>${p.equipoVisitante.nombreEquipo}</p>
-  </div>
-</div>
-
+                    <div style="text-align: center;">
+                      <img
+                        src="${getUrl(p.equipoLocal.logo)}"
+                        alt="Local"
+                        width="40"
+                        height="40"
+                        style="border-radius: 50%;"
+                      />
+                      <p>${p.equipoLocal.nombreEquipo}</p>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                      <h6 style="margin: 0;">${p.hora}</h6>
+                    </div>
+                    <div style="text-align: center;">
+                      <img
+                        src="${getUrl(p.equipoVisitante.logo)}"
+                        alt="Visitante"
+                        width="40"
+                        height="40"
+                        style="border-radius: 50%;"
+                      />
+                      <p>${p.equipoVisitante.nombreEquipo}</p>
+                    </div>
+                  </div>
                 </div>
               `
               )

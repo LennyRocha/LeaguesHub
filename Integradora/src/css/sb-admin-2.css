@@ -965,7 +965,13 @@ hr {
 .myDuenoGrid{
   display: grid;
   grid-template-columns: repeat(3,1fr);
-  gap: 1rem
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.gridNest{
+  max-height: 100vh;
+  overflow:auto;
 }
 
 @media (max-width: 1010px) {
@@ -979,6 +985,12 @@ hr {
     grid-template-columns: 1fr;
   }
 } 
+
+@media (max-width: 620px) and (min-width: 375px) {
+  .img_dueno{
+    width: 15% !important;
+  }
+}
 
 .dueno-container{
   width: 100%;
