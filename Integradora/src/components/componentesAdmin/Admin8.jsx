@@ -166,7 +166,7 @@ const equipos = [
   },
 ];
 
-export default function Admin8({ cambiarComponent }) {
+export default function Admin8({ cambiarComponent, dueno, setDueno }) {
   const [visible, setVisible] = useState(false);
   const [equipo, setEquipo] = useState([]);
   return (

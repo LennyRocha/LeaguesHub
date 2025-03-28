@@ -3,7 +3,7 @@ import { AuthContext } from "../../context/AuthContext";
 import "bootstrap";
 import axios from "axios";
 
-export default function Admin2({ cambiarComponent }) {
+export default function Admin2({ cambiarComponent, setDueno }) {
   const [duenos, setDuenos] = useState([]);
   const [loadDuenos, setLoadDuenos] = useState(false);
   const [falloD, setFalloD] = useState("");
@@ -63,7 +63,7 @@ export default function Admin2({ cambiarComponent }) {
         <div className="gridNest quitarScroll">
           <div className="myDuenoGrid">
             {loadDuenos ? (
-              <div className="centered-div">
+              <div className="centered-div w-100">
                 <div className="my-spinner"></div>
               </div>
             ) : falloD === "" ? (
@@ -98,7 +98,7 @@ export default function Admin2({ cambiarComponent }) {
                     </div>
                     <a
                       className="link"
-                      onClick={() => cambiarComponent("dueno")}
+                      onClick={() => {setDueno(d); cambiarComponent("dueno")}}
                     >
                       Ver equipos
                     </a>

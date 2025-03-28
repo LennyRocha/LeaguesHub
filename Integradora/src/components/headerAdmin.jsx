@@ -8,12 +8,11 @@ import TokenPage from "./componentesExternos/TokenPage";
 import NoAuthPage from "./componentesExternos/NoAuthPage";
 import { AuthContext } from "../context/AuthContext";
 import Swal from "sweetalert2";
-
+import "bootstrap/dist/js/bootstrap.bundle.min";
+import "@popperjs/core";
 import "../css/sb-admin-2.css";
 import "../css/fonts.css";
 import "../js/sb-admin-2";
-import "bootstrap/dist/js/bootstrap.bundle.min";
-import "@popperjs/core";
 
 import lottie from "lottie-web";
 import { defineElement } from "@lordicon/element";
@@ -32,6 +31,8 @@ import Admin8 from "./componentesAdmin/Admin8";
 function AdminDashboard() {
   const [userName, setUserName] = useState("Usuario");
   const [activeComponent, setActiveComponent] = useState("home");
+
+  const [dueno, setDueno] = useState({});
 
   const week = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
 
@@ -177,7 +178,7 @@ function AdminDashboard() {
       case "home":
         return <Admin1 />;
       case "equipos":
-        return <Admin2 cambiarComponent={setActiveComponent} />;
+        return <Admin2 cambiarComponent={setActiveComponent} setDueno={setDueno} />;
       case "torneos":
         return <Admin3 />;
       case "campos":
@@ -189,7 +190,7 @@ function AdminDashboard() {
       case "publicidad":
         return <Admin7 />;
       case "dueno":
-        return <Admin8 cambiarComponent={setActiveComponent} />;
+        return <Admin8 cambiarComponent={setActiveComponent} dueno={dueno} setDueno={setDueno} />;
       default:
         return <Admin1 />;
     }
@@ -227,49 +228,6 @@ function AdminDashboard() {
     };
   }, []);
 
-  const [sidebarToggled, setSidebarToggled] = useState(false);
-
-  const handleSidebarToggle = () => {
-    setSidebarToggled(!sidebarToggled);
-  };
-
-  useEffect(() => {
-    document.addEventListener("DOMContentLoaded", function () {
-      // Obtener los elementos necesarios
-      const sidebarToggle = document.getElementById("sidebarToggle");
-      const sidebar = document.getElementById("accordionSidebar");
-      const collapseExample = document.getElementById("collapseExample");
-
-      if (sidebarToggle && sidebar && collapseExample) {
-        // Inicializa el colapsable usando la API de Bootstrap
-        const collapse = new bootstrap.Collapse(collapseExample, {
-          toggle: false, // Inicializamos el colapsable cerrado
-        });
-
-        // Maneja el clic del toggle para cambiar el estado del sidebar
-        sidebarToggle.addEventListener("click", function () {
-          sidebar.classList.toggle("toggled"); // Alterna la clase "toggled" en el sidebar
-          if (sidebar.classList.contains("toggled")) {
-            // Si el sidebar está "toggled", muestra el colapsable
-            collapse.show(); // Muestra el colapsable
-          } else {
-            // Si el sidebar no está "toggled", oculta el colapsable
-            collapse.hide(); // Oculta el colapsable
-          }
-        });
-      }
-
-      // Asegúrate de que el colapsable se comporta bien en el cambio de tamaño de ventana
-      window.addEventListener("resize", function () {
-        if (window.innerWidth < 768) {
-          // Cierra el colapsable cuando el tamaño de la ventana es menor a 768px
-          const collapse = new bootstrap.Collapse(collapseExample);
-          collapse.hide();
-        }
-      });
-    });
-  }, [sidebarToggled]); // Cuando cambia el estado de sidebarToggled, actualizamos el colapsable.
-
   if (loadData) {
     return <LoadingScreen />;
   }
@@ -299,6 +257,7 @@ function AdminDashboard() {
           <a className="sidebar-brand d-flex align-items-center justify-content-center">
             <div className="sidebar-brand-icon">
               <img src={miImagen} alt="" width={"50em"} height={"50em"} />
+              {/*<i className="fas fa-laugh-wink"></i>*/}
             </div>
             <div className="sidebar-brand-text mx-3 non-h-text">Menú</div>
           </a>
@@ -403,15 +362,7 @@ function AdminDashboard() {
             <button
               className="rounded-circle border-0"
               id="sidebarToggle"
-              onClick={handleSidebarToggle}
             ></button>
-          </div>
-
-          {/* Contenido colapsable */}
-          <div className="collapse" id="collapseExample">
-            <div className="card card-body">
-              Contenido del sidebar colapsable
-            </div>
           </div>
 
           <div className="sidebar-card d-none d-lg-flex clock">
