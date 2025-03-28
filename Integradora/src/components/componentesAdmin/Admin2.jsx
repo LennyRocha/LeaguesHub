@@ -2,13 +2,14 @@ import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import "bootstrap";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export default function Admin2({ cambiarComponent, setDueno }) {
   const [duenos, setDuenos] = useState([]);
   const [loadDuenos, setLoadDuenos] = useState(false);
   const [falloD, setFalloD] = useState("");
 
-  const { getUserId, getUserRole, getToken, getUrl, api_url } =
+  const { getUserId, getUserRole, getToken, getUrl, api_url, logout } =
     useContext(AuthContext);
   const [tokData, setTokData] = useState("");
 
@@ -39,10 +40,17 @@ export default function Admin2({ cambiarComponent, setDueno }) {
           console.error(e, e.res.message);
           if (err.response.status === 403) {
             console.log("⚠️ Token expirado, redirigiendo a login...");
-            Alert.alert(
-              "Sesión expirada",
-              "Por favor, inicia sesión nuevamente."
-            );
+            Swal.fire({
+              icon: "warning",
+              title: "¡Denegado!",
+              text: "Su sesión ha expirado, ingrese sesión nuevamente para continuar",
+              confirmButtonText: "Aceptar",
+              customClass: {
+                confirmButton: "btn-confirm",
+                cancelButton: "btn-cancel",
+                denyButton: "btn-deny",
+              },
+            });
             logout();
             return;
           }
@@ -53,6 +61,73 @@ export default function Admin2({ cambiarComponent, setDueno }) {
     };
     getDuenos();
   }, []);
+
+  const [load, setLoad] = useState(false);
+  const desactivarDueño = async (id, name) => {
+    console.log(id);
+    setLoad(true);
+    try {
+      const tokData = await getToken();
+      const res = await axios.put(
+        `${api_url}/api/duenos/estatus/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${tokData}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("Registro exitoso:", res.data);
+      Swal.fire({
+        icon: "success",
+        title: "¡Exito!",
+        text: res.data || "Operación exitosa",
+        confirmButtonText: "Aceptar",
+        customClass: {
+          confirmButton: "btn-confirm",
+          cancelButton: "btn-cancel",
+          denyButton: "btn-deny",
+        },
+      });
+    } catch (err) {
+      console.error(err);
+      if (err.response.status === 400) {
+        console.log(err.response.data.message);
+        Swal.fire({
+          icon: "error",
+          title: "¡Denegado!",
+          text:
+            err.response?.data?.message || `No se pudo deshabilitar a ${name}`,
+          confirmButtonText: "Aceptar",
+          customClass: {
+            confirmButton: "btn-confirm",
+            cancelButton: "btn-cancel",
+            denyButton: "btn-deny",
+          },
+        });
+        return;
+      }
+      if (err.response.status === 403) {
+        console.log("⚠ Token expirado, redirigiendo a login...");
+        //logout();
+        Swal.fire({
+          icon: "warning",
+          title: "¡Denegado!",
+          text: "Su sesión ha expirado, ingrese sesión nuevamente para continuar",
+          confirmButtonText: "Aceptar",
+          customClass: {
+            confirmButton: "btn-confirm",
+            cancelButton: "btn-cancel",
+            denyButton: "btn-deny",
+          },
+        });
+        return;
+      }
+    } finally {
+      setLoad(false);
+    }
+  };
 
   return (
     <div>
@@ -79,9 +154,18 @@ export default function Admin2({ cambiarComponent, setDueno }) {
                         />
                         <h5>{d.nombreCompleto}</h5>
                       </div>
-                      <a className="link">
-                        <p>Inhabilitar</p>
-                      </a>
+                      {load ? (
+                        <div className="my-spinner acent-spinner"></div>
+                      ) : (
+                        <a
+                          className="link"
+                          onClick={() =>
+                            desactivarDueño(d.id, d.nombreCompleto)
+                          }
+                        >
+                          <p>Inhabilitar</p>
+                        </a>
+                      )}
                     </div>
                     <div className="divider"></div>
                     <div className="mini-grid">
@@ -98,7 +182,10 @@ export default function Admin2({ cambiarComponent, setDueno }) {
                     </div>
                     <a
                       className="link"
-                      onClick={() => {setDueno(d); cambiarComponent("dueno")}}
+                      onClick={() => {
+                        setDueno(d);
+                        cambiarComponent("dueno");
+                      }}
                     >
                       Ver equipos
                     </a>

@@ -17,6 +17,7 @@ export default function UsuarioLista({ cambiarComponente, getUrl, api }) {
         ...prev,
         [id]: primerNoJugado ? [primerNoJugado] : [],
       }));
+      console.log(res.data)
     } catch (e) {
       console.error(e);
     }

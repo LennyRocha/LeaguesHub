@@ -218,7 +218,7 @@ export default function Admin3() {
   });
 
   const [preview, setPreview] = useState(
-    "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
+    "https://th.bing.com/th/id/OIP.vxFF12mSgYf6Cs5z9O2i7QAAAA?rs=1&pid=ImgDetMain"
   );
 
   const iniciarTorneo = async (id) => {
@@ -243,8 +243,6 @@ export default function Admin3() {
             cancelButton: "btn-cancel",
             denyButton: "btn-deny",
           },
-        }).then(() => {
-          window.location.reload();
         });
         setReload(!reload);
       })
@@ -285,67 +283,97 @@ export default function Admin3() {
   const cancelarTorneo = async (id) => {
     const tokData = await getToken();
     console.log(id);
-    await axios
-      .patch(
-        `${api_url}/api/torneos/${id}/cancelar`,
-        {
-          motivoFinalizacion: motivo, // No envíes JSON.stringify aquí
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${tokData}`,
-            "Content-Type": "application/json", // Agrega este encabezado
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res.data);
-        Swal.fire({
-          icon: "success",
-          title: "¡OK!",
-          text: `Torneo cancelado correctamente`,
-          customClass: {
-            confirmButton: "btn-confirm",
-            cancelButton: "btn-cancel",
-            denyButton: "btn-deny",
-          },
-        }).then(() => {
-          window.location.reload();
-        });
-        setReload(!reload);
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
-          console.log(error.response.data.message);
-          Swal.fire({
-            icon: "error",
-            title: "¡Denegado!",
-            text: error.response?.data?.message || "Error desconocido",
-            confirmButtonText: "Aceptar",
-            customClass: {
-              confirmButton: "btn-confirm",
-              cancelButton: "btn-cancel",
-              denyButton: "btn-deny",
+    Swal.fire({
+      title: "¿Cancelar torneo?",
+      text: "Esta acción es irreversible, de confirmarlo, especifica un motivo para su cancelación",
+      input: "text",
+      showDenyButton: true,
+      confirmButtonText: "Cancelar torneo",
+      denyButtonText: `Volver`,
+      icon: 'question',
+      customClass: {
+        confirmButton: "btn-confirm",
+        cancelButton: "btn-cancel",
+        denyButton: "btn-deny",
+      },
+    }).then(async (result) => {
+      console.log(result, result.value)
+      if (result.isConfirmed) {
+        await axios
+          .patch(
+            `${api_url}/api/torneos/${id}/cancelar`,
+            {
+              motivoFinalizacion: result.value, // No envíes JSON.stringify aquí
             },
+            {
+              headers: {
+                Authorization: `Bearer ${tokData}`,
+                "Content-Type": "application/json", // Agrega este encabezado
+              },
+            }
+          )
+          .then((res) => {
+            console.log(res.data);
+            Swal.fire({
+              icon: "success",
+              title: "¡OK!",
+              text: `Torneo cancelado correctamente`,
+              customClass: {
+                confirmButton: "btn-confirm",
+                cancelButton: "btn-cancel",
+                denyButton: "btn-deny",
+              },
+            });
+            setReload(!reload);
+          })
+          .catch((error) => {
+            console.log(error.response);
+            Swal.fire({
+              icon: "error",
+              title: "¡Denegado!",
+              text: error.response?.data?.message || "Error desconocido",
+              confirmButtonText: "Aceptar",
+              customClass: {
+                confirmButton: "btn-confirm",
+                cancelButton: "btn-cancel",
+                denyButton: "btn-deny",
+              },
+            });
+            if (error.response.status === 400) {
+              console.log(error.response.data.message);
+              Swal.fire({
+                icon: "error",
+                title: "¡Denegado!",
+                text: error.response?.data?.message || "Error desconocido",
+                confirmButtonText: "Aceptar",
+                customClass: {
+                  confirmButton: "btn-confirm",
+                  cancelButton: "btn-cancel",
+                  denyButton: "btn-deny",
+                },
+              });
+              return;
+            }
+            if (error.response.status === 403) {
+              console.log("⚠ Token expirado, redirigiendo a login...");
+              logout();
+              Swal.fire({
+                icon: "warning",
+                title: "¡Denegado!",
+                text: "Su sesión ha expirado, ingrese sesión nuevamente para continuar",
+                confirmButtonText: "Aceptar",
+                customClass: {
+                  confirmButton: "btn-confirm",
+                  cancelButton: "btn-cancel",
+                  denyButton: "btn-deny",
+                },
+              });
+            }
           });
-          return;
-        }
-        if (error.response.status === 403) {
-          console.log("⚠ Token expirado, redirigiendo a login...");
-          logout();
-          Swal.fire({
-            icon: "warning",
-            title: "¡Denegado!",
-            text: "Su sesión ha expirado, ingrese sesión nuevamente para continuar",
-            confirmButtonText: "Aceptar",
-            customClass: {
-              confirmButton: "btn-confirm",
-              cancelButton: "btn-cancel",
-              denyButton: "btn-deny",
-            },
-          });
-        }
-      });
+      } else if (result.isDenied) {
+        return;
+      }
+    });
   };
 
   const [id, setId] = useState(0);
@@ -394,9 +422,8 @@ export default function Admin3() {
             cancelButton: "btn-cancel",
             denyButton: "btn-deny",
           },
-        }).then(() => {
-          window.location.reload();
         });
+        setReload(!reload);
       } catch (err) {
         console.log(err, err.message, err.response);
         if (err.response) {
@@ -456,14 +483,12 @@ export default function Admin3() {
         Swal.fire({
           icon: "success",
           title: "¡OK!",
-          text: `Usuario creado exitosamente`,
+          text: `Torneo actualizado`,
           customClass: {
             confirmButton: "btn-confirm",
             cancelButton: "btn-cancel",
             denyButton: "btn-deny",
           },
-        }).then(() => {
-          window.location.reload();
         });
       } catch (err) {
         console.log(err, err.message);
@@ -802,13 +827,14 @@ export default function Admin3() {
                       En liguilla
                     </h6>
                   ) : (
-                    <div className="_row">
+                    <div className="_row w-100 align-items-center justify-content-center">
                       <button
                         className={`slide-btn-sm ${
-                          t.motivoFinalizacion ||
-                          (!t.ganador && !t.motivoFinalizacion)
-                            ? "w-100"
-                            : ""
+                          t.estatusTorneo
+                            ? t.iniciado
+                              ? "w-100"
+                              : "w-100 text-black"
+                            : "w-50"
                         }`}
                         onClick={() =>
                           t.estatusTorneo
@@ -828,7 +854,14 @@ export default function Admin3() {
                         ? !t.ganador &&
                           !t.motivoFinalizacion && (
                             <button
-                              className="slide-btn-sm"
+                              className={`slide-btn-sm w-100 text-center ${
+                                !t.iniciado
+                                  ? "text-black"
+                                  : t.iniciado
+                                  ? ""
+                                  : ""
+                              }
+                              }`}
                               onClick={
                                 () =>
                                   !t.iniciado
@@ -977,11 +1010,14 @@ export default function Admin3() {
                   </div>
                 </div>
 
-                <div className="button-group">
+                <div className="button-group justify-content-center">
                   {loadBtn ? (
                     <div className="my-spinner"></div>
                   ) : (
-                    <button type="submit" className="slide-btn">
+                    <button
+                      type="submit"
+                      className="slide-btn text-black w-50 align-items-center"
+                    >
                       {editar ? "Actualizar torneo" : "Crear torneo"}
                     </button>
                   )}

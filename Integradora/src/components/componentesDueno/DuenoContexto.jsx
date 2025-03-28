@@ -9,6 +9,8 @@ import LoadingScreen from "../LoadingScreen";
 import TokenPage from "../componentesExternos/TokenPage";
 import NoAuthPage from "../componentesExternos/NoAuthPage";
 
+import { AuthContext } from "../../context/AuthContext";
+
 //Aqui no muevas nada, es una especie de contexto para las 4 pantallas del dueño
 //Aqui si quieres puedes declarar las variables que van a compartir y se las pasas como parametros
 //Aqui ya está hecho la validación del token tambien

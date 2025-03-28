@@ -112,17 +112,17 @@ export default function Admin5() {
         }
       );
       console.log("Registro exitoso:", res.data);
-      Swal.fire({
-        icon: "success",
-        title: "¡Exito!",
-        text: res.data || "Operación exitosa",
-        confirmButtonText: "Aceptar",
-        customClass: {
-          confirmButton: "btn-confirm",
-          cancelButton: "btn-cancel",
-          denyButton: "btn-deny",
-        },
-      });
+      // Swal.fire({
+      //   icon: "success",
+      //   title: "¡Exito!",
+      //   text: res.data || "Operación exitosa",
+      //   confirmButtonText: "Aceptar",
+      //   customClass: {
+      //     confirmButton: "btn-confirm",
+      //     cancelButton: "btn-cancel",
+      //     denyButton: "btn-deny",
+      //   },
+      // });
       setReload(!reload);
     } catch (err) {
       console.error(err);
@@ -242,9 +242,7 @@ export default function Admin5() {
             cancelButton: "btn-cancel",
             denyButton: "btn-deny",
           },
-        }).then(() => {
-          window.location.reload();
-        });
+        })
       } catch (err) {
         console.log(err, err.message);
         if (err.response) {
@@ -386,7 +384,7 @@ export default function Admin5() {
                     type="submit"
                     id="submitArb"
                     disabled={!isValid}
-                    className={!isValid ? "opa-0" : ""}
+                    className={ !isValid ? "text-black opa-0" : "text-black"}
                   >
                     Registrar
                   </button>

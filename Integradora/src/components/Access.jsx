@@ -43,7 +43,7 @@ const Access = ({ cambiarComponente }) => {
   const [emptyField, setEmptyField] = useState("");
 
   const [preview, setPreview] = useState(
-    "https://www.meme-arsenal.com/memes/a513f913ef43476bd2b494da4e599cbc.jpg"
+    "https://th.bing.com/th/id/OIP.vxFF12mSgYf6Cs5z9O2i7QAAAA?rs=1&pid=ImgDetMain"
   );
 
   const [selectedFile, setSelectedFile] = useState(null);
@@ -101,7 +101,7 @@ const Access = ({ cambiarComponente }) => {
   const handleChangeImg = async (e) => {
     if (
       preview !==
-      "https://www.meme-arsenal.com/memes/a513f913ef43476bd2b494da4e599cbc.jpg"
+      "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
     ) {
       setUserS({ ...userS, img: preview });
     }
@@ -213,7 +213,7 @@ const Access = ({ cambiarComponente }) => {
       });
     } else if (
       preview ===
-      "https://www.meme-arsenal.com/memes/a513f913ef43476bd2b494da4e599cbc.jpg"
+      "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
     ) {
       Swal.fire({
         icon: "error",

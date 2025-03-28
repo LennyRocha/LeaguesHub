@@ -520,7 +520,7 @@ function Admin1() {
                           <div className="duenoSolid">
                             <b className="body-small"> {s.nombreEquipo}</b>
                             <h5 className="m-0 ml-2">
-                              Toneo solicitado: {s.nombreTorneo}
+                              Toneo: {s.nombreTorneo}
                             </h5>
                           </div>
                         </div>

@@ -550,6 +550,10 @@ hr {
   width: 100%;
 }
 
+#submitArb:hover{
+  color: white !important;
+}
+
 #submitArb::before {
   content: "";
   position: absolute;
@@ -558,6 +562,7 @@ hr {
   width: 100%;
   height: 100%;
   background: var(--color-domin-1-3);
+  color: white !important;
   transition: all 0.3s;
   z-index: -1;
   transform: translateX(-100%);
@@ -565,6 +570,7 @@ hr {
 
 #submitArb:hover:before {
   transform: translateX(0);
+  color: white !important;
   cursor: pointer;
 }
 
@@ -601,10 +607,12 @@ hr {
 
 .slide-btn:hover {
   border-color: var(--color-domin-1-1);
+  color: white !important;
 }
 
 .slide-btn:hover:before {
   transform: translateX(0);
+  color: white !important;
   cursor: pointer;
 }
 
@@ -641,20 +649,24 @@ hr {
 
 .slide-btn-sm:hover {
   border-color: var(--color-domin-1-1);
+  color: white !important;
 }
 
 .slide-btn-sm:hover:before {
   transform: translateX(0);
+  color: white !important;
   cursor: pointer;
 }
 
 @media screen and (max-width: 768px) {
   .slide-btn-sm:before {
     transform: translateX(0);
+    color: white !important;
   }
 
   .slide-btn:before {
     transform: translateX(0);
+    color: white !important;
   }
 }
 
@@ -663,18 +675,21 @@ hr {
     transform: translateX(0);
     touch-action: manipulation;
     border-color: var(--color-domin-1-3);
+    color: white !important;
   }
 
   .slide-btn:before {
     transform: translateX(0);
     touch-action: manipulation;
     border-color: var(--color-domin-1-3);
+    color: white !important;
   }
 
   #submitArb:before {
     transform: translateX(0);
     touch-action: manipulation;
     border-color: var(--color-domin-1-3);
+    color: white !important;
   }
 }
 
@@ -1388,6 +1403,11 @@ p {
   display: flex;
   justify-content: center;
   justify-self: end;
+}
+
+.acent-spinner{
+  border-left-color: var(--color-acento-2-1) !important;
+  border-right-color: var(--color-acento-2-1) !important;
 }
 
 /* Enlace default */
