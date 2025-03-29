@@ -1,0 +1,325 @@
+#dueno {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+}
+
+.dSidebar {
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  align-items: start;
+  width: 5rem;
+  background: linear-gradient(135deg, #989898, #333333);
+  padding: 1.5625rem 1.25rem;
+  transition: all 0.4s ease;
+  position: sticky;
+}
+
+.dSidebar:hover {
+  width: 16.25rem;
+}
+
+.dSidebar:not(:hover) .dSidebar-links li a {
+  color: transparent;
+  transition: all 0.4s ease;
+}
+
+.dSidebar:not(:hover) .dSidebar-header h2 {
+  color: transparent;
+  transition: all 0.4s ease;
+}
+
+.dSidebar:not(:hover) .usuario-perfil h3 {
+  color: transparent;
+  transition: all 0.4s ease;
+}
+
+.dSidebar:not(:hover) .usuario-detallle span {
+  color: transparent !important;
+  transition: all 0.4s ease !important;
+}
+
+.dSidebar:focus {
+  width: 16.25rem;
+}
+
+.dSidebar-header img {
+  width: 3rem;
+  height: 3rem;
+}
+
+.dSidebar-header h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-left: 1.25rem;
+  color: white;
+  width: 100%;
+}
+
+.dSidebar-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dSidebar-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-top: 1.25rem;
+  width: 100%;
+}
+
+.dSidebar-links li a {
+  color: whitesmoke;
+  display: flex;
+  font-weight: 500;
+  gap: 0 1.25rem;
+  padding: 0.75rem 0.6rem;
+  white-space: nowrap;
+  text-decoration: none;
+  font-size: 1.25rem;
+  align-items: center;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.dSidebar-links li a:hover {
+  background: var(--color-domin-2-4);
+  color: var(--color-acento-1-5);
+  border-radius: 4px;
+  transition: all 0.25s ease-in-out;
+}
+
+.dSidebar-links li a:hover .mi {
+  color: var(--color-acento-1-5) !important;
+  transition: all 0.25s ease-in-out;
+}
+
+.dSidebar:not(:hover) .activo {
+  background-color: transparent;
+  color: var(--color-acento-1-4);
+  transition: all 0.25s ease-in-out;
+}
+
+.dSidebar:hover .activo {
+  color: var(--color-acento-1-4) !important;
+}
+
+.activo {
+  background: var(--color-domin-2-3);
+  color: var(--color-acento-1-4);
+  border-radius: 4px;
+  transition: all 0.25s ease-in-out;
+}
+
+.activo .mi {
+  color: var(--color-acento-1-4) !important;
+  transition: all 0.25s ease-in-out;
+}
+
+.usuario-cuenta {
+  margin-top: auto;
+  padding: 0 0.6rem;
+  margin-left: -1rem;
+  width: 100%;
+}
+
+.usuario-cuenta .usuario-perfil {
+  color: white !important;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0 0.75rem;
+}
+
+.usuario-perfil img {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+}
+
+.usuario-perfil h3 {
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  color: white;
+}
+
+.usuario-perfil span {
+  font-size: 0.775rem !important;
+  font-weight: 600 !important;
+  color: white !important;
+}
+
+.mi {
+  transform: scale(1.2) !important;
+  padding: 0;
+  color: white !important;
+}
+
+@media (max-width: 1024px) {
+  .usuario-cuenta {
+    margin-left: 0rem;
+  }
+
+  .dSidebar-header h2 {
+    margin-left: .75rem;
+  }
+
+  .usuario-cuenta {
+    margin-left: -0.5rem;
+  }
+
+  .dSidebar {
+    width: 5.5rem;
+    padding: 0.7rem;
+  }
+
+  .dSidebar:hover {
+    width: 24rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .usuario-cuenta {
+    margin-left: -0.5rem;
+  }
+
+  .dSidebar-links li a {
+    gap: 0 1rem;
+  }
+
+  /* .dSidebar-header img {
+    width: 2.5rem;
+    height: 2.5rem;
+  } */
+
+  .dSidebar-header h2 {
+    margin-left: .5rem;
+    overflow: hidden;
+    font-size: 1rem;
+  }
+
+  .dSidebar {
+    width: 7rem;
+    padding: 1rem;
+  }
+
+  .dSidebar:hover {
+    width: 30rem;
+  }
+
+  .dSidebar:not(:hover) .dSidebar-links li a span {
+    display: none;
+  }
+
+  .dSidebar-links li a {
+    overflow: hidden;
+  }
+
+  .usuario-cuenta .usuario-perfil {
+    gap: 0 0.5rem;
+  }
+
+  .usuario-perfil img {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
+
+@media (max-width: 625px) {
+  .dSidebar {
+    width: 8rem;
+    padding: 1rem;
+  }
+
+  .dSidebar-links li a {
+    gap: 0 .5rem;
+  }
+
+  .usuario-perfil h3 {
+    font-size: 0.5rem;
+  }
+
+  .usuario-detallle span {
+    display: none;
+  }
+
+  .dSidebar:hover {
+    width: 30rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dSidebar-header h2 {
+    display: none;
+  }
+
+  .dSidebar-header img {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .dSidebar-links li a {
+    color: transparent;
+  }
+
+  .dSidebar:hover .activo {
+    color: transparent !important;
+  }
+
+  .usuario-perfil h3,
+  .usuario-detallle span {
+    display: none;
+  }
+
+  .dSidebar {
+    width: 10rem;
+    padding: 1rem;
+  }
+
+  .dSidebar:hover {
+    width: 10rem;
+  }
+
+  .dSidebar-header img {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .usuario-perfil h3,
+  .usuario-detallle span {
+    overflow: hidden;
+  }
+
+  .dSidebar-header h2 {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 425px) {
+  .dSidebar {
+    width: 10rem;
+    padding: 0.5rem;
+  }
+
+  .dSidebar:hover {
+    width: 10rem;
+  }
+}
+
+@media (max-width: 376px) {
+  .dSidebar {
+    width: 12rem;
+  }
+
+  .dSidebar:hover {
+    width: 12rem;
+  }
+}

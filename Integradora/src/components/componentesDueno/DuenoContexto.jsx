@@ -5,6 +5,7 @@ import DuenoEquipos from "./DuenoEquipos";
 import DuenoJugadores from "./DuenoJugadores";
 import DuenoPagos from "./DuenoPagos";
 import miImagen from "../../img/logo1.png";
+import "../../css/dueno.css";
 
 import LoadingScreen from "../LoadingScreen";
 import TokenPage from "../componentesExternos/TokenPage";
@@ -168,5 +169,66 @@ export default function DuenoContexto() {
     );
   }
 
-  return <>{renderizarComponente()}</>;
+  return (
+    <div id="dueno">
+      <aside className="dSidebar">
+        <div className="dSidebar-header">
+          <img src={miImagen} alt="logo" />
+          <h2>
+            <span>Leagues hub</span>
+          </h2>
+        </div>
+        <ul className="dSidebar-links">
+          <li>
+            <a className={`${componenteActual === 'A' && 'activo'}`} href="">
+              <i className="fa fa-home icon mi" aria-hidden="true"></i>
+              Inicio
+            </a>
+          </li>
+          <li>
+            <a href="">
+              <i className="fa fa-shield icon mi" aria-hidden="true"></i>
+              Mis equipos
+            </a>
+          </li>
+          <li>
+            <a href="">
+              <i className="fa fa-users icon mi" aria-hidden="true"></i>
+              Jugadores
+            </a>
+          </li>
+          <li>
+            <a href="">
+              <i className="fa fa-wallet icon mi" aria-hidden="true"></i>
+              Pagos
+            </a>
+          </li>
+          <li>
+            <a href="">
+              <i className="fa fa-book icon mi" aria-hidden="true"></i>
+              Historial
+            </a>
+          </li>
+          <li>
+            <a href="">
+              <i className="fa fa-envelope icon mi" aria-hidden="true"></i>
+              Texto
+            </a>
+          </li>
+        </ul>
+        <div className="usuario-cuenta">
+          <div className="usuario-perfil">
+            <img src="https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg" alt="Foto" />
+            <div className="usuario-detallle">
+              <h3 className="ml-1">
+                Nombre del dueño
+              </h3>
+              <span>correo@example.com</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+      {renderizarComponente()}
+    </div>
+  );
 }
