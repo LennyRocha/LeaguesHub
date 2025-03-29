@@ -21,6 +21,7 @@ export default function UsuarioTabla2() {
   };
 
   const fetchTorneos = async () => {
+    setLoading(true);
     try {
       const res = await axios.get(`${api}/api/torneos/iniciados`);
       setTorneos(res.data);
@@ -29,13 +30,17 @@ export default function UsuarioTabla2() {
       }
     } catch (e) {
       setError("Error al cargar los torneos.");
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchGoleadores = async (idTorneo) => {
     setLoading(true);
     try {
-      const res = await axios.get(`${api}/api/jugadorestadisticas/torneo/${idTorneo}`);
+      const res = await axios.get(
+        `${api}/api/jugadorestadisticas/torneo/${idTorneo}`
+      );
       setJugadores(res.data);
     } catch (e) {
       setError("Error al cargar la tabla de goleo.");
@@ -70,6 +75,9 @@ export default function UsuarioTabla2() {
             setPaginaActual(0);
           }}
         >
+          <option value={''}>
+            Selecciona un torneo
+          </option>
           {torneos.map((torneo) => (
             <option key={torneo.id} value={torneo.id}>
               {torneo.nombreTorneo}
@@ -134,7 +142,8 @@ export default function UsuarioTabla2() {
                 Anterior
               </button>
               <span>
-                Página {paginaActual + 1} de {Math.ceil(jugadores.length / porPagina)}
+                Página {paginaActual + 1} de{" "}
+                {Math.ceil(jugadores.length / porPagina)}
               </span>
               <button
                 disabled={end >= jugadores.length}

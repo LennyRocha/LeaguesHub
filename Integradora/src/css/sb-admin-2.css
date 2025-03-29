@@ -668,6 +668,18 @@ hr {
     transform: translateX(0);
     color: white !important;
   }
+
+  .slide-btn {
+    color: white !important;
+  }
+
+  .slide-btn-sm {
+    color: white !important;
+  }
+
+  #submitArb{
+    color: white !important;
+  }
 }
 
 @media (hover: none) and (pointer: coarse) {

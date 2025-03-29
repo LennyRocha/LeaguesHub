@@ -290,8 +290,8 @@ function Admin1() {
         else setFechaReciente(res.data);
       })
       .catch((e) => {
-        console.error(e, e.res.message);
-        if (err.response.status === 403) {
+        console.error(e, e.response.data.message);
+        if (e.response.status === 403) {
           console.log("⚠️ Token expirado, redirigiendo a login...");
           Alert.alert(
             "Sesión expirada",

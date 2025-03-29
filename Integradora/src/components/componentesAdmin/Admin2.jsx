@@ -12,11 +12,8 @@ export default function Admin2({ cambiarComponent, setDueno }) {
   const { getUserId, getUserRole, getToken, getUrl, api_url, logout } =
     useContext(AuthContext);
   const [tokData, setTokData] = useState("");
-
-  function sendData(data) {
-    const team = data;
-    navigation.navigate("Ver equipo", { team });
-  }
+  
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
     const getDuenos = async () => {
@@ -37,7 +34,7 @@ export default function Admin2({ cambiarComponent, setDueno }) {
           else setDuenos(res.data);
         })
         .catch((e) => {
-          console.error(e, e.res.message);
+          console.error(e, e.response.message);
           if (err.response.status === 403) {
             console.log("⚠️ Token expirado, redirigiendo a login...");
             Swal.fire({
@@ -60,7 +57,7 @@ export default function Admin2({ cambiarComponent, setDueno }) {
         .finally(() => setLoadDuenos(false));
     };
     getDuenos();
-  }, []);
+  }, [reload]);
 
   const [load, setLoad] = useState(false);
   const desactivarDueño = async (id, name) => {
@@ -90,13 +87,14 @@ export default function Admin2({ cambiarComponent, setDueno }) {
           denyButton: "btn-deny",
         },
       });
+      setReload(!reload);
     } catch (err) {
       console.error(err);
       if (err.response.status === 400) {
         console.log(err.response.data.message);
         Swal.fire({
           icon: "error",
-          title: "¡Denegado!",
+          title: "¡Fallo!",
           text:
             err.response?.data?.message || `No se pudo deshabilitar a ${name}`,
           confirmButtonText: "Aceptar",
@@ -144,7 +142,7 @@ export default function Admin2({ cambiarComponent, setDueno }) {
             ) : falloD === "" ? (
               duenos.map((d) => {
                 return (
-                  <div className="dueno-container bg-light" key={d.id}>
+                  <div className={`dueno-container ${d.usuario.estatus ? 'bg-light' : 'bg-gray'}`} key={d.id}>
                     <div className="dueno-head-row">
                       <div className="_row">
                         <img
@@ -163,7 +161,7 @@ export default function Admin2({ cambiarComponent, setDueno }) {
                             desactivarDueño(d.id, d.nombreCompleto)
                           }
                         >
-                          <p>Inhabilitar</p>
+                          <p>{d.usuario.estatus ? "Inhabilitar" : "Rehabilitar"}</p>
                         </a>
                       )}
                     </div>

@@ -24,6 +24,7 @@ export default function UsuarioLista({ cambiarComponente, getUrl, api }) {
   };
 
   const getTorneos = async () => {
+    setLoadData(true);
     try {
       const res = await axios.get(`${api}/api/torneos`);
       setTorneos(res.data);

@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import {
   Table,
@@ -203,6 +204,297 @@ export default function Admin4() {
     getAddress(lat, lng);
   };
 
+  //Importado de Native
+  const { getUserId, getUserRole, getToken } = useContext(AuthContext);
+  const [tokData, setTokData] = useState("");
+  const [vis, setVis] = useState(false);
+  const [editando, setEditando] = useState(false);
+  const [campoEdit, setCampoEdit] = useState({});
+  const [canchasEdit, setCanchasEdit] = useState([]);
+
+  const [idCancha, setIdCancha] = useState({});
+  const [modalCancha, setModalCancha] = useState(false);
+
+  const [lugar, setLugar] = useState("");
+  const [elecc, setElecc] = useState("");
+  const [address2, setAddress2] = useState("");
+  const [campos, setCampos] = useState([]);
+  //const [canchas, setCanchas] = useState([]);
+  const [canchas, setCanchas] = useState([
+    { id: Date.now(), pos: 0, desc: "" },
+  ]); // Fila por defecto
+  const [canchasDesc, setCanchasDesc] = useState([]);
+  const [loadCamps, setLoadCamps] = useState(false);
+  const [fallo1, setFallo1] = useState("");
+
+  const [selectedPlace, setSelectedPlace] = useState(null);
+  const [slideAnim] = useState(new Animated.Value(-400));
+  const [rows, setRows] = useState(1);
+  const [rowsEdit, setRowsEdit] = useState(1);
+
+  const [id, setId] = useState(0);
+
+  const [reload, setReload] = useState(false);
+
+  //esquema para validaciones
+  // const campo = yup.object().shape({
+  //   id: yup.number(),
+  //   nombre: yup.string().required("El nombre es requerido"),
+  //   direccion: yup.string().required("La dirección es requerida"),
+  //   latitud: yup
+  //     .number("No válido")
+  //     .typeError("Debe ser un número")
+  //     .required("Latitud Requerida"),
+  //   longitud: yup
+  //     .number("No válido")
+  //     .typeError("Debe ser un número")
+  //     .required("Longitud Requerida"),
+  //   cancha: yup.string().required("Debes registrar al menos 1 cancha"),
+  // });
+
+  // Al momento de editar, puedes establecer estos valores como predeterminados
+  const setEdicion = (campo, cancha, canchas) => {
+    setId(campo.id);
+    setEditando(true);
+    // Usamos setValue para rellenar el formulario con los valores de miCampo
+    setValue("id", campo.id);
+    setValue("nombre", campo.nombre);
+    setValue("direccion", campo.direccion);
+    setValue("latitud", campo.latitud);
+    setValue("longitud", campo.longitud);
+    setValue("cancha", cancha);
+    setCanchasEdit(canchas);
+    canchas.map((c) => {
+      console.log(c);
+    });
+  };
+
+  // Al momento de editar, puedes establecer estos valores como predeterminados
+  const removeEdicion = () => {
+    // Usamos setValue para rellenar el formulario con los valores de miCampo
+    setId(0);
+    setValue("nombre", "");
+    setValue("direccion", "");
+    setValue("latitud", "");
+    setValue("longitud", "");
+    setValue("cancha", "");
+    setEditando(false);
+  };
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    control,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: "onBlur",
+  });
+
+  const crearCampo = async (data) => {
+    try {
+      const res = await api.post(
+        `/api/campos`,
+        JSON.stringify({
+          nombre: data.nombre,
+          direccion: data.direccion,
+          latitud: data.latitud,
+          longitud: data.longitud,
+        }),
+        {
+          headers: {
+            Authorization: `Bearer ${tokData}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(res.data);
+      if (res.data.id) {
+        canchas.map((c) => {
+          registrarCancha(c.desc, c.pos, res.data.id);
+        });
+      }
+      Alert.alert("¡Éxito!", "Campo registrado exitosamente");
+      setReload(!reload);
+    } catch (err) {
+      console.error(err, err.res.message);
+      if (err.response.status === 403) {
+        console.log("⚠️ Token expirado, redirigiendo a login...");
+        Alert.alert("Sesión expirada", "Por favor, inicia sesión nuevamente.");
+        logout();
+        return;
+      }
+    }
+  };
+
+  const registrarCancha = async (desc, pos, id) => {
+    try {
+      const res = await api.post(
+        `/api/canchas`,
+        JSON.stringify({
+          numeroCancha: pos,
+          descripcion: desc,
+          idCampo: id,
+        }),
+        {
+          headers: {
+            Authorization: `Bearer ${tokData}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(res.data);
+    } catch (err) {
+      console.log(err.toJSON());
+      console.error(err, err.response.message);
+      if (err.response.status === 403) {
+        console.log("⚠️ Token expirado, redirigiendo a login...");
+        Alert.alert("Sesión expirada", "Por favor, inicia sesión nuevamente.");
+        logout();
+        return;
+      }
+    }
+  };
+
+  const quitarCancha = async (id) => {
+    try {
+      const res = await api.put(
+        `/api/canchas/estatus/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${tokData}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(res.data);
+      Alert.alert("¡Éxito!", "operación exitosa");
+      setReload(!reload);
+    } catch (err) {
+      console.log(err.toJSON());
+      console.error(err, err.response.message);
+      if (err.response.status === 403) {
+        console.log("⚠️ Token expirado, redirigiendo a login...");
+        Alert.alert("Sesión expirada", "Por favor, inicia sesión nuevamente.");
+        logout();
+        return;
+      }
+    } finally {
+      setModalCancha(false);
+    }
+  };
+
+  const updateCampo = async (data) => {
+    console.log(data, "Wey");
+    const token = await getToken();
+    try {
+      const res = await api.put(
+        `/api/campos/${data.id || id}`,
+        JSON.stringify({
+          nombre: data.nombre,
+          direccion: data.direccion,
+          latitud: data.latitud,
+          longitud: data.longitud,
+        }),
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(res.data);
+      if (res.data.id) {
+        canchasEdit.map((c) => {
+          updateCancha(c.descripcion, c.numeroCancha, res.data.id, c.id);
+          console.log(c);
+        });
+      }
+      Alert.alert("¡Éxito!", "Campo actualizado exitosamente");
+      setReload(!reload);
+      removeEdicion();
+      setCampoEdit({});
+      setCanchasEdit([]);
+    } catch (err) {
+      console.error(err, err.response.message, err.toJSON());
+      if (err.response.status === 403) {
+        console.log("⚠️ Token expirado, redirigiendo a login...");
+        Alert.alert("Sesión expirada", "Por favor, inicia sesión nuevamente.");
+        logout();
+        return;
+      }
+    }
+  };
+
+  const updateCancha = async (desc, pos, id, idCan) => {
+    const token = await getToken();
+    try {
+      const res = await api.put(
+        `/api/canchas/${idCan}`,
+        JSON.stringify({
+          numeroCancha: pos,
+          descripcion: desc,
+          idCampo: id,
+        }),
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(res.data);
+    } catch (err) {
+      console.log(err.toJSON());
+      console.error(err, err.response.message);
+      if (err.response.status === 403) {
+        console.log("⚠️ Token expirado, redirigiendo a login...");
+        Alert.alert("Sesión expirada", "Por favor, inicia sesión nuevamente.");
+        logout();
+        return;
+      }
+    }
+  };
+
+  useEffect(() => {
+    const getCampos = async () => {
+      const id = await getUserRole();
+      const rolo = await getUserId();
+      const tok = await getToken();
+      setTokData(tok);
+
+      setLoadCamps(true);
+      api
+        .get(`/api/campos/activos`, {
+          headers: {
+            Authorization: `Bearer ${tok}`,
+          },
+        })
+        .then((res) => {
+          if (res.data.length === 0) setFallo1("No hay campos registrados");
+          else setCampos(res.data);
+        })
+        .catch((e) => {
+          console.error(e, e.res.message);
+          if (e.response.status === 403) {
+            console.log("⚠️ Token expirado, redirigiendo a login...");
+            Alert.alert(
+              "Sesión expirada",
+              "Por favor, inicia sesión nuevamente."
+            );
+            logout();
+            return;
+          }
+          if (e.res.message) setFallo1(e.res.message);
+          else setFallo1("Error al obtener campos");
+        })
+        .finally(() => setLoadCamps(false));
+    };
+    getCampos();
+    setCanchas([{ id: Date.now(), pos: 0, desc: "" }]);
+  }, [reload]);
+
   return (
     <div>
       <div className="container-fluid">
@@ -210,12 +502,12 @@ export default function Admin4() {
           <h2 className="mb-0">Menú de campos</h2>
         </div>
       </div>
-      <div className="container-fluid table-overflow">
+      <div className="container-fluid table-overflow mb-0">
         <TableContainer component={Paper}>
           <Table>
             <TableHead className="myThead theadContainer">
               <TableRow>
-                <TableCell className="cell">Id</TableCell>
+                <TableCell className="cell">#</TableCell>
                 <TableCell className="cell">Nombre</TableCell>
                 <TableCell className="cell">Dirección</TableCell>
                 <TableCell className="cell">Canchas</TableCell>
@@ -223,19 +515,16 @@ export default function Admin4() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.map((d) => {
+              {data.map((d, index) => {
                 return (
                   <TableRow key={d.id}>
-                    <TableCell>{d.id}</TableCell>
+                    <TableCell>{index + 1}</TableCell>
                     <TableCell>{d.name}</TableCell>
                     <TableCell>{d.dir}</TableCell>
                     <TableCell>{d.canchas}</TableCell>
                     <TableCell>
                       <IconButton onClick={() => onEdit(d)}>
                         <Edit color="primary" />
-                      </IconButton>
-                      <IconButton onClick={() => onDelete(d.id)}>
-                        <Delete color="error" />
                       </IconButton>
                       <IconButton
                         onClick={() => setLocation({ lat: d.lat, lng: d.lon })}
@@ -285,9 +574,9 @@ export default function Admin4() {
             </p>
           )}
         </div>
-        <div className="col-lg-6 mb-2">
+        <div className="col-lg-6">
           <div className="card bg-light shadow p-4 h-100">
-            <div className="card-header bg-red container-fluid mb-2">
+            <div className="card-header bg-red container-fluid">
               <p className="font-weight-bold body-small text-white ml-1 tit-campo">
                 Registrar campo
               </p>
@@ -304,13 +593,15 @@ export default function Admin4() {
                 onChange={(e) => handleSearchPlaces(e.target.value)}
                 placeholder="Buscar lugar..."
               />
-              <ul className="suggestions-list">
-                {suggestions.map((place) => (
-                  <li key={place.id} onClick={() => handleSelect(place)}>
-                    {place.title}
-                  </li>
-                ))}
-              </ul>
+              {Object.keys(suggestions).length > 0 && (
+                <ul className="suggestions-list">
+                  {suggestions.map((place) => (
+                    <li key={place.id} onClick={() => handleSelect(place)}>
+                      {place.title}
+                    </li>
+                  ))}
+                </ul>
+              )}
               <TextField
                 className="txtAr mt-1 mb-1"
                 label="Dirección"
@@ -322,7 +613,7 @@ export default function Admin4() {
                 onChange={(e) => handleSearch(e.target.value)}
                 placeholder="Buscar dirección..."
               />
-              <button type="submit" id="submitArb" className="text-white">
+              <button type="submit" id="submitArb" className="text-black">
                 Registrar
               </button>
             </form>
@@ -335,7 +626,6 @@ export default function Admin4() {
         </div>
         <div className="canchas-group">
           {Array.from({ length: counter }).map((_, index) => {
-
             const handleInputChange = (i, text) => {
               setInputs((prev) => ({
                 ...prev,
@@ -347,7 +637,7 @@ export default function Admin4() {
               if (!inputs[i]) {
                 setCounter((prev) => prev - 1);
                 const updatedInputs = { ...inputs };
-                delete updatedInputs[i]; 
+                delete updatedInputs[i];
                 setInputs(updatedInputs);
               }
             };

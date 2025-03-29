@@ -4,6 +4,7 @@ import DuenoHome from "./DuenoHome";
 import DuenoEquipos from "./DuenoEquipos";
 import DuenoJugadores from "./DuenoJugadores";
 import DuenoPagos from "./DuenoPagos";
+import miImagen from "../../img/logo1.png";
 
 import LoadingScreen from "../LoadingScreen";
 import TokenPage from "../componentesExternos/TokenPage";

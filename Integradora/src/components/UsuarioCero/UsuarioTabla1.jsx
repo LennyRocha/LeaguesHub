@@ -16,6 +16,7 @@ export default function UsuarioTabla1({ api }) {
   const itemsPerPage = 10;
 
   useEffect(() => {
+    setLoading(true);
     const fetchTorneos = async () => {
       try {
         const res = await axios.get(`${api}/api/torneos/iniciados`);
@@ -26,6 +27,8 @@ export default function UsuarioTabla1({ api }) {
         }
       } catch (e) {
         setError("Error al cargar los torneos. Intenta de nuevo.");
+      } finally {
+        setLoading(false);
       }
     };
     fetchTorneos();

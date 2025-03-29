@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import axios from "axios";
 import "bootstrap";
 
 const jugadoresPrueba = [
@@ -169,17 +171,84 @@ const equipos = [
 export default function Admin8({ cambiarComponent, dueno, setDueno }) {
   const [visible, setVisible] = useState(false);
   const [equipo, setEquipo] = useState([]);
+  useEffect(() => {
+    console.log(dueno, dueno.usuario);
+  }, []);
+
+  const [teams, setTeams] = useState([]);
+  const [loadTeams, setLoadTeams] = useState(false);
+  const [fallo, setFallo] = useState("");
+
+  const { getUserId, getUserRole, getToken, getUrl, api_url, logout } =
+    useContext(AuthContext);
+  const [tokData, setTokData] = useState("");
+
+  const [reload, setReload] = useState(false);
+
+  useEffect(() => {
+    const getDuenoEquipos = async () => {
+      const id = await getUserRole();
+      const rolo = await getUserId();
+      const tok = await getToken();
+      setTokData(tok);
+
+      setLoadTeams(true);
+      axios
+        .get(`${api_url}/api/equipos/porDueno/${dueno.usuario.id}`, {})
+        .then((res) => {
+          if (res.data.length === 0)
+            setFallo(`No hay equipos asociados a ${dueno.nombreCompleto}`);
+          else setTeams(res.data);
+        })
+        .catch((e) => {
+          console.error(e, e.response?.message);
+          if (e.response.status === 403) {
+            console.log("⚠️ Token expirado, redirigiendo a login...");
+            Swal.fire({
+              icon: "warning",
+              title: "¡Denegado!",
+              text: "Su sesión ha expirado, ingrese sesión nuevamente para continuar",
+              confirmButtonText: "Aceptar",
+              customClass: {
+                confirmButton: "btn-confirm",
+                cancelButton: "btn-cancel",
+                denyButton: "btn-deny",
+              },
+            });
+            logout();
+            return;
+          }
+          if (e.response.message) setFallo(e.response.message);
+          else setFallo(`Error al obtener equipos de ${dueno.nombreCompleto}`);
+        })
+        .finally(() => setLoadTeams(false));
+    };
+    getDuenoEquipos();
+  }, [reload]);
+
   return (
     <div>
       <nav aria-label="breadcrumb">
         <ol className="breadcrumb">
           <li className="breadcrumb-item">
-            <a onClick={() => cambiarComponent("home")} className="link">
+            <a
+              onClick={() => {
+                cambiarComponent("home");
+                setDueno({});
+              }}
+              className="link"
+            >
               Inicio
             </a>
           </li>
           <li className="breadcrumb-item">
-            <a onClick={() => cambiarComponent("equipos")} className="link">
+            <a
+              onClick={() => {
+                cambiarComponent("equipos");
+                setDueno({});
+              }}
+              className="link"
+            >
               Dueños
             </a>
           </li>
@@ -190,20 +259,35 @@ export default function Admin8({ cambiarComponent, dueno, setDueno }) {
       </nav>
       <div className="container-fluid">
         <div className="d-sm-flex align-items-center justify-content-between mb-4">
-          <h2 className="mb-0">Equipos de Fulanito</h2>
+          <h2 className="mb-0">Equipos de {dueno.nombreCompleto}</h2>
         </div>
         <div className="overf-auto">
-          {equipos.map((e) => {
-            return (
-              <div className="dueno-container-2 bg-light" key={e.equipoId}>
-                <img src={e.img} alt={e.nombre} className="teamImage" />
-                <h5 className="w-100">{e.nombre}</h5>
-                <button className="slide-btn-sm" onClick={() => setVisible(!visible)}>Ver jugadores</button>
-              </div>
-            );
-          })}
+          {loadTeams ? (
+            <div className="w-100 justify-content-center d-flex">
+              <div className="my-spinner mt-3"></div>
+            </div>
+          ) : fallo === "" ? (
+            teams.map((e) => {
+              return (
+                <div className="dueno-container-2 bg-light" key={e.equipoId}>
+                  <img src={getUrl(e.logoEquipo)} alt={e.nombreEquipo} className="teamImage" />
+                  <h5 className="w-100">{e.nombreEquipo}</h5>
+                  <button
+                    className="slide-btn-sm text-black"
+                    onClick={() => setVisible(!visible)}
+                  >
+                    Ver jugadores
+                  </button>
+                </div>
+              );
+            })
+          ) : (
+            <div className="w-100 justify-content-center d-flex mt-5">
+              <h3>{fallo}</h3>
+            </div>
+          )}
         </div>
-        <div className={`${ visible ? 'teamsVisible' : 'teamsInvisible'}`}>
+        <div className={`${visible ? "teamsVisible" : "teamsInvisible"}`}>
           <div className="d-sm-flex align-items-center justify-content-between mt-4 mb-2 ml-2">
             <h3 className="mb-0">Equipo x</h3>
           </div>
