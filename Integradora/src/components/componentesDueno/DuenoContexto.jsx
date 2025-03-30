@@ -4,8 +4,10 @@ import DuenoHome from "./DuenoHome";
 import DuenoEquipos from "./DuenoEquipos";
 import DuenoJugadores from "./DuenoJugadores";
 import DuenoPagos from "./DuenoPagos";
+import DuenoHistorial from "./DuenoHistorial";
 import miImagen from "../../img/logo1.png";
 import "../../css/dueno.css";
+import "../../css/fonts.css";
 
 import LoadingScreen from "../LoadingScreen";
 import TokenPage from "../componentesExternos/TokenPage";
@@ -20,7 +22,7 @@ import { AuthContext } from "../../context/AuthContext";
 export default function DuenoContexto() {
   const { getToken, decodeToken, getUserEmail, getUserRole, getUserId } =
     useContext(AuthContext);
-  const { logout, removeToken, removeUser, getUrl, api_url } =
+  const { logout, getout, removeToken, removeUser, getUrl, api_url } =
     useContext(AuthContext);
   //getUrl la vas a usar para cargar las imagenes si sin de Google Drive, porque no deja
   //api_url es la url base de la api del .env
@@ -134,6 +136,8 @@ export default function DuenoContexto() {
     return () => clearInterval(intervalId); // Limpiar intervalo al desmontar
   }, [switcht]);
 
+  const [expand, setExpand] = useState(false);
+
   //Por ejemplo, este es para cambiar el componente visible, y lo hereda a los otros componentes
   const [componenteActual, setComponenteActual] = useState("A");
   const renderizarComponente = () => {
@@ -146,6 +150,8 @@ export default function DuenoContexto() {
         return <DuenoJugadores cambiarComponente={setComponenteActual} />;
       case "D":
         return <DuenoPagos cambiarComponente={setComponenteActual} />;
+      case "E":
+        return <DuenoHistorial cambiarComponente={setComponenteActual} />;
       default:
         return <DuenoHome cambiarComponente={setComponenteActual} />; //Inicia por default en 'home'
     }
@@ -165,70 +171,236 @@ export default function DuenoContexto() {
         removeToken={removeToken}
         removeUser={removeUser}
         logout={logout}
+        getout={getout}
       />
     );
   }
 
   return (
-    <div id="dueno">
-      <aside className="dSidebar">
-        <div className="dSidebar-header">
-          <img src={miImagen} alt="logo" />
-          <h2>
-            <span>Leagues hub</span>
-          </h2>
-        </div>
-        <ul className="dSidebar-links">
-          <li>
-            <a className={`${componenteActual === 'A' && 'activo'}`} href="">
-              <i className="fa fa-home icon mi" aria-hidden="true"></i>
-              Inicio
-            </a>
-          </li>
-          <li>
-            <a href="">
-              <i className="fa fa-shield icon mi" aria-hidden="true"></i>
-              Mis equipos
-            </a>
-          </li>
-          <li>
-            <a href="">
-              <i className="fa fa-users icon mi" aria-hidden="true"></i>
-              Jugadores
-            </a>
-          </li>
-          <li>
-            <a href="">
-              <i className="fa fa-wallet icon mi" aria-hidden="true"></i>
-              Pagos
-            </a>
-          </li>
-          <li>
-            <a href="">
-              <i className="fa fa-book icon mi" aria-hidden="true"></i>
-              Historial
-            </a>
-          </li>
-          <li>
-            <a href="">
-              <i className="fa fa-envelope icon mi" aria-hidden="true"></i>
-              Texto
-            </a>
-          </li>
-        </ul>
-        <div className="usuario-cuenta">
-          <div className="usuario-perfil">
-            <img src="https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg" alt="Foto" />
-            <div className="usuario-detallle">
-              <h3 className="ml-1">
-                Nombre del dueño
-              </h3>
-              <span>correo@example.com</span>
+    <>
+      <div id="dueno">
+        <aside className={`dSidebar ${expand ? "open" : "closed"}`}>
+          <div className="dSidebar-header">
+            <img src={miImagen} alt="logo" />
+            <h2>
+              <span>Leagues hub</span>
+            </h2>
+          </div>
+          <ul className="dSidebar-links">
+            <li>
+              <a
+                className={`${componenteActual === "A" && "activo"}`}
+                onClick={() => setComponenteActual("A")}
+              >
+                <i className="fa fa-home icon mi" aria-hidden="true"></i>
+                Inicio
+              </a>
+            </li>
+            <li>
+              <a
+                className={`${componenteActual === "B" && "activo"}`}
+                onClick={() => setComponenteActual("B")}
+              >
+                <i className="fa fa-shield icon mi" aria-hidden="true"></i>
+                Mis equipos
+              </a>
+            </li>
+            <li>
+              <a
+                className={`${componenteActual === "C" && "activo"}`}
+                onClick={() => setComponenteActual("C")}
+              >
+                <i className="fa fa-users icon mi" aria-hidden="true"></i>
+                Jugadores
+              </a>
+            </li>
+            <li>
+              <a
+                className={`${componenteActual === "D" && "activo"}`}
+                onClick={() => setComponenteActual("D")}
+              >
+                <i className="fa fa-wallet icon mi" aria-hidden="true"></i>
+                Pagos
+              </a>
+            </li>
+            <li>
+              <a
+                className={`${componenteActual === "E" && "activo"}`}
+                onClick={() => setComponenteActual("E")}
+              >
+                <i className="fa fa-book icon mi" aria-hidden="true"></i>
+                Historial
+              </a>
+            </li>
+            <li id="hidden" className="sidebar-toggle">
+              <a onClick={() => setExpand(!expand)} id="sidebar-toggle">
+                <i
+                  className={`fa ${
+                    !expand ? "fa-arrow-left" : "fa-arrow-right"
+                  } icon mi`}
+                  aria-hidden="true"
+                ></i>
+              </a>
+            </li>
+          </ul>
+          <div className="usuario-cuenta">
+            <div className="usuario-perfil">
+              <img
+                src="https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
+                alt="Foto"
+              />
+              <div className="usuario-detallle">
+                <h3 className="ml-1">Nombre del dueño</h3>
+                <span>correo@example.com</span>
+              </div>
             </div>
           </div>
+        </aside>
+        <div className="w-100">
+            {/* Topbar */}
+            <nav
+              className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+              id="navbar"
+            >
+              <p className="text-white m-2">Menú de dueños de equipos</p>
+
+              <ul className="navbar-nav ml-auto">
+                <li className="nav-item dropdown no-arrow mx-auto">
+                  <a
+                    className="nav-link dropdown-toggle gray-back ali"
+                    id="alertsDropdown"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="true"
+                  >
+                    <i className="fa-regular en-fa fa-bell fa-fw"></i>
+                    <span className="badge badge-danger badge-counter">3+</span>
+                  </a>
+
+                  <div
+                    className="dropdown-list dropdown-menu shadow animated--grow-in"
+                    aria-labelledby="alertsDropdown"
+                  >
+                    <h6 className="dropdown-header">Notificaciones</h6>
+                    <a className="dropdown-item d-flex align-items-center">
+                      <div className="mr-3">
+                        <div className="icon-circle bg-primary">
+                          <i className="fas en-fa fa-file-alt text-white h-100"></i>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="small text-gray-500">
+                          December 12, 2019
+                        </div>
+                        <span className="font-weight-bold">
+                          A new monthly report is ready to download!
+                        </span>
+                      </div>
+                    </a>
+                    <a
+                      className="dropdown-item d-flex align-items-center"
+                      href="#"
+                    >
+                      <div className="mr-3">
+                        <div className="icon-circle bg-success">
+                          <i className="fas en-fa fa-donate h-100 text-white"></i>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="small text-gray-500">
+                          December 7, 2019
+                        </div>
+                        $290.29 has been deposited into your account!
+                      </div>
+                    </a>
+                    <a
+                      className="dropdown-item d-flex align-items-center"
+                      href="#"
+                    >
+                      <div className="mr-3">
+                        <div className="icon-circle bg-warning">
+                          <i className="fas en-fa fa-exclamation-triangle h-100 text-white"></i>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="small text-gray-500">
+                          December 2, 2019
+                        </div>
+                        Spending Alert: We've noticed unusually high spending
+                        for your account.
+                      </div>
+                    </a>
+                    <a
+                      className="dropdown-item text-center small text-gray-500"
+                      href="#"
+                    >
+                      Show All Alerts
+                    </a>
+                  </div>
+                </li>
+
+                <div className="topbar-divider d-none d-sm-block"></div>
+
+                <li className="nav-item dropdown no-arrow">
+                  <a
+                    className="nav-link dropdown-toggle head-a"
+                    href="#"
+                    id="userDropdown"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    <span className="mr-3 d-none d-lg-inline small text-white-600">
+                      Usuario #0000000001
+                    </span>
+                    <img
+                      className="img-profile rounded-circle"
+                      src="https://www.meme-arsenal.com/memes/a513f913ef43476bd2b494da4e599cbc.jpg"
+                      alt="..."
+                    />
+                  </a>
+
+                  <div
+                    className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                    aria-labelledby="userDropdown"
+                  >
+                    <a className="dropdown-item" href="#">
+                      <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                      Profile
+                    </a>
+                    <a className="dropdown-item" href="#">
+                      <i className="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                      Settings
+                    </a>
+                    <a className="dropdown-item" href="#">
+                      <i className="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                      Activity Log
+                    </a>
+                    <div className="dropdown-divider"></div>
+                    <a
+                      className="dropdown-item"
+                      data-toggle="modal"
+                      data-target="#logoutModal"
+                      onClick={() => logout()}
+                    >
+                      <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                      Logout
+                    </a>
+                  </div>
+                </li>
+              </ul>
+            </nav>
+          {/* Componente elegido */}
+          {renderizarComponente()}
+          {/* Footer */}
         </div>
-      </aside>
-      {renderizarComponente()}
-    </div>
+      </div>
+      <footer className="sticky-footer bg-base mt-0">
+        <span>Copyright &copy; Leagues Hub 2025</span>
+        <a href="https://lordicon.com/">Icons by Lordicon.com</a>
+      </footer>
+    </>
   );
 }

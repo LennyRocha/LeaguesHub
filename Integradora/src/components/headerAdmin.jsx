@@ -78,6 +78,10 @@ function AdminDashboard() {
         const fetchedToken = await getToken();
         const rol = await getUserRole();
         const correo = await getUserEmail();
+        if(rol !== 'ROLE_ADMIN'){
+          setNoData(true);
+          return;
+        }
         if (fetchedToken) {
           setTokenData(fetchedToken);
           tokenRef.current = fetchedToken; // Actualizar el token más reciente

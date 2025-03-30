@@ -83,12 +83,6 @@ h4 {
   padding: 0.5em;
 }
 
-h4::selection {
-  background-color: var(--color-domin-2-5);
-  color: white;
-  margin-bottom: 0.5em;
-}
-
 #sendCambio {
   border-radius: 0.5rem;
   width: 10rem;

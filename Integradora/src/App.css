@@ -11,17 +11,6 @@
   /* background: linear-gradient(to right, #8999A7, #0094DF, #FF0000); */
 }
 
-body{
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-  display: flex;
-  align-items: flex-start;
-  overflow: auto;
-  height: 100%;
-  width: 100%;
-}
-
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -49,12 +38,6 @@ body{
     animation: logo-spin infinite 20s linear;
   }
 }
-
-/*@media(max-width: 320px){
-  body{
-      overflow: scroll !important;  
-  }
-}*/
 
 .card {
   padding: 2em;

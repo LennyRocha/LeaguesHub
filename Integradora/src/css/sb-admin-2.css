@@ -11633,6 +11633,7 @@ a:focus {
   background: #5a5c69;
 }
 
+/*Arreglar para que solo los iconos de la sidebar*/
 .scroll-to-top i {
   font-weight: 800;
 }

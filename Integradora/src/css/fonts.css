@@ -78,15 +78,15 @@ h1, h2, h3, h4, h5 {
     }
 
     .body-small{
-        font-size: 20px;
+        font-size: 1.25rem;
     }
 
     .body-med{
-        font-size: 25px;
+        font-size: 1.5625rem;
     }
 
     .body-big{
-        font-size: 30px;
+        font-size: 1.875rem;
     }
 
     .non-h-text{

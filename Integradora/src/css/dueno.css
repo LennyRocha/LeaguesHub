@@ -1,10 +1,13 @@
 #dueno {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
   display: flex;
   flex-direction: row;
   min-height: 100vh;
+}
+
+#dueno > *{
+  font-weight: 600 !important;
 }
 
 .dSidebar {
@@ -14,10 +17,10 @@
   flex-direction: column;
   overflow: hidden;
   align-items: start;
-  width: 5rem;
+  width: 5.25rem;
   background: linear-gradient(135deg, #989898, #333333);
-  padding: 1.5625rem 1.25rem;
-  transition: all 0.4s ease;
+  padding: 1.5rem 1.25rem;
+  transition: width 0.4s ease-in-out, opacity 0.3s ease-in-out;
   position: sticky;
 }
 
@@ -46,6 +49,10 @@
 }
 
 .dSidebar:focus {
+  width: 16.25rem;
+}
+
+.dSidebar .open {
   width: 16.25rem;
 }
 
@@ -169,7 +176,7 @@
   }
 
   .dSidebar-header h2 {
-    margin-left: .75rem;
+    margin-left: 0.75rem;
   }
 
   .usuario-cuenta {
@@ -177,11 +184,11 @@
   }
 
   .dSidebar {
-    width: 5.5rem;
-    padding: 0.7rem;
+    width: 4.75rem;
+    padding: 0.75rem;
   }
 
-  .dSidebar:hover {
+  .dSidebar .open {
     width: 24rem;
   }
 }
@@ -201,17 +208,17 @@
   } */
 
   .dSidebar-header h2 {
-    margin-left: .5rem;
+    margin-left: 0.5rem;
     overflow: hidden;
     font-size: 1rem;
   }
 
   .dSidebar {
-    width: 7rem;
+    width: 5rem;
     padding: 1rem;
   }
 
-  .dSidebar:hover {
+  .dSidebar .open {
     width: 30rem;
   }
 
@@ -240,7 +247,12 @@
   }
 
   .dSidebar-links li a {
-    gap: 0 .5rem;
+    gap: 0 0.5rem;
+  }
+
+  .dSidebar {
+    width: 4.5rem;
+    padding: 1rem;
   }
 
   .usuario-perfil h3 {
@@ -251,8 +263,8 @@
     display: none;
   }
 
-  .dSidebar:hover {
-    width: 30rem;
+  .dSidebar .open {
+    pointer-events: none;
   }
 }
 
@@ -266,6 +278,10 @@
     height: 2.5rem;
   }
 
+  #hidden {
+    display: none !important;
+  }
+
   .dSidebar-links li a {
     color: transparent;
   }
@@ -274,18 +290,13 @@
     color: transparent !important;
   }
 
+  .dSidebar:hover {
+    width: 4.5rem !important;
+  }
+
   .usuario-perfil h3,
   .usuario-detallle span {
     display: none;
-  }
-
-  .dSidebar {
-    width: 10rem;
-    padding: 1rem;
-  }
-
-  .dSidebar:hover {
-    width: 10rem;
   }
 
   .dSidebar-header img {
@@ -305,21 +316,203 @@
 
 @media (max-width: 425px) {
   .dSidebar {
-    width: 10rem;
+    width: 4.5rem;
     padding: 0.5rem;
   }
 
-  .dSidebar:hover {
+  .dSidebar:hover :not(.open) {
+    width: 10rem;
+  }
+
+  .dSidebar .open {
     width: 10rem;
   }
 }
 
 @media (max-width: 376px) {
   .dSidebar {
-    width: 12rem;
+    width: 4rem;
   }
 
   .dSidebar:hover {
     width: 12rem;
   }
+
+  .dSidebar .open {
+    width: 10rem;
+  }
+}
+
+#hidden {
+  display: none;
+  transition: all 0.5s ease;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  #hidden {
+    display: block;
+  }
+
+  .dSidebar.closed {
+    width: 5.25rem;
+  }
+
+  .dSidebar.dSidebar.closed:hover .activo {
+    color: transparent !important;
+  }
+
+  .dSidebar.closed:hover .activo {
+    background-color: transparent;
+    color: var(--color-acento-1-4);
+    transition: all 0.25s ease-in-out;
+  }
+
+  .dSidebar.closed:not(:hover) .activo {
+    background-color: transparent;
+    color: transparent;
+    transition: all 0.25s ease-in-out;
+  }
+
+  .dSidebar.dSidebar.closed:hover .dSidebar-links li a {
+    color: transparent;
+    transition: all 0.4s ease;
+  }
+
+  .dSidebar.dSidebar.closed:hover .dSidebar-header h2 {
+    color: transparent;
+    transition: all 0.4s ease;
+  }
+
+  .dSidebar.dSidebar.closed:hover .usuario-perfil h3 {
+    color: transparent;
+    transition: all 0.4s ease;
+  }
+
+  .dSidebar.dSidebar.closed:hover .usuario-detallle span {
+    color: transparent !important;
+    transition: all 0.4s ease !important;
+  }
+}
+
+/* Footer */
+footer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 1px;
+  padding: 1em !important;
+}
+
+/* header */
+.head-a:hover {
+  background: transparent !important;
+}
+
+.ali:hover {
+  background: transparent !important;
+}
+
+.en-fa {
+  transform: scale(1) !important;
+}
+
+/* Dueño home */
+.w-80 {
+  width: 80%;
+}
+
+._col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.w-90 {
+  width: 90% !important;
+  text-align: justify !important;
+  margin: 0 !important;
+}
+
+.h2-bold {
+  font-weight: bold;
+}
+
+.h-mai {
+  height: 150px !important;
+  margin-bottom: 5rem !important;
+}
+
+.gapo {
+  gap: 1rem !important;
+  display: flex;
+  flex-direction: column;
+}
+
+.duenoBox h4 {
+  width: fit-content !important;
+  text-align: left !important;
+  margin: 0 !important;
+}
+
+.duenoBox {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Dueño Equipos */
+.overf-autox {
+  display: flex;
+  flex-direction: row;
+  overflow-y: scroll;
+  overflow-x: scroll;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: auto;
+  max-height: 300px !important;
+  flex-wrap: wrap; /* Permite que los elementos se acomoden en múltiples filas */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.textito{
+  font-size: smaller !important;
+}
+
+.overf-autox::-webkit-scrollbar {
+  display: none; /* Chrome, Safari y Edge */
+}
+
+.dueno-container-3 {
+  width: 150px !important;
+  height: auto;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  box-shadow: 4px 4px 8px rgba(51, 51, 51, 0.5);
+  max-width: 200px; /* Asegura que los contenedores no se expandan más allá de 200px */
+}
+
+.dueno-container-3 {
+  flex: 0 0 200px; /* No se expande más allá de 200px */
+}
+
+.dueno-container-3 h5 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.player-flow {
+  max-height: 50vh;
+  overflow-y: scroll;
+  margin-bottom: 2rem;
 }
