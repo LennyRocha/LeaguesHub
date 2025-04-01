@@ -15,7 +15,7 @@ import {
   TextField,
   Tooltip,
 } from "@mui/material";
-import { Edit, Delete } from "@mui/icons-material";
+import { Edit, Delete, LibraryAdd, EmojiEvents } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -290,14 +290,14 @@ export default function Admin3() {
       showDenyButton: true,
       confirmButtonText: "Cancelar torneo",
       denyButtonText: `Volver`,
-      icon: 'question',
+      icon: "question",
       customClass: {
         confirmButton: "btn-confirm",
         cancelButton: "btn-cancel",
         denyButton: "btn-deny",
       },
     }).then(async (result) => {
-      console.log(result, result.value)
+      console.log(result, result.value);
       if (result.isConfirmed) {
         await axios
           .patch(
@@ -377,6 +377,10 @@ export default function Admin3() {
   };
 
   const [id, setId] = useState(0);
+
+  const doEdit = (tor) => {
+    setEditar(true);
+  };
 
   async function submitTorneo(data, image) {
     const validationErrors = validateFields(data);
@@ -839,7 +843,7 @@ export default function Admin3() {
                         onClick={() =>
                           t.estatusTorneo
                             ? t.iniciado
-                              ? null //Será editar
+                              ? doEdit(t) //Será editar
                               : showDetails(t)
                             : showDetails(t)
                         }
@@ -893,11 +897,22 @@ export default function Admin3() {
         <div className="row">
           <div className="col-lg-8">
             <div className="bg-light form-div">
-              <div className="container-fluid">
-                <div className="d-sm-flex align-items-center justify-content-between mb-4">
+              <div className="">
+                <div className="d-sm-flex align-items-center justify-content-left mb-4">
                   <h3 className="mb-0">
                     {editar ? "Editar torneo" : "Nuevo torneo"}
                   </h3>
+                  {editar && (
+                    <Tooltip title="Crear un torneo">
+                      <IconButton
+                        onClick={() => {
+                          setEditar(false);
+                        }}
+                      >
+                        <EmojiEvents color="warning" />
+                      </IconButton>
+                    </Tooltip>
+                  )}
                 </div>
               </div>
               <form onSubmit={handleSubmit(onSubmit)}>
