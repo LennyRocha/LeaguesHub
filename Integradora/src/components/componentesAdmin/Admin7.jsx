@@ -82,7 +82,7 @@ export default function Admin7() {
           <img
             src={Banner1}
             alt="PosterPlantilla"
-            className="img-fluid d-block w-100"
+            className="d-block w-100 h-peque"
           />
         </div>
       </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { useForm } from "react-hook-form";
 import axios from "axios";
 import {
   Table,
@@ -205,7 +206,7 @@ export default function Admin4() {
   };
 
   //Importado de Native
-  const { getUserId, getUserRole, getToken } = useContext(AuthContext);
+  const { getUserId, getUserRole, getToken, api_url } = useContext(AuthContext);
   const [tokData, setTokData] = useState("");
   const [vis, setVis] = useState(false);
   const [editando, setEditando] = useState(false);
@@ -228,7 +229,6 @@ export default function Admin4() {
   const [fallo1, setFallo1] = useState("");
 
   const [selectedPlace, setSelectedPlace] = useState(null);
-  const [slideAnim] = useState(new Animated.Value(-400));
   const [rows, setRows] = useState(1);
   const [rowsEdit, setRowsEdit] = useState(1);
 
@@ -465,8 +465,8 @@ export default function Admin4() {
       setTokData(tok);
 
       setLoadCamps(true);
-      api
-        .get(`/api/campos/activos`, {
+      axios
+        .get(`${api_url}/api/campos/activos`, {
           headers: {
             Authorization: `Bearer ${tok}`,
           },
@@ -474,6 +474,7 @@ export default function Admin4() {
         .then((res) => {
           if (res.data.length === 0) setFallo1("No hay campos registrados");
           else setCampos(res.data);
+          console.log(res.data);
         })
         .catch((e) => {
           console.error(e, e.res.message);
@@ -503,41 +504,49 @@ export default function Admin4() {
         </div>
       </div>
       <div className="container-fluid table-overflow mb-0">
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead className="myThead theadContainer">
-              <TableRow>
-                <TableCell className="cell">#</TableCell>
-                <TableCell className="cell">Nombre</TableCell>
-                <TableCell className="cell">Dirección</TableCell>
-                <TableCell className="cell">Canchas</TableCell>
-                <TableCell className="cell">Opciones</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {data.map((d, index) => {
-                return (
-                  <TableRow key={d.id}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{d.name}</TableCell>
-                    <TableCell>{d.dir}</TableCell>
-                    <TableCell>{d.canchas}</TableCell>
-                    <TableCell>
-                      <IconButton onClick={() => onEdit(d)}>
-                        <Edit color="primary" />
-                      </IconButton>
-                      <IconButton
-                        onClick={() => setLocation({ lat: d.lat, lng: d.lon })}
-                      >
-                        <Map color="success" />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        {loadCamps ? (
+          <div className="w-100 align-items-center d-flex row justify-content-center">
+            <div className="my-spinner"></div>
+          </div>
+        ) : (
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead className="myThead theadContainer">
+                <TableRow>
+                  <TableCell className="cell">#</TableCell>
+                  <TableCell className="cell">Nombre</TableCell>
+                  <TableCell className="cell">Dirección</TableCell>
+                  <TableCell className="cell">Canchas</TableCell>
+                  <TableCell className="cell">Opciones</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {campos.map((d, index) => {
+                  return (
+                    <TableRow key={d.id}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{d.nombre}</TableCell>
+                      <TableCell>{d.direccion}</TableCell>
+                      <TableCell>{d.canchas.length}</TableCell>
+                      <TableCell>
+                        <IconButton onClick={() => onEdit(d)}>
+                          <Edit color="primary" />
+                        </IconButton>
+                        <IconButton
+                          onClick={() =>
+                            setLocation({ lat: d.latitud, lng: d.longitud })
+                          }
+                        >
+                          <Map color="success" />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
       </div>
       <div className="centered">
         <iframe
@@ -581,7 +590,7 @@ export default function Admin4() {
                 Registrar campo
               </p>
             </div>
-            <form onSubmit={(e) => submitCampo(e)}>
+            <form onSubmit={(e) => submitCampo(e)} className="gap-5">
               <TextField
                 className="txtAr"
                 label="Nombre del campo"
@@ -624,7 +633,7 @@ export default function Admin4() {
             <h4 className="mb-0">Asignacion de canchas</h4>
           </div>
         </div>
-        <div className="canchas-group">
+        <div className="canchas-group quitarScroll">
           {Array.from({ length: counter }).map((_, index) => {
             const handleInputChange = (i, text) => {
               setInputs((prev) => ({

@@ -161,7 +161,7 @@ export default function Admin2({ cambiarComponent, setDueno }) {
                             desactivarDueño(d.id, d.nombreCompleto)
                           }
                         >
-                          <p>{d.usuario.estatus ? "Inhabilitar" : "Rehabilitar"}</p>
+                          <p>{d.usuario.estatus ? "Desactivar" : "Reactivar"}</p>
                         </a>
                       )}
                     </div>

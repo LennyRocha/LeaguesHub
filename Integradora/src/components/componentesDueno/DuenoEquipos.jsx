@@ -177,22 +177,30 @@ export default function DuenoEquipos({ cambiarComponent }) {
             <h2 className="mb-0">Tus equipos</h2>
           </div>
 
-            <div className="overf-autox">
-              {equipos.map((e) => {
-                return (
-                  <div className="dueno-container-3 bg-light" key={e.equipoId}>
-                    <img src={e.img} alt={e.nombre} className="teamImage" />
-                    <h5 className="w-100">{e.nombre}</h5>
-                    <button
-                      className="slide-btn-sm textito text-black"
+          <div className="overf-autox">
+            {equipos.map((e) => {
+              return (
+                <div className="dueno-container-3 bg-light" key={e.equipoId}>
+                  <img src={e.img} alt={e.nombre} className="teamImage" />
+                  <h5 className="w-100">{e.nombre}</h5>
+                  <div className="_rowo w-100">
+                    <a
+                      className="link"
                       onClick={() => setVisible(!visible)}
                     >
-                      Ver jugadores
-                    </button>
+                      Editar
+                    </a>
+                    <a
+                      className="link"
+                      onClick={() => setVisible(!visible)}
+                    >
+                      Jugadores
+                    </a>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              );
+            })}
+          </div>
 
           <div className={`${visible ? "teamsVisible" : "teamsInvisible"}`}>
             <div className="d-sm-flex align-items-center justify-content-between mt-4 mb-2 ml-2">

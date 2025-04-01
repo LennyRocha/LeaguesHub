@@ -256,10 +256,10 @@ export default function DuenoContexto() {
             </div>
           </div>
         </aside>
-        <div className="w-100">
+        <div className="w-100 overflow-hidden">
             {/* Topbar */}
             <nav
-              className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+              className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow w-100"
               id="navbar"
             >
               <p className="text-white m-2">Menú de dueños de equipos</p>
@@ -342,7 +342,7 @@ export default function DuenoContexto() {
 
                 <div className="topbar-divider d-none d-sm-block"></div>
 
-                <li className="nav-item dropdown no-arrow">
+                <li className="nav-item duenolink dropdown no-arrow">
                   <a
                     className="nav-link dropdown-toggle head-a"
                     href="#"

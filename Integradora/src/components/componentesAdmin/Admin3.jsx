@@ -847,7 +847,7 @@ export default function Admin3() {
                         {t.estatusTorneo
                           ? t.iniciado
                             ? "Editar"
-                            : "Detalles"
+                            : "Editar"
                           : "Detalles"}
                       </button>
                       {t.motivoFinalizacion || t.estatusTorneo

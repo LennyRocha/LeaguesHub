@@ -70,17 +70,6 @@ section {
   display: block;
 }
 
-body {
-  margin: 0;
-  font-family: "Oswald", "Nunito";
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #858796;
-  text-align: left;
-  background-color: var(--color-base-1-1);
-}
-
 [tabindex="-1"]:focus:not(:focus-visible) {
   outline: 0 !important;
 }
@@ -1158,6 +1147,14 @@ hr {
   gap: 5px;
 }
 
+._rowo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
 .img_dueno {
   width: 25%;
   border-radius: 50%;
@@ -1257,7 +1254,7 @@ hr {
 
 .front-head {
   width: 100%;
-  height: 40%;
+  height: 35%;
   border-bottom-right-radius: 50%;
   border-bottom-left-radius: 50%;
   border-top-right-radius: 5px;
@@ -1329,19 +1326,19 @@ hr {
 }
 
 .kard h2,
-h3,
-h4,
-h5,
-h6,
-b,
-p {
+.kard h3,
+.kard h4,
+.kard h5,
+.kard h6,
+.kard b,
+.kard p {
   transform: perspective(500px) translateZ(50px);
 }
 
 .jugImg {
   width: 60%;
   height: 90%;
-  border-radius: 12%;
+  border-radius: 50%;
   margin-bottom: -3rem;
 }
 
@@ -1460,7 +1457,11 @@ p {
 }
 
 .map-frame {
-  padding: 0.5rem;
+  padding: 0.25rem;
+}
+
+.h-peque{
+  height: 150px !important;
 }
 
 /* A aquí */
@@ -1512,6 +1513,10 @@ dd {
 
 blockquote {
   margin: 0 0 1rem;
+}
+
+li{
+  list-style: none !important;
 }
 
 b,
@@ -1740,52 +1745,6 @@ template {
 [hidden] {
   display: none !important;
 }
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.h1,
-.h2,
-.h3,
-.h4,
-.h5,
-.h6 {
-  margin-bottom: 0.5rem;
-  font-weight: 400;
-  line-height: 1.2;
-}
-
-h1,
-.h1 {
-  font-size: 2.5rem;
-}
-
-h2,
-.h2 {
-  font-size: 2rem;
-}
-
-h3,
-.h3 {
-  font-size: 1.75rem;
-}
-
-h4,
-.h4 {
-  font-size: 1.5rem;
-}
-
-h5,
-.h5 {
-  font-size: 1.25rem;
-}
-
-/*h6, .h6 {
-  font-size: 1rem;
-}*/
 
 .lead {
   font-size: 1.25rem;
@@ -11523,21 +11482,8 @@ a.text-dark:focus {
   img {
     page-break-inside: avoid;
   }
-  p,
-  h2,
-  h3 {
-    orphans: 3;
-    widows: 3;
-  }
-  h2,
-  h3 {
-    page-break-after: avoid;
-  }
   @page {
     size: a3;
-  }
-  body {
-    min-width: 992px !important;
   }
   .container {
     min-width: 992px !important;
@@ -11572,15 +11518,6 @@ a.text-dark:focus {
     color: inherit;
     border-color: #e3e6f0;
   }
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  height: 100%;
 }
 
 a:focus {
