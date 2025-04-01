@@ -6,11 +6,11 @@
   min-height: 100vh;
 }
 
-#dueno > *{
+#dueno > * {
   font-weight: 600;
 }
 
-#dueno p{
+#dueno p {
   font-weight: normal !important;
 }
 
@@ -416,7 +416,7 @@ footer {
   background: transparent !important;
 }
 
-.duenolink a:hover{
+.duenolink a:hover {
   color: white !important;
 }
 
@@ -486,7 +486,7 @@ footer {
   -ms-overflow-style: none;
 }
 
-.textito{
+.textito {
   font-size: smaller !important;
 }
 
@@ -494,8 +494,31 @@ footer {
   display: none; /* Chrome, Safari y Edge */
 }
 
+.teams-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  max-height: 100vh;
+  row-gap: 1rem;
+  column-gap: 0.75rem;
+  padding: .5rem;
+  overflow-y: scroll;
+}
+
+@media (max-width: 575px) {
+  .teams-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 376px) {
+  .teams-grid {
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+}
+
 .dueno-container-3 {
-  width: 150px !important;
+  width: 100% !important;
   height: auto;
   min-height: 150px;
   display: flex;
@@ -506,7 +529,6 @@ footer {
   justify-content: center;
   border-radius: 0.5rem;
   box-shadow: 4px 4px 8px rgba(51, 51, 51, 0.5);
-  max-width: 200px; /* Asegura que los contenedores no se expandan más allá de 200px */
 }
 
 .dueno-container-3 {
@@ -557,6 +579,12 @@ footer {
   }
 }
 
+@media (max-width: 768px) {
+  .detallicos{
+    padding: .25rem;
+  }
+}
+
 .botonDivPlayer {
   bottom: 0;
   right: 0;
@@ -585,8 +613,8 @@ footer {
 }
 
 @media (max-width: 425px) {
-  .fotoPlayer{
-    transform: scale(.8);
+  .fotoPlayer {
+    transform: scale(0.8);
   }
 }
 
@@ -608,7 +636,7 @@ footer {
 
 .botonDivPlayer i {
   transform: scale(3.5);
-  margin-top: .5rem;
+  margin-top: 0.5rem;
   margin-left: 5px;
   color: var(--color-domin-1-2);
   cursor: pointer;

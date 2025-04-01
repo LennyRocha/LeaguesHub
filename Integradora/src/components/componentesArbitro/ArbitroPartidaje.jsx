@@ -21,6 +21,13 @@ export default function ArbitroPartidaje({
   const [partidoDefault, setPartidoDefault] = useState(false);
   const [ganadorDefault, setGanadorDefault] = useState("local");
 
+  // Variables para goles de penalti
+  const [penalesLocal, setPenalesLocal] = useState(0);
+  const [penalesVisitante, setPenalesVisitante] = useState(0);
+
+  // Para el criterio de desempate
+  const [criterioDesempate, setCriterioDesempate] = useState("NORMAL");
+
   const transformarUrl = (url) => {
     const match = url.match(/id=([^&]+)/);
     return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : url;
@@ -44,7 +51,7 @@ export default function ArbitroPartidaje({
       }
     };
     cargarJugadores();
-  }, []);
+  }, [api_url, partidoSeleccionado]);
 
   const manejarCheckbox = (jugador, equipo, activo) => {
     const estadisticas =
@@ -111,6 +118,8 @@ export default function ArbitroPartidaje({
         : golesVisitante,
       autogolesLocal,
       autogolesVisitante,
+      penalesLocal,
+      penalesVisitante,
       estadisticasLocal: partidoDefault
         ? ganadorDefault === "visitante"
           ? []
@@ -121,6 +130,9 @@ export default function ArbitroPartidaje({
           ? []
           : estadisticasVisitante.map((e) => ({ ...e, goles: 0 }))
         : estadisticasVisitante,
+      tipoDesempate: criterioDesempate, // Aquí agregamos el tipo de desempate
+      golesLocalPenales: criterioDesempate === "PENALES" ? penalesLocal : 0, // Solo si es PENALES
+      golesVisitantePenales: criterioDesempate === "PENALES" ? penalesVisitante : 0, // Solo si es PENALES
     };
 
     try {
@@ -330,6 +342,27 @@ export default function ArbitroPartidaje({
           value={autogolesVisitante}
           onChange={(e) => setAutogolesVisitante(Number(e.target.value))}
         />
+        
+        {/* Mostrar solo para liguilla vuelta */}
+        {partidoSeleccionado.tipoPartido === "LIGUILLA" && partidoSeleccionado.idaVuelta === "VUELTA" && (
+          <div>
+            <label>Seleccione criterio de desempate:</label>
+            <select value={criterioDesempate} onChange={(e) => setCriterioDesempate(e.target.value)}>
+              <option value="NORMAL">Normal</option>
+              <option value="TIEMPO_EXTRA">Tiempo Extra</option>
+              <option value="PENALES">Penales</option>
+            </select>
+
+            {criterioDesempate === "PENALES" && (
+              <div>
+                <label>Goles de penalti Local:</label>
+                <input type="number" value={penalesLocal} onChange={(e) => setPenalesLocal(Number(e.target.value))} />
+                <label>Goles de penalti Visitante:</label>
+                <input type="number" value={penalesVisitante} onChange={(e) => setPenalesVisitante(Number(e.target.value))} />
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="default-checkbox">

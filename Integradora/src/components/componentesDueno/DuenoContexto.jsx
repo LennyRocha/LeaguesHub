@@ -37,6 +37,10 @@ export default function DuenoContexto() {
   const [noData, setNoData] = useState(false);
   const tokenCheckInterval = 5 * 60 * 1000; // 5 minutos
 
+  useEffect(() => {
+    document.title = "Dueños";
+  }, []);
+
   // useRef para mantener el valor más reciente del token
   const tokenRef = useRef("");
 
@@ -257,141 +261,257 @@ export default function DuenoContexto() {
           </div>
         </aside>
         <div className="w-100 overflow-hidden">
-            {/* Topbar */}
-            <nav
-              className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow w-100"
-              id="navbar"
-            >
-              <p className="text-white m-2">Menú de dueños de equipos</p>
+          {/* Topbar */}
+          <nav
+            className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow w-100"
+            id="navbar"
+          >
+            <p className="text-white m-2">Menú de dueños de equipos</p>
 
-              <ul className="navbar-nav ml-auto">
-                <li className="nav-item dropdown no-arrow mx-auto">
-                  <a
-                    className="nav-link dropdown-toggle gray-back ali"
-                    id="alertsDropdown"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="true"
-                  >
-                    <i className="fa-regular en-fa fa-bell fa-fw"></i>
-                    <span className="badge badge-danger badge-counter">3+</span>
+            <ul className="navbar-nav ml-auto">
+              <li className="nav-item dropdown no-arrow mx-auto">
+                <a
+                  className="nav-link dropdown-toggle gray-back ali"
+                  id="alertsDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="true"
+                >
+                  <i className="fa-regular en-fa fa-bell fa-fw"></i>
+                  <span className="badge badge-danger badge-counter">3+</span>
+                </a>
+
+                <div
+                  className="dropdown-list dropdown-menu shadow animated--grow-in"
+                  aria-labelledby="alertsDropdown"
+                >
+                  <h6 className="dropdown-header">Notificaciones</h6>
+                  <a className="dropdown-item d-flex align-items-center">
+                    <div className="mr-3">
+                      <div className="icon-circle bg-primary">
+                        <i className="fas en-fa fa-file-alt text-white h-100"></i>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="small text-gray-500">
+                        December 12, 2019
+                      </div>
+                      <span className="font-weight-bold">
+                        A new monthly report is ready to download!
+                      </span>
+                    </div>
                   </a>
-
-                  <div
-                    className="dropdown-list dropdown-menu shadow animated--grow-in"
-                    aria-labelledby="alertsDropdown"
-                  >
-                    <h6 className="dropdown-header">Notificaciones</h6>
-                    <a className="dropdown-item d-flex align-items-center">
-                      <div className="mr-3">
-                        <div className="icon-circle bg-primary">
-                          <i className="fas en-fa fa-file-alt text-white h-100"></i>
-                        </div>
-                      </div>
-                      <div>
-                        <div className="small text-gray-500">
-                          December 12, 2019
-                        </div>
-                        <span className="font-weight-bold">
-                          A new monthly report is ready to download!
-                        </span>
-                      </div>
-                    </a>
-                    <a
-                      className="dropdown-item d-flex align-items-center"
-                      href="#"
-                    >
-                      <div className="mr-3">
-                        <div className="icon-circle bg-success">
-                          <i className="fas en-fa fa-donate h-100 text-white"></i>
-                        </div>
-                      </div>
-                      <div>
-                        <div className="small text-gray-500">
-                          December 7, 2019
-                        </div>
-                        $290.29 has been deposited into your account!
-                      </div>
-                    </a>
-                    <a
-                      className="dropdown-item d-flex align-items-center"
-                      href="#"
-                    >
-                      <div className="mr-3">
-                        <div className="icon-circle bg-warning">
-                          <i className="fas en-fa fa-exclamation-triangle h-100 text-white"></i>
-                        </div>
-                      </div>
-                      <div>
-                        <div className="small text-gray-500">
-                          December 2, 2019
-                        </div>
-                        Spending Alert: We've noticed unusually high spending
-                        for your account.
-                      </div>
-                    </a>
-                    <a
-                      className="dropdown-item text-center small text-gray-500"
-                      href="#"
-                    >
-                      Show All Alerts
-                    </a>
-                  </div>
-                </li>
-
-                <div className="topbar-divider d-none d-sm-block"></div>
-
-                <li className="nav-item duenolink dropdown no-arrow">
                   <a
-                    className="nav-link dropdown-toggle head-a"
+                    className="dropdown-item d-flex align-items-center"
                     href="#"
-                    id="userDropdown"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
                   >
-                    <span className="mr-3 d-none d-lg-inline small text-white-600">
-                      Usuario #0000000001
-                    </span>
-                    <img
-                      className="img-profile rounded-circle"
-                      src="https://www.meme-arsenal.com/memes/a513f913ef43476bd2b494da4e599cbc.jpg"
-                      alt="..."
-                    />
+                    <div className="mr-3">
+                      <div className="icon-circle bg-success">
+                        <i className="fas en-fa fa-donate h-100 text-white"></i>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="small text-gray-500">
+                        December 7, 2019
+                      </div>
+                      $290.29 has been deposited into your account!
+                    </div>
                   </a>
-
-                  <div
-                    className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                    aria-labelledby="userDropdown"
+                  <a
+                    className="dropdown-item d-flex align-items-center"
+                    href="#"
                   >
-                    <a className="dropdown-item" href="#">
-                      <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                      Profile
-                    </a>
-                    <a className="dropdown-item" href="#">
-                      <i className="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                      Settings
-                    </a>
-                    <a className="dropdown-item" href="#">
-                      <i className="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                      Activity Log
-                    </a>
-                    <div className="dropdown-divider"></div>
-                    <a
-                      className="dropdown-item"
-                      data-toggle="modal"
-                      data-target="#logoutModal"
-                      onClick={() => logout()}
-                    >
-                      <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                      Logout
-                    </a>
-                  </div>
-                </li>
-              </ul>
-            </nav>
+                    <div className="mr-3">
+                      <div className="icon-circle bg-warning">
+                        <i className="fas en-fa fa-exclamation-triangle h-100 text-white"></i>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="small text-gray-500">
+                        December 2, 2019
+                      </div>
+                      Spending Alert: We've noticed unusually high spending for
+                      your account.
+                    </div>
+                  </a>
+                  <a
+                    className="dropdown-item text-center small text-gray-500"
+                    href="#"
+                  >
+                    Show All Alerts
+                  </a>
+                </div>
+              </li>
+
+              <li className="nav-item dropdown no-arrow mx-1">
+                <a
+                  className="nav-link dropdown-toggle ali"
+                  href="#"
+                  id="messagesDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <i className="fa-regular en-fa fa-envelope fa-fw"></i>
+                  <span className="badge badge-danger badge-counter">7</span>
+                </a>
+
+                <div
+                  className="dropdown-list dropdown-menu shadow animated--grow-in"
+                  aria-labelledby="messagesDropdown"
+                  id="messagesCenter"
+                >
+                  <h6 className="dropdown-header">Solicitudes</h6>
+                  <a
+                    className="dropdown-item d-flex align-items-center"
+                    href="#"
+                  >
+                    <div className="dropdown-list-image mr-1">
+                      <img
+                        className="rounded-circle"
+                        src="img/undraw_profile_1.svg"
+                        alt="..."
+                      />
+                      <div className="status-indicator bg-success"></div>
+                    </div>
+                    <div>
+                      <div className="text-truncate">
+                        Hi there! I am wondering if you can help me with a
+                        problem I've been having.
+                      </div>
+                      <div className="small text-gray-500">
+                        Emily Fowler · 58m
+                      </div>
+                    </div>
+                  </a>
+                  <a
+                    className="dropdown-item d-flex align-items-center"
+                    href="#"
+                  >
+                    <div className="dropdown-list-image mr-1">
+                      <img
+                        className="rounded-circle"
+                        src="img/undraw_profile_2.svg"
+                        alt="..."
+                      />
+                      <div className="status-indicator bg-success"></div>
+                    </div>
+                    <div>
+                      <div className="text-truncate">
+                        I have the photos that you ordered last month, how would
+                        you like them sent to you?
+                      </div>
+                      <div className="small text-gray-500">Jae Chun · 1d</div>
+                    </div>
+                  </a>
+                  <a
+                    className="dropdown-item d-flex align-items-center"
+                    href="#"
+                  >
+                    <div className="dropdown-list-image mr-1">
+                      <img
+                        className="rounded-circle"
+                        src="img/undraw_profile_3.svg"
+                        alt="..."
+                      />
+                      <div className="status-indicator bg-success"></div>
+                    </div>
+                    <div>
+                      <div className="text-truncate">
+                        Last month's report looks great, I am very happy with
+                        the progress so far, keep up the good work!
+                      </div>
+                      <div className="small text-gray-500">
+                        Morgan Alvarez · 2d
+                      </div>
+                    </div>
+                  </a>
+                  <a
+                    className="dropdown-item d-flex align-items-center"
+                    href="#"
+                  >
+                    <div className="dropdown-list-image mr-1">
+                      <img
+                        className="rounded-circle"
+                        src="img/undraw_profile_4.svg"
+                        alt="..."
+                      />
+                      <div className="status-indicator bg-success"></div>
+                    </div>
+                    <div>
+                      <div className="text-truncate">
+                        Am I a good boy? The reason I ask is because someone
+                        told me that people say this to all dogs, even if they
+                        aren't good...
+                      </div>
+                      <div className="small text-gray-500">
+                        Chicken the Dog · 2w
+                      </div>
+                    </div>
+                  </a>
+                  <a
+                    className="dropdown-item text-center small text-gray-500"
+                    href="#"
+                  >
+                    Read More Messages
+                  </a>
+                </div>
+              </li>
+
+              <div className="topbar-divider d-none d-sm-block"></div>
+
+              <li className="nav-item duenolink dropdown no-arrow">
+                <a
+                  className="nav-link dropdown-toggle head-a"
+                  href="#"
+                  id="userDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <span className="mr-3 d-none d-lg-inline small text-white-600">
+                    Usuario #0000000001
+                  </span>
+                  <img
+                    className="img-profile rounded-circle"
+                    src="https://www.meme-arsenal.com/memes/a513f913ef43476bd2b494da4e599cbc.jpg"
+                    alt="..."
+                  />
+                </a>
+
+                <div
+                  className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                  aria-labelledby="userDropdown"
+                >
+                  <a className="dropdown-item" href="#">
+                    <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Profile
+                  </a>
+                  <a className="dropdown-item" href="#">
+                    <i className="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Settings
+                  </a>
+                  <a className="dropdown-item" href="#">
+                    <i className="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Activity Log
+                  </a>
+                  <div className="dropdown-divider"></div>
+                  <a
+                    className="dropdown-item"
+                    data-toggle="modal"
+                    data-target="#logoutModal"
+                    onClick={() => logout()}
+                  >
+                    <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Logout
+                  </a>
+                </div>
+              </li>
+            </ul>
+          </nav>
           {/* Componente elegido */}
           {renderizarComponente()}
           {/* Footer */}

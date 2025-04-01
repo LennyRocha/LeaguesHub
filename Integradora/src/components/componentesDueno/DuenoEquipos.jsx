@@ -1,5 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "bootstrap";
+import { AuthContext } from "../../context/AuthContext";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  TextField,
+  Tooltip,
+} from "@mui/material";
+import { Edit } from "@mui/icons-material";
 
 const jugadoresPrueba = [
   {
@@ -169,88 +183,56 @@ const equipos = [
 export default function DuenoEquipos({ cambiarComponent }) {
   const [visible, setVisible] = useState(false);
   const [equipo, setEquipo] = useState([]);
+  const [edit, setEdit] = useState(false);
+  const { getUrl } = useContext(AuthContext);
   return (
     <div className="container-fluid">
       <div className="duenoBox quitarScroll">
         <div className="">
-          <div className="d-sm-flex align-items-center justify-content-between mb-4">
+          <div className="d-flex flex-row align-items-center justify-content-left g-2 mb-4">
             <h2 className="mb-0">Tus equipos</h2>
+            <IconButton
+              onClick={() => {
+                setEdit(false);
+                setVisible(!visible);
+              }}
+            >
+              <Edit color="primary" />
+            </IconButton>
           </div>
 
-          <div className="overf-autox">
-            {equipos.map((e) => {
-              return (
-                <div className="dueno-container-3 bg-light" key={e.equipoId}>
-                  <img src={e.img} alt={e.nombre} className="teamImage" />
-                  <h5 className="w-100">{e.nombre}</h5>
-                  <div className="_rowo w-100">
-                    <a
-                      className="link"
-                      onClick={() => setVisible(!visible)}
+          <div className="row">
+            <div className="col-md-8">
+              <div className="teams-grid quitarScroll">
+                {equipos.map((e) => {
+                  return (
+                    <div
+                      className="dueno-container-3 bg-light"
+                      key={e.equipoId}
                     >
-                      Editar
-                    </a>
-                    <a
-                      className="link"
-                      onClick={() => setVisible(!visible)}
-                    >
-                      Jugadores
-                    </a>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className={`${visible ? "teamsVisible" : "teamsInvisible"}`}>
-            <div className="d-sm-flex align-items-center justify-content-between mt-4 mb-2 ml-2">
-              <h3 className="mb-0">Equipo x</h3>
-            </div>
-            <div className="players-grid player-flow quitarScroll">
-              {jugadoresPrueba.map((j) => {
-                return (
-                  <div className="over-card" key={j.id}>
-                    <div className="kard">
-                      <div className="face card-front">
-                        <div
-                          className={`front-head ${
-                            j.activo ? "aktive" : "inactive"
-                          }`}
+                      <img
+                        src={getUrl(e.img)}
+                        alt={e.nombre}
+                        className="img-fluid"
+                      />
+                      <h5 className="w-100">{e.nombre}</h5>
+                      <div className="_rowo w-100">
+                        <a
+                          className="link"
+                          onClick={() => setVisible(!visible)}
                         >
-                          <img src={j.img} alt={j.nombre} className="jugImg" />
-                        </div>
-                        <h5 className="h_tz f-col">{j.nombre}</h5>
-                        <div
-                          className={`mini-alert ${
-                            j.activo
-                              ? "aktive activeTxt"
-                              : "inactive inactiveTxt"
-                          }`}
-                        >
-                          {j.activo ? "Activo" : "Inactivo"}
-                        </div>
-                      </div>
-                      <div className="face card-back _col">
-                        <h3>Info</h3>
-                        <div className="mini-grid">
-                          <div className="para_alla">
-                            <p>Partidos</p>
-                            <p>Goles</p>
-                            <p>t. rojas</p>
-                            <p>t. amarillas</p>
-                          </div>
-                          <div className="para_aca">
-                            <p>10</p>
-                            <p>1</p>
-                            <p>N/A</p>
-                            <p>3</p>
-                          </div>
-                        </div>
+                          Editar
+                        </a>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
+              <div className="col-md-4">
+                <div
+                  className={`${visible ? "teamsVisible" : "teamsInvisible"}`}
+                ></div>
+              </div>
             </div>
           </div>
         </div>

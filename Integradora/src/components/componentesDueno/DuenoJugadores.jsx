@@ -202,7 +202,7 @@ export default function DuenoJugadores({ cambiarComponente }) {
   };
   return (
     <div className="w-100">
-      <div className="d-sm-flex align-items-center justify-content-left g-2 mb-4 container-fluid">
+      <div className="d-flex flex-row align-items-center justify-content-left g-2 mb-4 container-fluid">
         <h2 className="mb-0">Menú de jugadores</h2>
         <IconButton
           onClick={() => {
@@ -281,7 +281,7 @@ export default function DuenoJugadores({ cambiarComponente }) {
         </div>
 
         <div class="col-md-4 position-sticky">
-          <div class="position-sticky">
+          <div class="position-sticky detallicos">
             <div class="p-4 mb-3 bg-light rounded">
               <details>
                 <summary>Elige un equipo para ver sus jugadores</summary>
