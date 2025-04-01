@@ -3,6 +3,8 @@ import { AuthContext } from "../../context/AuthContext";
 import "bootstrap";
 import axios from "axios";
 import Swal from "sweetalert2";
+import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 export default function Admin2({ cambiarComponent, setDueno }) {
   const [duenos, setDuenos] = useState([]);
@@ -12,7 +14,7 @@ export default function Admin2({ cambiarComponent, setDueno }) {
   const { getUserId, getUserRole, getToken, getUrl, api_url, logout } =
     useContext(AuthContext);
   const [tokData, setTokData] = useState("");
-  
+
   const [reload, setReload] = useState(false);
 
   useEffect(() => {
@@ -127,6 +129,28 @@ export default function Admin2({ cambiarComponent, setDueno }) {
     }
   };
 
+  const ITEMS_PER_PAGE = 6; // Número de dueños por página
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalPages = Math.ceil(duenos.length / ITEMS_PER_PAGE);
+
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentItems = duenos.slice(indexOfFirstItem, indexOfLastItem);
+
+  const nextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   return (
     <div>
       <div className="container-fluid">
@@ -140,56 +164,57 @@ export default function Admin2({ cambiarComponent, setDueno }) {
                 <div className="my-spinner"></div>
               </div>
             ) : falloD === "" ? (
-              duenos.map((d) => {
-                return (
-                  <div className={`dueno-container ${d.usuario.estatus ? 'bg-light' : 'bg-gray'}`} key={d.id}>
-                    <div className="dueno-head-row">
-                      <div className="_row">
-                        <img
-                          className="img_dueno"
-                          src={getUrl(d.imagenUrl)}
-                          alt={d.nombreCompleto}
-                        />
-                        <h5>{d.nombreCompleto}</h5>
-                      </div>
-                      {load ? (
-                        <div className="my-spinner acent-spinner"></div>
-                      ) : (
-                        <a
-                          className="link"
-                          onClick={() =>
-                            desactivarDueño(d.id, d.nombreCompleto)
-                          }
-                        >
-                          <p>{d.usuario.estatus ? "Desactivar" : "Reactivar"}</p>
-                        </a>
-                      )}
+              currentItems.map((d) => (
+                <div
+                  className={`dueno-container ${
+                    d.usuario.estatus ? "bg-light" : "bg-gray"
+                  }`}
+                  key={d.id}
+                >
+                  <div className="dueno-head-row">
+                    <div className="_row">
+                      <img
+                        className="img_dueno"
+                        src={getUrl(d.imagenUrl)}
+                        alt={d.nombreCompleto}
+                      />
+                      <h5>{d.nombreCompleto}</h5>
                     </div>
-                    <div className="divider"></div>
-                    <div className="mini-grid">
-                      <div className="para_alla">
-                        <p>Status</p>
-                        <p>Correo</p>
-                        <p>Equipos</p>
-                      </div>
-                      <div className="para_aca">
-                        <p>{d.usuario.estatus ? "Activo" : "Inactivo"}</p>
-                        <p>{d.usuario.email}</p>
-                        <p>3</p>
-                      </div>
-                    </div>
-                    <a
-                      className="link"
-                      onClick={() => {
-                        setDueno(d);
-                        cambiarComponent("dueno");
-                      }}
-                    >
-                      Ver equipos
-                    </a>
+                    {load ? (
+                      <div className="my-spinner acent-spinner"></div>
+                    ) : (
+                      <a
+                        className="link"
+                        onClick={() => desactivarDueño(d.id, d.nombreCompleto)}
+                      >
+                        <p>{d.usuario.estatus ? "Desactivar" : "Reactivar"}</p>
+                      </a>
+                    )}
                   </div>
-                );
-              })
+                  <div className="divider"></div>
+                  <div className="mini-grid">
+                    <div className="para_alla">
+                      <p>Status</p>
+                      <p>Correo</p>
+                      <p>Equipos</p>
+                    </div>
+                    <div className="para_aca">
+                      <p>{d.usuario.estatus ? "Activo" : "Inactivo"}</p>
+                      <p>{d.usuario.email}</p>
+                      <p>3</p>
+                    </div>
+                  </div>
+                  <a
+                    className="link"
+                    onClick={() => {
+                      setDueno(d);
+                      cambiarComponent("dueno");
+                    }}
+                  >
+                    Ver equipos
+                  </a>
+                </div>
+              ))
             ) : (
               <div className="derecha">
                 <h5 id="confirm">{falloD}</h5>
@@ -197,8 +222,19 @@ export default function Admin2({ cambiarComponent, setDueno }) {
             )}
           </div>
         </div>
+        <div className="flex-row d-flex align-items-center mt-3 gap-3 justify-content-center">
+          <button onClick={prevPage} disabled={currentPage === 1}>
+            <ArrowLeftIcon fontSize="large" />
+          </button>
+          <span>
+            Página {currentPage} de {totalPages}
+          </span>
+          <button onClick={nextPage} disabled={currentPage === totalPages}>
+            <ArrowRightIcon fontSize="large" />
+          </button>
+        </div>
         <br />
-        <div className="ml-md-5 ml-sm-3 ml-xs-5 align-items-center justify-content-between mb-4 note-p">
+        <div className="align-items-left justify-content-between mb-4">
           <p>
             <b>NOTA:</b> En caso de tener adeudos, consulte el menú de pagos
             para mas información
