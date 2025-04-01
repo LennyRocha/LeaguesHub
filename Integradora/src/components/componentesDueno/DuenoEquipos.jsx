@@ -185,6 +185,28 @@ export default function DuenoEquipos({ cambiarComponent }) {
   const [equipo, setEquipo] = useState([]);
   const [edit, setEdit] = useState(false);
   const { getUrl } = useContext(AuthContext);
+  const [preview, setPreview] = useState(
+    "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
+  );
+
+  const [load, setLoad] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      const reader = new FileReader();
+      reader.onload = () => setPreview(reader.result);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  function mostrarEdit(){
+    setEdit(true);
+    setVisible(true);
+  }
+
   return (
     <div className="container-fluid">
       <div className="duenoBox quitarScroll">
@@ -219,7 +241,7 @@ export default function DuenoEquipos({ cambiarComponent }) {
                       <div className="_rowo w-100">
                         <a
                           className="link"
-                          onClick={() => setVisible(!visible)}
+                          onClick={() => !visible ? mostrarEdit() : setEdit(true)}
                         >
                           Editar
                         </a>
@@ -228,10 +250,64 @@ export default function DuenoEquipos({ cambiarComponent }) {
                   );
                 })}
               </div>
-              <div className="col-md-4">
-                <div
-                  className={`${visible ? "teamsVisible" : "teamsInvisible"}`}
-                ></div>
+            </div>
+            <div className="col-md-4">
+              <div className={`${visible ? "teamsVisible" : "teamsInvisible"}`}>
+                <h3 class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="body-small">
+                    {edit ? "Editar equipo" : "Registrar equipo"}
+                  </span>
+                </h3>
+                <div className="arbitro-card bg-light rounded mb-4">
+                  <form>
+                    <div className="player-picture">
+                      <div className="fotoPlayer">
+                        <img
+                          src={preview}
+                          alt="Foto de perfil nueva"
+                          id="selPictPlayer"
+                        />
+                        <Tooltip title="Elegir una imagen">
+                          <div className="botonDivPlayer">
+                            <input
+                              type="file"
+                              className="botonCamPlayer"
+                              accept="image/*"
+                              onChange={handleFileChange}
+                            />
+                            <i className="fa fa-camera"></i>
+                          </div>
+                        </Tooltip>
+                      </div>
+                    </div>
+                    <TextField
+                      className="txtAr txtCon"
+                      label="Nombre del equipo"
+                      fullWidth
+                      margin="dense"
+                      name="nombre"
+                      required
+                      id="arbName"
+                    />
+                    <p className="text-danger"></p>
+                    <select className="form-control mb-2 txtAr">
+                      <option value="">Selecciona un campo</option>
+                      <option value="">Campo 1</option>
+                      <option value="">Campo 2</option>
+                    </select>
+                    {load ? (
+                      <div className="my-spinner"></div>
+                    ) : (
+                      <button
+                        type="submit"
+                        id="submitArb"
+                        className={"text-black"}
+                      >
+                        Registrar
+                      </button>
+                    )}
+                  </form>
+                </div>
               </div>
             </div>
           </div>
