@@ -3,11 +3,10 @@ import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import "bootstrap";
 
-export default function Admin8({ cambiarComponent, dueno, setDueno }) {
-  const [visible, setVisible] = useState(false);
-  const [equipo, setEquipo] = useState([]);
+export default function Admin9({cambiarComponent, team, setTeam}) {
+  const [visible, setVisible] = useState(true);
   useEffect(() => {
-    console.log(dueno, dueno.usuario);
+    console.log(team, team.nombreEquipo);
   }, []);
 
   const [teams, setTeams] = useState([]);
@@ -23,9 +22,9 @@ export default function Admin8({ cambiarComponent, dueno, setDueno }) {
 
   const [reload, setReload] = useState(false);
 
-  const [nombreTeam, setNombreTeam] = useState('');
+  const [nombreTeam, setNombreTeam] = useState("");
 
-  const getJugadores = (id, name) => {
+  const getJugadores = (id) => {
     setVisible(true);
     setLoadPlayers(true);
     axios
@@ -100,9 +99,9 @@ export default function Admin8({ cambiarComponent, dueno, setDueno }) {
           setVisible(!visible);
         });
     };
-    getDuenoEquipos();
+    //getDuenoEquipos();
+    getJugadores(team.id);
   }, [reload]);
-
   return (
     <div>
       <nav aria-label="breadcrumb">
@@ -111,22 +110,11 @@ export default function Admin8({ cambiarComponent, dueno, setDueno }) {
             <a
               onClick={() => {
                 cambiarComponent("home");
-                setDueno({});
+                setTeam({});
               }}
               className="link"
             >
               Inicio
-            </a>
-          </li>
-          <li className="breadcrumb-item">
-            <a
-              onClick={() => {
-                cambiarComponent("equipos");
-                setDueno({});
-              }}
-              className="link"
-            >
-              Dueños
             </a>
           </li>
           <li className="breadcrumb-item active" aria-current="page">
@@ -136,9 +124,9 @@ export default function Admin8({ cambiarComponent, dueno, setDueno }) {
       </nav>
       <div className="container-fluid">
         <div className="d-sm-flex align-items-center justify-content-between mb-4">
-          <h2 className="mb-0">Equipos de {dueno.nombreCompleto}</h2>
+          <h2 className="mb-0">Equipo {team.nombreEquipo}</h2>
         </div>
-        <div className="overf-auto">
+        {/* <div className="overf-auto">
           {loadTeams ? (
             <div className="w-100 justify-content-center d-flex">
               <div className="my-spinner mt-3"></div>
@@ -167,11 +155,8 @@ export default function Admin8({ cambiarComponent, dueno, setDueno }) {
               <h3>{fallo}</h3>
             </div>
           )}
-        </div>
+        </div> */}
         <div className={`${visible ? "teamsVisible" : "teamsInvisible"}`}>
-          <div className="d-sm-flex align-items-center justify-content-between mt-4 mb-2 ml-2">
-            <h3 className="mb-0">{nombreTeam}</h3>
-          </div>
           {loadPlayers ? (
             <div className="w-100 justify-content-center d-flex">
               <div className="my-spinner mt-3"></div>
@@ -179,7 +164,7 @@ export default function Admin8({ cambiarComponent, dueno, setDueno }) {
           ) : falloJ === "" ? (
             <div className="players-grid">
               {players.map((j) => {
-                console.log(j.expulsado)
+                console.log(j.expulsado);
                 return (
                   <div className="over-card" key={j.id}>
                     <div className="kard">
@@ -189,9 +174,15 @@ export default function Admin8({ cambiarComponent, dueno, setDueno }) {
                             j.habilitado ? "aktive" : "inactive"
                           }`}
                         >
-                          <img src={getUrl(j.fotoJugador)} alt={j.nombreCompleto} className="jugImg" />
+                          <img
+                            src={getUrl(j.fotoJugador)}
+                            alt={j.nombreCompleto}
+                            className="jugImg"
+                          />
                         </div>
-                        <h6 className="h_tz f-col text-center px-2 w-75">{j.nombreCompleto}</h6>
+                        <h6 className="h_tz f-col text-center px-2 w-75">
+                          {j.nombreCompleto}
+                        </h6>
                         <div
                           className={`mini-alert ${
                             j.habilitado
@@ -213,7 +204,7 @@ export default function Admin8({ cambiarComponent, dueno, setDueno }) {
                           <div className="para_aca">
                             <p>{j.partidosJugados}</p>
                             <p>{j.numeroCamiseta}</p>
-                            <p>{j.expulsado ? 'Si' : 'No'}</p>
+                            <p>{j.expulsado ? "Si" : "No"}</p>
                           </div>
                         </div>
                         <p className="pb-2 pt-0">{j.fechaNacimiento}</p>
@@ -229,6 +220,7 @@ export default function Admin8({ cambiarComponent, dueno, setDueno }) {
             </div>
           )}
         </div>
+        <p><strong>NOTA: </strong> Consulte el menú de dueños para más información</p>
       </div>
     </div>
   );

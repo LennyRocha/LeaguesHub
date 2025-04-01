@@ -4,7 +4,7 @@ import Calendar from "react-calendar";
 import Swal from "sweetalert2";
 import axios from "axios";
 
-function Admin1() {
+function Admin1({ cambiarComponent, setTeam }) {
   const [date, setDate] = useState(new Date());
 
   const { getUserId, getUserRole, getToken, logout, api_url, getUrl } =
@@ -600,7 +600,7 @@ function Admin1() {
                 ) : fallo2 === "" ? (
                   <div className="duenoGrid">
                     {equipos.map((e) => (
-                      <div className="duenoCard" key={e.id}>
+                      <div className="duenoCard dc" key={e.id} onClick={() => {setTeam(e); cambiarComponent('equipo')}}>
                         <img
                           className="img-fluid"
                           width="80%"

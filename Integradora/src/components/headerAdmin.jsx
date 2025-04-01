@@ -27,12 +27,14 @@ import Admin5 from "./componentesAdmin/Admin5";
 import Admin6 from "./componentesAdmin/Admin6";
 import Admin7 from "./componentesAdmin/Admin7";
 import Admin8 from "./componentesAdmin/Admin8";
+import Admin9 from "./componentesAdmin/Admin9";
 
 function AdminDashboard() {
   const [userName, setUserName] = useState("Usuario");
   const [activeComponent, setActiveComponent] = useState("home");
 
   const [dueno, setDueno] = useState({});
+  const [team, setTeam] = useState({});
 
   const week = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
 
@@ -41,7 +43,7 @@ function AdminDashboard() {
 
   const { getToken, decodeToken, getUserEmail, getUserRole } =
     useContext(AuthContext);
-  const { logout, removeToken, removeUser } = useContext(AuthContext);
+  const { logout, removeToken, removeUser, getout } = useContext(AuthContext);
 
   const [tokenData, setTokenData] = useState("");
   const [expire, setExpire] = useState(false);
@@ -180,7 +182,7 @@ function AdminDashboard() {
   const renderComponent = () => {
     switch (activeComponent) {
       case "home":
-        return <Admin1 />;
+        return <Admin1 cambiarComponent={setActiveComponent} setTeam={setTeam} />;
       case "equipos":
         return <Admin2 cambiarComponent={setActiveComponent} setDueno={setDueno} />;
       case "torneos":
@@ -195,6 +197,8 @@ function AdminDashboard() {
         return <Admin7 />;
       case "dueno":
         return <Admin8 cambiarComponent={setActiveComponent} dueno={dueno} setDueno={setDueno} />;
+        case "equipo":
+      return <Admin9 cambiarComponent={setActiveComponent} team={team} setTeam={setTeam} />;
       default:
         return <Admin1 />;
     }
@@ -246,6 +250,7 @@ function AdminDashboard() {
         removeToken={removeToken}
         removeUser={removeUser}
         logout={logout}
+        getout={getout}
       />
     );
   }
@@ -269,7 +274,7 @@ function AdminDashboard() {
           <hr className="sidebar-divider my-0" />
 
           <li
-            className={`nav-item ${activeComponent === "home" ? "active" : ""}`}
+            className={`nav-item ${activeComponent === "home" || activeComponent === "equipo" ? "active" : ""}`}
           >
             <a className="nav-link" onClick={() => setActiveComponent("home")}>
               <i className="fa-solid fa-house fap"></i>
@@ -706,7 +711,7 @@ function AdminDashboard() {
           {/* Footer */}
           <footer className="sticky-footer bg-base">
             <div className="container my-auto">
-              <div className="copyright text-center my-auto">
+              <div className="copyright text-center text-white my-auto">
                 <span>Copyright &copy; Leagues Hub 2025</span>
                 <br />
                 <a href="https://lordicon.com/">Icons by Lordicon.com</a>
