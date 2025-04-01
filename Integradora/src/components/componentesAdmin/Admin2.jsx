@@ -223,23 +223,17 @@ export default function Admin2({ cambiarComponent, setDueno }) {
           </div>
         </div>
         <div className="flex-row d-flex align-items-center mt-3 gap-3 justify-content-center">
-          <button onClick={prevPage} disabled={currentPage === 1}>
+          <button className="p-0" onClick={prevPage} disabled={currentPage === 1}>
             <ArrowLeftIcon fontSize="large" />
           </button>
           <span>
             Página {currentPage} de {totalPages}
           </span>
-          <button onClick={nextPage} disabled={currentPage === totalPages}>
+          <button className="p-0" onClick={nextPage} disabled={currentPage === totalPages}>
             <ArrowRightIcon fontSize="large" />
           </button>
         </div>
         <br />
-        <div className="align-items-left justify-content-between mb-4">
-          <p>
-            <b>NOTA:</b> En caso de tener adeudos, consulte el menú de pagos
-            para mas información
-          </p>
-        </div>
       </div>
     </div>
   );
