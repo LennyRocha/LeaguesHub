@@ -13,7 +13,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import { Edit } from "@mui/icons-material";
-import '../../css/sb-admin-2.css'
+import "../../css/sb-admin-2.css";
 
 const jugadoresPrueba = [
   {
@@ -188,7 +188,7 @@ export default function DuenoJugadores({ cambiarComponente }) {
     "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
   );
 
-  const [load, setLoad] = useState(false)
+  const [load, setLoad] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handleFileChange = (event) => {
@@ -265,7 +265,7 @@ export default function DuenoJugadores({ cambiarComponente }) {
                             className="link"
                             onClick={() => {
                               setEdit(true);
-                              setVisible2(!visible2);
+                              setVisible2(true);
                             }}
                           >
                             Editar
@@ -295,7 +295,7 @@ export default function DuenoJugadores({ cambiarComponente }) {
               </details>
             </div>
 
-            <div className={`${visible2 ? "teamsVisible" : "teamsInvisible"}`}>
+            <div className={`p-sm-1 ${visible2 ? "teamsVisible" : "teamsInvisible"}`}>
               <h4 class="d-flex justify-content-between align-items-center mb-3">
                 <span class="body-small">
                   {edit ? "Editar jugador" : "Registrar jugador"}
@@ -303,23 +303,28 @@ export default function DuenoJugadores({ cambiarComponente }) {
               </h4>
               <div className="arbitro-card bg-light rounded mb-4">
                 <form>
-                  <div className="fotoContainer">
-                    <img className="img-thumbnail rounded" src={preview} alt="..." />
-                    <Tooltip title="Elegir una imagen">
-                      <div className="botonDiv">
-                        <i className="fa fa-camera"></i>
-                        <input
-                          type="file"
-                          className="botonCam"
-                          accept="image/*"
-                          onChange={handleFileChange}
-                          id="btnCam"
-                        />
-                      </div>
-                    </Tooltip>
+                  <div className="player-picture">
+                    <div className="fotoPlayer">
+                      <img
+                        src={preview}
+                        alt="Foto de perfil nueva"
+                        id="selPictPlayer"
+                      />
+                      <Tooltip title="Elegir una imagen">
+                        <div className="botonDivPlayer">
+                          <input
+                            type="file"
+                            className="botonCamPlayer"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                          />
+                          <i className="fa fa-camera"></i>
+                        </div>
+                      </Tooltip>
+                    </div>
                   </div>
                   <TextField
-                    className="txtAr"
+                    className="txtAr txtCon"
                     label="Nombre completo"
                     fullWidth
                     margin="dense"
@@ -329,31 +334,22 @@ export default function DuenoJugadores({ cambiarComponente }) {
                   />
                   <p className="text-danger"></p>
                   <TextField
-                    className="txtAr"
-                    type="email"
-                    label="Correo electrónico"
+                    className="txtAr txtCon"
+                    type="date"
+                    placeholder="Fecha de nacimiento"
                     fullWidth
                     margin="dense"
                     name="correo"
-                    required                  />
-                  <p className="text-danger"></p>
-                  <TextField
-                    className="txtAr"
-                    type="password"
-                    label="Contraseña"
-                    fullWidth
-                    margin="dense"
-                    name="contra"
                     required
                   />
                   <p className="text-danger"></p>
                   <TextField
-                    className="txtAr"
-                    type="password"
-                    label="Confirmar contraseña"
+                    className="txtAr txtCon"
+                    type="number"
+                    label="Número de camiseta"
                     fullWidth
                     margin="dense"
-                    name="contra2"
+                    name="contra"
                     required
                   />
                   <p className="text-danger"></p>

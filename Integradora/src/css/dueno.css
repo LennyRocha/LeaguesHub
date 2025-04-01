@@ -556,3 +556,60 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
+.botonDivPlayer {
+  bottom: 0;
+  right: 0;
+  width: 5em;
+  height: 5em;
+  line-height: 2.1em;
+  overflow: hidden;
+  text-align: center;
+  align-self: flex-start;
+  z-index: 1050 !important;
+  margin-top: -5.25rem;
+  background-color: transparent;
+}
+
+#selPictPlayer {
+  width: 10em;
+  height: 10em;
+  border-radius: 50%;
+}
+
+.fotoPlayer {
+  width: 100%;
+  align-items: center;
+  position: relative;
+  margin: auto;
+}
+
+@media (max-width: 425px) {
+  .fotoPlayer{
+    transform: scale(.8);
+  }
+}
+
+.player-picture {
+  align-items: center;
+}
+
+.botonCamPlayer {
+  position: absolute;
+  transform: scale(3);
+  opacity: 0;
+  top: 10px;
+  left: 120px;
+}
+
+.botonCamPlayer ::-webkit-file-upload-button {
+  cursor: pointer;
+}
+
+.botonDivPlayer i {
+  transform: scale(3.5);
+  margin-top: .5rem;
+  margin-left: 5px;
+  color: var(--color-domin-1-2);
+  cursor: pointer;
+}
