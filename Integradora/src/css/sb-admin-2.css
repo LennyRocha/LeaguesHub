@@ -529,6 +529,69 @@ hr {
   z-index: -1;
 }
 
+.selAr{
+  padding: .5rem;
+  color: black;
+  border-radius: .5rem;
+  border: 2px solid var(--color-domin-1-1) !important;
+}
+
+option{
+  border-radius: 0px;
+  padding: 5px;
+}
+
+.h-100vh{
+  height: 100vh;
+}
+
+.sel-con{
+  max-width: 30ch !important;
+}
+
+select {
+  width: 100%;
+  min-width: 15ch;
+  max-width: 15ch;
+  border: 1px solid var(--select-border);
+  border-radius: 0.25em;
+  padding: 0.25em 0.5em;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.3), 0 1px 2px rgba(0, 0, 0, 0.4);
+  font-size: 1.25rem;
+  cursor: pointer;
+  line-height: 1.1;
+  background-image: linear-gradient(to top, #e9e9e9, #dcdcdc, #bdbdbd, #fff 50%) !important;
+  align-items: center;
+  -webkit-transition: box-shadow 200ms, border-color 200ms;
+  -moz-transition: box-shadow 200ms, border-color 200ms;
+  transition: box-shadow 200ms, border-color 200ms;
+  white-space: nowrap; 
+}
+select option {
+  text-shadow: none; 
+}
+select::after {
+  content: "";
+  width: 0.8em;
+  height: 0.5em;
+  background-color: var(--select-arrow);
+  clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+  justify-self: end;
+}
+option {
+  background-color: #f8f9fa;
+  color: #333;
+  padding: 10px;
+  border-radius: 0% !important;
+}
+select:hover, select:focus{
+  box-shadow: 0 1px 2px var(--color-domin-1-2), inset 0 1px 2px var(--color-domin-1-2);
+}
+
+.selAr:focus, .selAr:active{
+  border: 2px solid var(--color-domin-2-3) !important;
+}
+
 .txtAr .MuiInputLabel-root {
   color: var(--color-base-1-5) !important; /* Color por defecto */
 }

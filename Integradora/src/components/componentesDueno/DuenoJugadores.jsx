@@ -218,7 +218,7 @@ export default function DuenoJugadores({ cambiarComponente }) {
           <div className={`${visible ? "teamsVisible" : "teamsInvisible"}`}>
             <article class="blog-post container-fluid w-100">
               <div className="players-grid-d player-flow quitarScroll">
-                {jugadoresPrueba.map((j) => {
+                {jugadoresPrueba.map((j, index) => {
                   return (
                     <div className="over-card" key={j.id}>
                       <div className="kard">
@@ -252,14 +252,25 @@ export default function DuenoJugadores({ cambiarComponente }) {
                               <p>Partidos</p>
                               <p>Goles</p>
                               <p>t. rojas</p>
-                              <p>t. amarillas</p>
                             </div>
                             <div className="para_aca">
                               <p>10</p>
                               <p>1</p>
                               <p>N/A</p>
-                              <p>3</p>
                             </div>
+                          </div>
+                          <div className="switch-button">
+                            <input
+                              type="checkbox"
+                              name="switch-button"
+                              id={`switch-label-${index}`}
+                              className="switch-button__checkbox"
+                              //checked={j.activo}
+                            />
+                            <label
+                              htmlFor={`switch-label-${index}`}
+                              className="switch-button__label"
+                            ></label>
                           </div>
                           <a
                             className="link"
@@ -295,7 +306,11 @@ export default function DuenoJugadores({ cambiarComponente }) {
               </details>
             </div>
 
-            <div className={`p-sm-1 ${visible2 ? "teamsVisible" : "teamsInvisible"}`}>
+            <div
+              className={`p-sm-1 ${
+                visible2 ? "teamsVisible" : "teamsInvisible"
+              }`}
+            >
               <h4 class="d-flex justify-content-between align-items-center mb-3">
                 <span class="body-small">
                   {edit ? "Editar jugador" : "Registrar jugador"}

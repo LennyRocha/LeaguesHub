@@ -266,7 +266,7 @@ export default function DuenoContexto() {
             className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow w-100"
             id="navbar"
           >
-            <p className="text-white m-2">Menú de dueños de equipos</p>
+            <p className="text-white m-2 p-head">Menú de dueños de equipos</p>
 
             <ul className="navbar-nav ml-auto">
               <li className="nav-item dropdown no-arrow mx-auto">
