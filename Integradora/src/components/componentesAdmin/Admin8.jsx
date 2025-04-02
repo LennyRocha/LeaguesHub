@@ -23,7 +23,7 @@ export default function Admin8({ cambiarComponent, dueno, setDueno }) {
 
   const [reload, setReload] = useState(false);
 
-  const [nombreTeam, setNombreTeam] = useState('');
+  const [nombreTeam, setNombreTeam] = useState("");
 
   const getJugadores = (id, name) => {
     setVisible(true);
@@ -46,11 +46,10 @@ export default function Admin8({ cambiarComponent, dueno, setDueno }) {
             confirmButtonText: "Aceptar",
             customClass: {
               confirmButton: "btn-confirm",
-              denyButton: "btn-deny",
               cancelButton: "btn-cancel",
+              denyButton: "btn-deny",
             },
-          });
-          logout();
+          }).then((resutlt) => logout());
           return;
         }
         if (e.response.message) setFallo(e.response.message);
@@ -88,8 +87,7 @@ export default function Admin8({ cambiarComponent, dueno, setDueno }) {
                 cancelButton: "btn-cancel",
                 denyButton: "btn-deny",
               },
-            });
-            logout();
+            }).then((resutlt) => logout());
             return;
           }
           if (e.response.message) setFallo(e.response.message);
@@ -179,7 +177,7 @@ export default function Admin8({ cambiarComponent, dueno, setDueno }) {
           ) : falloJ === "" ? (
             <div className="players-grid">
               {players.map((j) => {
-                console.log(j.expulsado)
+                console.log(j.expulsado);
                 return (
                   <div className="over-card" key={j.id}>
                     <div className="kard">
@@ -189,9 +187,15 @@ export default function Admin8({ cambiarComponent, dueno, setDueno }) {
                             j.habilitado ? "aktive" : "inactive"
                           }`}
                         >
-                          <img src={getUrl(j.fotoJugador)} alt={j.nombreCompleto} className="jugImg" />
+                          <img
+                            src={getUrl(j.fotoJugador)}
+                            alt={j.nombreCompleto}
+                            className="jugImg"
+                          />
                         </div>
-                        <h6 className="h_tz f-col text-center px-2 w-75">{j.nombreCompleto}</h6>
+                        <h6 className="h_tz f-col text-center px-2 w-75">
+                          {j.nombreCompleto}
+                        </h6>
                         <div
                           className={`mini-alert ${
                             j.habilitado
@@ -213,7 +217,7 @@ export default function Admin8({ cambiarComponent, dueno, setDueno }) {
                           <div className="para_aca">
                             <p>{j.partidosJugados}</p>
                             <p>{j.numeroCamiseta}</p>
-                            <p>{j.expulsado ? 'Si' : 'No'}</p>
+                            <p>{j.expulsado ? "Si" : "No"}</p>
                           </div>
                         </div>
                         <p className="pb-2 pt-0">{j.fechaNacimiento}</p>

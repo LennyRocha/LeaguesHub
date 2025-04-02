@@ -263,8 +263,7 @@ export default function Admin3() {
           return;
         }
         if (error.response.status === 403) {
-          console.log("⚠ Token expirado, redirigiendo a login...");
-          logout();
+          console.log("⚠️ Token expirado, redirigiendo a login...");
           Swal.fire({
             icon: "warning",
             title: "¡Denegado!",
@@ -275,7 +274,8 @@ export default function Admin3() {
               cancelButton: "btn-cancel",
               denyButton: "btn-deny",
             },
-          });
+          }).then((resutlt) => logout());
+          return;
         }
       });
   };
@@ -355,8 +355,7 @@ export default function Admin3() {
               return;
             }
             if (error.response.status === 403) {
-              console.log("⚠ Token expirado, redirigiendo a login...");
-              logout();
+              console.log("⚠️ Token expirado, redirigiendo a login...");
               Swal.fire({
                 icon: "warning",
                 title: "¡Denegado!",
@@ -367,7 +366,8 @@ export default function Admin3() {
                   cancelButton: "btn-cancel",
                   denyButton: "btn-deny",
                 },
-              });
+              }).then((resutlt) => logout());
+              return;
             }
           });
       } else if (result.isDenied) {
@@ -647,7 +647,7 @@ export default function Admin3() {
           if (res.data.length === 0) setFalloT("No hay árbitros registrados");
           else setTorneos(res.data);
         })
-        .catch((e) => {
+        .catch((err) => {
           console.log(err.response.data.message);
           Swal.fire({
             icon: "error",
@@ -661,8 +661,7 @@ export default function Admin3() {
             },
           });
           if (err.response.status === 403) {
-            console.log("⚠ Token expirado, redirigiendo a login...");
-            logout();
+            console.log("⚠️ Token expirado, redirigiendo a login...");
             Swal.fire({
               icon: "warning",
               title: "¡Denegado!",
@@ -673,7 +672,8 @@ export default function Admin3() {
                 cancelButton: "btn-cancel",
                 denyButton: "btn-deny",
               },
-            });
+            }).then((resutlt) => logout());
+            return;
           }
         })
         .finally(() => setLoadTors(false));

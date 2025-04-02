@@ -46,11 +46,10 @@ export default function Admin7() {
               confirmButtonText: "Aceptar",
               customClass: {
                 confirmButton: "btn-confirm",
-                denyButton: "btn-deny",
                 cancelButton: "btn-cancel",
+                denyButton: "btn-deny",
               },
-            });
-            logout();
+            }).then((resutlt) => logout());
             return;
           }
           setFalloTor(
@@ -146,9 +145,7 @@ export default function Admin7() {
                         value={selection.descripcion}
                       />
                       <div className="button-group">
-                        <button className="slide-btn text-black">
-                          Ver
-                        </button>
+                        <button className="slide-btn text-black">Ver</button>
                         <button className="slide-btn text-black">Crear</button>
                       </div>
                     </form>

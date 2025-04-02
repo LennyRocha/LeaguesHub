@@ -144,7 +144,7 @@ export default function Admin5() {
       }
       if (err.response.status === 403) {
         console.log("⚠ Token expirado, redirigiendo a login...");
-        logout();
+        console.log("⚠️ Token expirado, redirigiendo a login...");
         Swal.fire({
           icon: "warning",
           title: "¡Denegado!",
@@ -155,7 +155,7 @@ export default function Admin5() {
             cancelButton: "btn-cancel",
             denyButton: "btn-deny",
           },
-        });
+        }).then((resutlt) => logout());
         return;
       }
     }
@@ -182,12 +182,18 @@ export default function Admin5() {
         .catch((e) => {
           console.error(e, e.res.message, e.res.code);
           if (e.response.status === 403) {
-            console.log("⚠ Token expirado, redirigiendo a login...");
-            Alert.alert(
-              "Sesión expirada ⚠",
-              "Por favor, inicia sesión nuevamente."
-            );
-            logout();
+            console.log("⚠️ Token expirado, redirigiendo a login...");
+            Swal.fire({
+              icon: "warning",
+              title: "¡Denegado!",
+              text: "Su sesión ha expirado, ingrese sesión nuevamente para continuar",
+              confirmButtonText: "Aceptar",
+              customClass: {
+                confirmButton: "btn-confirm",
+                cancelButton: "btn-cancel",
+                denyButton: "btn-deny",
+              },
+            }).then((resutlt) => logout());
             return;
           }
           if (e.res.message) Alert.alert("Error", e.res.message);
@@ -242,7 +248,7 @@ export default function Admin5() {
             cancelButton: "btn-cancel",
             denyButton: "btn-deny",
           },
-        })
+        });
       } catch (err) {
         console.log(err, err.message);
         if (err.response) {
@@ -384,7 +390,7 @@ export default function Admin5() {
                     type="submit"
                     id="submitArb"
                     disabled={!isValid}
-                    className={ !isValid ? "text-black opa-0" : "text-black"}
+                    className={!isValid ? "text-black opa-0" : "text-black"}
                   >
                     Registrar
                   </button>

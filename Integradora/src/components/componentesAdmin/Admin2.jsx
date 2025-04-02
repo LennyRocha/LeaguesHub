@@ -3,8 +3,8 @@ import { AuthContext } from "../../context/AuthContext";
 import "bootstrap";
 import axios from "axios";
 import Swal from "sweetalert2";
-import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 
 export default function Admin2({ cambiarComponent, setDueno }) {
   const [duenos, setDuenos] = useState([]);
@@ -49,8 +49,7 @@ export default function Admin2({ cambiarComponent, setDueno }) {
                 cancelButton: "btn-cancel",
                 denyButton: "btn-deny",
               },
-            });
-            logout();
+            }).then((resutlt) => logout());
             return;
           }
           if (e.res.message) setFalloD(e.res.message);
@@ -109,8 +108,7 @@ export default function Admin2({ cambiarComponent, setDueno }) {
         return;
       }
       if (err.response.status === 403) {
-        console.log("⚠ Token expirado, redirigiendo a login...");
-        //logout();
+        console.log("⚠️ Token expirado, redirigiendo a login...");
         Swal.fire({
           icon: "warning",
           title: "¡Denegado!",
@@ -121,7 +119,7 @@ export default function Admin2({ cambiarComponent, setDueno }) {
             cancelButton: "btn-cancel",
             denyButton: "btn-deny",
           },
-        });
+        }).then((resutlt) => logout());
         return;
       }
     } finally {
@@ -223,13 +221,21 @@ export default function Admin2({ cambiarComponent, setDueno }) {
           </div>
         </div>
         <div className="flex-row d-flex align-items-center mt-3 gap-3 justify-content-center">
-          <button className="p-0 pag-btn" onClick={prevPage} disabled={currentPage === 1}>
+          <button
+            className="p-0 pag-btn"
+            onClick={prevPage}
+            disabled={currentPage === 1}
+          >
             <ArrowLeftIcon fontSize="large" />
           </button>
           <span>
             Página {currentPage} de {totalPages}
           </span>
-          <button className="p-0 pag-btn" onClick={nextPage} disabled={currentPage === totalPages}>
+          <button
+            className="p-0 pag-btn"
+            onClick={nextPage}
+            disabled={currentPage === totalPages}
+          >
             <ArrowRightIcon fontSize="large" />
           </button>
         </div>

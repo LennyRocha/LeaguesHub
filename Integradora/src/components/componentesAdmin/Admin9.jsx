@@ -3,7 +3,7 @@ import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import "bootstrap";
 
-export default function Admin9({cambiarComponent, team, setTeam}) {
+export default function Admin9({ cambiarComponent, team, setTeam }) {
   const [visible, setVisible] = useState(true);
   useEffect(() => {
     console.log(team, team.nombreEquipo);
@@ -45,11 +45,10 @@ export default function Admin9({cambiarComponent, team, setTeam}) {
             confirmButtonText: "Aceptar",
             customClass: {
               confirmButton: "btn-confirm",
-              denyButton: "btn-deny",
               cancelButton: "btn-cancel",
+              denyButton: "btn-deny",
             },
-          });
-          logout();
+          }).then((resutlt) => logout());
           return;
         }
         if (e.response.message) setFallo(e.response.message);
@@ -87,8 +86,7 @@ export default function Admin9({cambiarComponent, team, setTeam}) {
                 cancelButton: "btn-cancel",
                 denyButton: "btn-deny",
               },
-            });
-            logout();
+            }).then((resutlt) => logout());
             return;
           }
           if (e.response.message) setFallo(e.response.message);
@@ -220,7 +218,10 @@ export default function Admin9({cambiarComponent, team, setTeam}) {
             </div>
           )}
         </div>
-        <p><strong>NOTA: </strong> Consulte el menú de dueños para más información</p>
+        <p>
+          <strong>NOTA: </strong> Consulte el menú de dueños para más
+          información
+        </p>
       </div>
     </div>
   );

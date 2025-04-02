@@ -320,8 +320,17 @@ export default function Admin4() {
       console.error(err, err.res.message);
       if (err.response.status === 403) {
         console.log("⚠️ Token expirado, redirigiendo a login...");
-        Alert.alert("Sesión expirada", "Por favor, inicia sesión nuevamente.");
-        logout();
+        Swal.fire({
+          icon: "warning",
+          title: "¡Denegado!",
+          text: "Su sesión ha expirado, ingrese sesión nuevamente para continuar",
+          confirmButtonText: "Aceptar",
+          customClass: {
+            confirmButton: "btn-confirm",
+            cancelButton: "btn-cancel",
+            denyButton: "btn-deny",
+          },
+        }).then((resutlt) => logout());
         return;
       }
     }
@@ -349,8 +358,17 @@ export default function Admin4() {
       console.error(err, err.response.message);
       if (err.response.status === 403) {
         console.log("⚠️ Token expirado, redirigiendo a login...");
-        Alert.alert("Sesión expirada", "Por favor, inicia sesión nuevamente.");
-        logout();
+        Swal.fire({
+          icon: "warning",
+          title: "¡Denegado!",
+          text: "Su sesión ha expirado, ingrese sesión nuevamente para continuar",
+          confirmButtonText: "Aceptar",
+          customClass: {
+            confirmButton: "btn-confirm",
+            cancelButton: "btn-cancel",
+            denyButton: "btn-deny",
+          },
+        }).then((resutlt) => logout());
         return;
       }
     }
@@ -376,8 +394,17 @@ export default function Admin4() {
       console.error(err, err.response.message);
       if (err.response.status === 403) {
         console.log("⚠️ Token expirado, redirigiendo a login...");
-        Alert.alert("Sesión expirada", "Por favor, inicia sesión nuevamente.");
-        logout();
+        Swal.fire({
+          icon: "warning",
+          title: "¡Denegado!",
+          text: "Su sesión ha expirado, ingrese sesión nuevamente para continuar",
+          confirmButtonText: "Aceptar",
+          customClass: {
+            confirmButton: "btn-confirm",
+            cancelButton: "btn-cancel",
+            denyButton: "btn-deny",
+          },
+        }).then((resutlt) => logout());
         return;
       }
     } finally {
@@ -420,8 +447,17 @@ export default function Admin4() {
       console.error(err, err.response.message, err.toJSON());
       if (err.response.status === 403) {
         console.log("⚠️ Token expirado, redirigiendo a login...");
-        Alert.alert("Sesión expirada", "Por favor, inicia sesión nuevamente.");
-        logout();
+        Swal.fire({
+          icon: "warning",
+          title: "¡Denegado!",
+          text: "Su sesión ha expirado, ingrese sesión nuevamente para continuar",
+          confirmButtonText: "Aceptar",
+          customClass: {
+            confirmButton: "btn-confirm",
+            cancelButton: "btn-cancel",
+            denyButton: "btn-deny",
+          },
+        }).then((resutlt) => logout());
         return;
       }
     }
@@ -450,8 +486,17 @@ export default function Admin4() {
       console.error(err, err.response.message);
       if (err.response.status === 403) {
         console.log("⚠️ Token expirado, redirigiendo a login...");
-        Alert.alert("Sesión expirada", "Por favor, inicia sesión nuevamente.");
-        logout();
+        Swal.fire({
+          icon: "warning",
+          title: "¡Denegado!",
+          text: "Su sesión ha expirado, ingrese sesión nuevamente para continuar",
+          confirmButtonText: "Aceptar",
+          customClass: {
+            confirmButton: "btn-confirm",
+            cancelButton: "btn-cancel",
+            denyButton: "btn-deny",
+          },
+        }).then((resutlt) => logout());
         return;
       }
     }
@@ -480,11 +525,17 @@ export default function Admin4() {
           console.error(e, e.res.message);
           if (e.response.status === 403) {
             console.log("⚠️ Token expirado, redirigiendo a login...");
-            Alert.alert(
-              "Sesión expirada",
-              "Por favor, inicia sesión nuevamente."
-            );
-            logout();
+            Swal.fire({
+              icon: "warning",
+              title: "¡Denegado!",
+              text: "Su sesión ha expirado, ingrese sesión nuevamente para continuar",
+              confirmButtonText: "Aceptar",
+              customClass: {
+                confirmButton: "btn-confirm",
+                cancelButton: "btn-cancel",
+                denyButton: "btn-deny",
+              },
+            }).then((resutlt) => logout());
             return;
           }
           if (e.res.message) setFallo1(e.res.message);

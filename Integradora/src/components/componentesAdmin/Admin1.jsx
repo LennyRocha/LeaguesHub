@@ -143,17 +143,22 @@ function Admin1({ cambiarComponent, setTeam }) {
         })
         .catch((e) => {
           console.error(e, e.res.message);
+          console.error(e, e.response.message);
           if (err.response.status === 403) {
             console.log("⚠️ Token expirado, redirigiendo a login...");
-            Alert.alert(
-              "Sesión expirada",
-              "Por favor, inicia sesión nuevamente."
-            );
-            logout();
+            Swal.fire({
+              icon: "warning",
+              title: "¡Denegado!",
+              text: "Su sesión ha expirado, ingrese sesión nuevamente para continuar",
+              confirmButtonText: "Aceptar",
+              customClass: {
+                confirmButton: "btn-confirm",
+                cancelButton: "btn-cancel",
+                denyButton: "btn-deny",
+              },
+            }).then((resutlt) => logout());
             return;
-          }
-          if (e.res.message) setFallo(e.res.message);
-          else setFallo("Error al obtener solicitudes");
+          } else setFallo("Error al obtener solicitudes");
         })
         .finally(() => setLoadSolids(false));
 
@@ -191,13 +196,19 @@ function Admin1({ cambiarComponent, setTeam }) {
         })
         .catch((e) => {
           console.error(e, e.res.message);
-          if (err.response.status === 403) {
+          if (e.response.status === 403) {
             console.log("⚠️ Token expirado, redirigiendo a login...");
-            Alert.alert(
-              "Sesión expirada",
-              "Por favor, inicia sesión nuevamente."
-            );
-            logout();
+            Swal.fire({
+              icon: "warning",
+              title: "¡Denegado!",
+              text: "Su sesión ha expirado, ingrese sesión nuevamente para continuar",
+              confirmButtonText: "Aceptar",
+              customClass: {
+                confirmButton: "btn-confirm",
+                cancelButton: "btn-cancel",
+                denyButton: "btn-deny",
+              },
+            }).then((resutlt) => logout());
             return;
           }
         });
@@ -214,13 +225,19 @@ function Admin1({ cambiarComponent, setTeam }) {
         })
         .catch((e) => {
           console.error(e, e.res.message);
-          if (err.response.status === 403) {
+          if (e.response.status === 403) {
             console.log("⚠️ Token expirado, redirigiendo a login...");
-            Alert.alert(
-              "Sesión expirada",
-              "Por favor, inicia sesión nuevamente."
-            );
-            logout();
+            Swal.fire({
+              icon: "warning",
+              title: "¡Denegado!",
+              text: "Su sesión ha expirado, ingrese sesión nuevamente para continuar",
+              confirmButtonText: "Aceptar",
+              customClass: {
+                confirmButton: "btn-confirm",
+                cancelButton: "btn-cancel",
+                denyButton: "btn-deny",
+              },
+            }).then((resutlt) => logout());
             return;
           }
           setTotPagos(0);
@@ -246,13 +263,19 @@ function Admin1({ cambiarComponent, setTeam }) {
       })
       .catch((e) => {
         console.error(e, e.res.message);
-        if (err.response.status === 403) {
+        if (e.response.status === 403) {
           console.log("⚠️ Token expirado, redirigiendo a login...");
-          Alert.alert(
-            "Sesión expirada",
-            "Por favor, inicia sesión nuevamente."
-          );
-          logout();
+          Swal.fire({
+            icon: "warning",
+            title: "¡Denegado!",
+            text: "Su sesión ha expirado, ingrese sesión nuevamente para continuar",
+            confirmButtonText: "Aceptar",
+            customClass: {
+              confirmButton: "btn-confirm",
+              cancelButton: "btn-cancel",
+              denyButton: "btn-deny",
+            },
+          }).then((resutlt) => logout());
           return;
         }
         if (e.res.message) setFallo2(e.res.message);
@@ -268,13 +291,19 @@ function Admin1({ cambiarComponent, setTeam }) {
       })
       .catch((e) => {
         console.error(e, e.res.message);
-        if (err.response.status === 403) {
+        if (e.response.status === 403) {
           console.log("⚠️ Token expirado, redirigiendo a login...");
-          Alert.alert(
-            "Sesión expirada",
-            "Por favor, inicia sesión nuevamente."
-          );
-          logout();
+          Swal.fire({
+            icon: "warning",
+            title: "¡Denegado!",
+            text: "Su sesión ha expirado, ingrese sesión nuevamente para continuar",
+            confirmButtonText: "Aceptar",
+            customClass: {
+              confirmButton: "btn-confirm",
+              cancelButton: "btn-cancel",
+              denyButton: "btn-deny",
+            },
+          }).then((resutlt) => logout());
           return;
         }
         setTorEspera(0);
@@ -328,11 +357,17 @@ function Admin1({ cambiarComponent, setTeam }) {
         console.error(error, error.response);
         if (error.response?.status === 403) {
           console.log("⚠️ Token expirado, redirigiendo a login...");
-          Alert.alert(
-            "Sesión expirada",
-            "Por favor, inicia sesión nuevamente."
-          );
-          logout();
+          Swal.fire({
+            icon: "warning",
+            title: "¡Denegado!",
+            text: "Su sesión ha expirado, ingrese sesión nuevamente para continuar",
+            confirmButtonText: "Aceptar",
+            customClass: {
+              confirmButton: "btn-confirm",
+              cancelButton: "btn-cancel",
+              denyButton: "btn-deny",
+            },
+          }).then((resutlt) => logout());
           return;
         }
         setRespuestas((prev) => ({
@@ -600,7 +635,14 @@ function Admin1({ cambiarComponent, setTeam }) {
                 ) : fallo2 === "" ? (
                   <div className="duenoGrid">
                     {equipos.map((e) => (
-                      <div className="duenoCard dc" key={e.id} onClick={() => {setTeam(e); cambiarComponent('equipo')}}>
+                      <div
+                        className="duenoCard dc"
+                        key={e.id}
+                        onClick={() => {
+                          setTeam(e);
+                          cambiarComponent("equipo");
+                        }}
+                      >
                         <img
                           className="img-fluid"
                           width="80%"
