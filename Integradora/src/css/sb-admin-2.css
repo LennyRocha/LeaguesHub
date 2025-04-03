@@ -586,6 +586,8 @@ option {
 }
 select:hover, select:focus{
   box-shadow: 0 1px 2px var(--color-domin-1-2), inset 0 1px 2px var(--color-domin-1-2);
+  border-color: var(--color-domin-1-2);
+  transition: all 0.25s ease;
 }
 
 .selAr:focus, .selAr:active{

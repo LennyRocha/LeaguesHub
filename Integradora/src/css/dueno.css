@@ -398,7 +398,7 @@
   }
 
   @media screen and (max-width: 480px) {
-    .dSidebar:hover{
+    .dSidebar:hover {
       pointer-events: none !important;
     }
   }
@@ -477,9 +477,9 @@ footer {
 }
 
 @media (max-width: 364px) {
-  .p-head{
+  .p-head {
     display: none;
-  } 
+  }
 }
 
 /* Dueño Equipos */
@@ -513,7 +513,7 @@ footer {
   max-height: 100vh;
   row-gap: 1rem;
   column-gap: 0.75rem;
-  padding: .5rem;
+  padding: 0.5rem;
   overflow-y: scroll;
 }
 
@@ -598,8 +598,8 @@ footer {
 }
 
 @media (max-width: 768px) {
-  .detallicos{
-    padding: .25rem;
+  .detallicos {
+    padding: 0.25rem;
   }
 }
 
@@ -663,6 +663,46 @@ footer {
   cursor: pointer;
 }
 
+/*Dueño pagos*/
+.payments-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .5rem;
+  padding: 0.5rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  width: 100%;
+  gap: 0.25rem;
+  align-items: start; /* Alinea los elementos en la parte superior */
+}
+
+.pagos-list{
+  max-height: 75vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+@media (max-width: 900px) {
+  .payments-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 805px) {
+  .payments-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .payments-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Dueño historial */
 .histCard {
   max-height: 5rem;
@@ -671,6 +711,6 @@ footer {
   object-fit: cover;
 }
 
-.w-95{
+.w-95 {
   width: 95%;
 }

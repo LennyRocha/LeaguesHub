@@ -17,8 +17,8 @@ import { TextField, InputAdornment } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import Swal from "sweetalert2";
 import "bootstrap";
-import Banner1 from "../../assets/templates/Banner1.png";
-import Poster1 from "../../assets/templates/Publicidad1.png";
+import Banner1 from "../../assets/templates/banner_back.png";
+import Poster1 from "../../assets/templates/poster_back.png";
 
 export default function Admin7() {
   const [torneos, setTorneos] = useState([]);
