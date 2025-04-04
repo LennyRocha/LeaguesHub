@@ -26,6 +26,7 @@ export default function Admin7() {
   const [falloTor, setFalloTor] = useState("");
   const { api_url } = useContext(AuthContext);
   const [selection, setSelection] = useState(null);
+  const [poster, setPoster] = useState("");
   useEffect(() => {
     const getTorneos = async () => {
       axios
@@ -65,6 +66,60 @@ export default function Admin7() {
   useEffect(() => {
     console.log(selection);
   }, [selection]);
+  async function crearConvocatoria() {
+    const tokData = await getToken();
+    await axios
+      .post(`${api_url}/api/convocatorias/publicar/${selection.id}`, null, {
+        headers: {
+          Authorization: `Bearer ${tokData}`,
+        },
+      })
+      .then((res) => {
+        Swal.fire({
+          icon: "success",
+          title: "¡OK!",
+          text: `Convocatoria creada`,
+          customClass: {
+            confirmButton: "btn-confirm",
+            cancelButton: "btn-cancel",
+            denyButton: "btn-deny",
+          },
+        });
+        console.log(res.data);
+        setPoster("");
+      })
+      .catch((error) => {
+        console.error(error, error.response?.data?.message);
+        console.log(error.toJSON());
+        if (error.response?.status === 403) {
+          console.log("⚠️ Token expirado, redirigiendo a login...");
+          Swal.fire({
+            icon: "warning",
+            title: "¡Denegado!",
+            text: "Su sesión ha expirado, ingrese sesión nuevamente para continuar",
+            confirmButtonText: "Aceptar",
+            customClass: {
+              confirmButton: "btn-confirm",
+              cancelButton: "btn-cancel",
+              denyButton: "btn-deny",
+            },
+          }).then((resutlt) => logout());
+          return;
+        }else{
+          Swal.fire({
+            icon: "warning",
+            title: "¡Denegado!",
+            text: error.response?.message || 'Algo salió mal, intentalo nuevamente',
+            confirmButtonText: "Aceptar",
+            customClass: {
+              confirmButton: "btn-confirm",
+              cancelButton: "btn-cancel",
+              denyButton: "btn-deny",
+            },
+          })
+        }
+      });
+  }
   return (
     <div>
       <div className="container-fluid">
@@ -76,7 +131,7 @@ export default function Admin7() {
             <div className="container-fluid w-100 h-100 align-items-center justify-content-center d-flex">
               <div className="my-spinner mt-3"></div>
             </div>
-          ) : falloTor === "" ? (
+          ) : falloTor !== "" ? (
             <div className="row">
               <div className="col-lg-8 div-margin">
                 <select
@@ -146,7 +201,12 @@ export default function Admin7() {
                       />
                       <div className="button-group">
                         <button className="slide-btn text-black">Ver</button>
-                        <button className="slide-btn text-black">Crear</button>
+                        <button
+                          className="slide-btn text-black"
+                          onClick={async () => crearConvocatoria()}
+                        >
+                          Crear
+                        </button>
                       </div>
                     </form>
                   )}
@@ -155,7 +215,7 @@ export default function Admin7() {
               <div className="col-lg-4 div-margin">
                 <h5 className="mb-1">Vista vértical</h5>
                 <img
-                  src={Poster1}
+                  src={poster === '' ? Poster1 : poster}
                   alt="BannerPlantilla"
                   className="img-fluid d-block w-100"
                 />

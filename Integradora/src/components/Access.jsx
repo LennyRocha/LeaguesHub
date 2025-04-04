@@ -35,11 +35,6 @@ const Access = ({ cambiarComponente }) => {
 
   const [loadPost, setLoadPost] = useState(false);
 
-  useEffect(() => {
-    console.log("Contexto recibido:", context);
-    console.log(context.login);
-  }, []);
-
   const [emptyField, setEmptyField] = useState("");
 
   const [preview, setPreview] = useState(
@@ -162,6 +157,18 @@ const Access = ({ cambiarComponente }) => {
             text:
               err.response?.data?.message ||
               "Algo salió mal, inténtalo nuevamente",
+            customClass: {
+              confirmButton: "btn-confirm",
+              cancelButton: "btn-cancel",
+              denyButton: "btn-deny",
+            },
+          });
+        }
+        if (err.message) {
+          Swal.fire({
+            icon: "error",
+            title: "¡Oh no!",
+            text: err.message === 'Network Error' ? 'Comprueba tu conexión a internet, y vuelve a intentarlo' : "Algo salió mal, inténtalo nuevamente",
             customClass: {
               confirmButton: "btn-confirm",
               cancelButton: "btn-cancel",

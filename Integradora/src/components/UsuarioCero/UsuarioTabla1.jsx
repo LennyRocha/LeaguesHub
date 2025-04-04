@@ -3,6 +3,8 @@ import MiniLoadingScreen from "../MiniLoadingScreen";
 import "bootstrap";
 import "../../css/usuario.css";
 import axios from "axios";
+import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 
 export default function UsuarioTabla1({ api }) {
   const [torneos, setTorneos] = useState([]);
@@ -21,7 +23,7 @@ export default function UsuarioTabla1({ api }) {
       try {
         const res = await axios.get(`${api}/api/torneos/iniciados`);
         setTorneos(res.data);
-        console.log(res.data,'X')
+        console.log(res.data, "X");
         if (res.data.length > 0) {
           setSelectedTorneo(res.data[0].id);
         }
@@ -39,7 +41,9 @@ export default function UsuarioTabla1({ api }) {
       setLoading(true);
       const fetchEquipos = async () => {
         try {
-          const res = await axios.get(`${api}/api/tabla-clasificacion/${selectedTorneo}`);
+          const res = await axios.get(
+            `${api}/api/tabla-clasificacion/${selectedTorneo}`
+          );
           setEquipos(res.data);
         } catch (e) {
           setError("Error al cargar la tabla de clasificación.");
@@ -55,7 +59,9 @@ export default function UsuarioTabla1({ api }) {
     if (selectedTorneo) {
       const fetchPartidos = async () => {
         try {
-          const res = await axios.get(`${api}/api/partidos/todos/portorneo/${selectedTorneo}`);
+          const res = await axios.get(
+            `${api}/api/partidos/todos/portorneo/${selectedTorneo}`
+          );
           setPartidos((prev) => ({ ...prev, [selectedTorneo]: res.data }));
         } catch (e) {
           console.error("Error al cargar los partidos:", e);
@@ -72,16 +78,23 @@ export default function UsuarioTabla1({ api }) {
     const match = url.match(/id=([^&]+)/);
     return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : url;
   };
-  
 
   return (
     <div className="my-5">
       <h1 id="clasif">Tablas de Clasificación</h1>
       <div className="partidoFilter">
-        <select value={selectedTorneo} onChange={(e) => { setSelectedTorneo(e.target.value); setCurrentPage(0); }}>
+        <select
+          value={selectedTorneo}
+          onChange={(e) => {
+            setSelectedTorneo(e.target.value);
+            setCurrentPage(0);
+          }}
+        >
           <option value="">Selecciona un torneo</option>
           {torneos.map((torneo) => (
-            <option key={torneo.id} value={torneo.id}>{torneo.nombreTorneo}</option>
+            <option key={torneo.id} value={torneo.id}>
+              {torneo.nombreTorneo}
+            </option>
           ))}
         </select>
       </div>
@@ -110,24 +123,52 @@ export default function UsuarioTabla1({ api }) {
               {displayedTeams.map((team, index) => (
                 <tr key={team.id}>
                   <td>{startIndex + index + 1}</td>
-                  <td className="imgCell"><img src={transformarUrl(team.logo)} alt={team.nombreEquipo} width={30} height={30} /></td>
+                  <td className="imgCell">
+                    <img
+                      src={transformarUrl(team.logo)}
+                      alt={team.nombreEquipo}
+                      width={30}
+                      height={30}
+                    />
+                  </td>
                   <td>{team.nombreEquipo}</td>
-                  <td>{team.partidosGanados + team.partidosEmpatados + team.partidosPerdidos}</td>
+                  <td>
+                    {team.partidosGanados +
+                      team.partidosEmpatados +
+                      team.partidosPerdidos}
+                  </td>
                   <td className="jg">{team.partidosGanados}</td>
                   <td className="je">{team.partidosEmpatados}</td>
                   <td className="jp">{team.partidosPerdidos}</td>
                   <td>{team.golesAFavor}</td>
                   <td>{team.golesEnContra}</td>
-                  <td className="diff">{team.golesAFavor - team.golesEnContra}</td>
+                  <td className="diff">
+                    {team.golesAFavor - team.golesEnContra}
+                  </td>
                   <td className="pts">{team.puntos}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <div className="pagination-container">
-            <button disabled={currentPage === 0} onClick={() => setCurrentPage(currentPage - 1)}>Anterior</button>
-            <span>Página {currentPage + 1} de {Math.ceil(equipos.length / itemsPerPage)}</span>
-            <button disabled={endIndex >= equipos.length} onClick={() => setCurrentPage(currentPage + 1)}>Siguiente</button>
+          <div className="pagination-container gap-5">
+            <button
+              className="p-0 pag-btn"
+              disabled={currentPage === 0}
+              onClick={() => setCurrentPage(currentPage - 1)}
+            >
+              <ArrowLeftIcon fontSize="large" />
+            </button>
+            <span className="mx-2">
+              Página {currentPage + 1} de{" "}
+              {Math.ceil(equipos.length / itemsPerPage)}
+            </span>
+            <button
+              className="p-0 pag-btn"
+              disabled={endIndex >= equipos.length}
+              onClick={() => setCurrentPage(currentPage + 1)}
+            >
+              <ArrowRightIcon fontSize="large" />
+            </button>
           </div>
         </div>
       )}

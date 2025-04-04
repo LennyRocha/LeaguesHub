@@ -71,6 +71,10 @@ export default function Admin3() {
     setError,
     setValue,
     watch,
+    trigger,
+    clearErrors,
+    reset,
+    resetField,
     formState: { errors },
   } = useForm();
 
@@ -377,8 +381,10 @@ export default function Admin3() {
   };
 
   const [id, setId] = useState(0);
+  const [selection, setSelection] = useState({})
 
   const doEdit = (tor) => {
+    setSelection(tor);
     setEditar(true);
   };
 
@@ -844,7 +850,7 @@ export default function Admin3() {
                           t.estatusTorneo
                             ? t.iniciado
                               ? doEdit(t) //Será editar
-                              : showDetails(t)
+                              : doEdit(t)
                             : showDetails(t)
                         }
                       >
@@ -907,6 +913,7 @@ export default function Admin3() {
                       <IconButton
                         onClick={() => {
                           setEditar(false);
+                          setSelection({});
                         }}
                       >
                         <EmojiEvents color="warning" />
@@ -921,6 +928,7 @@ export default function Admin3() {
                     <TextField
                       fullWidth
                       label="Nombre del torneo"
+                      value={Object.keys(selection).length > 0 ? selection.nombreTorneo : ''}
                       className="txtAr txtCon mb-2 w-100"
                       {...register("nombreTorneo")}
                     />
@@ -934,6 +942,7 @@ export default function Admin3() {
                     <TextField
                       fullWidth
                       label="Premio"
+                      value={Object.keys(selection).length > 0 ? selection.premio : ''}
                       className="txtAr txtCon mb-2 w-100"
                       {...register("premio")}
                     />
@@ -948,6 +957,7 @@ export default function Admin3() {
                   multiline
                   rows={6}
                   fullWidth
+                  value={Object.keys(selection).length > 0 ? selection.descripcion : ''}
                   className="txtAr txtCon mb-2"
                   {...register("descripcion")}
                 />
@@ -960,6 +970,7 @@ export default function Admin3() {
                   <TextField
                     type="date"
                     fullWidth
+                    value={Object.keys(selection).length > 0 ? selection.fechaInicio : ''}
                     inputProps={{ min: new Date().toISOString().split("T")[0] }}
                     className="txtAr txtCon mb-2"
                     {...register("fechaInicio")}
@@ -975,6 +986,7 @@ export default function Admin3() {
                       fullWidth
                       label="# máximo de equipos"
                       type="number"
+                      value={Object.keys(selection).length > 0 ? selection.maxEquipos : ''}
                       className="txtAr txtCon mb-2 w-33"
                       {...register("maxEquipos")}
                     />
@@ -988,6 +1000,7 @@ export default function Admin3() {
                       label="# mínimo de equipos"
                       type="number"
                       min={0}
+                      value={Object.keys(selection).length > 0 ? selection.minEquipos : ''}
                       className="txtAr txtCon mb-2"
                       {...register("minEquipos")}
                     />
@@ -1001,6 +1014,7 @@ export default function Admin3() {
                       label="# de vueltas"
                       type="number"
                       min={0}
+                      value={Object.keys(selection).length > 0 ? selection.vueltas : ''}
                       className="txtAr txtCon mb-2"
                       {...register("vueltas")}
                     />
@@ -1014,6 +1028,7 @@ export default function Admin3() {
                       label="Equipos en liguilla"
                       type="number"
                       min={0}
+                      value={Object.keys(selection).length > 0 ? selection.equiposLiguilla : ''}
                       className="txtAr txtCon mb-2"
                       {...register("equiposLiguilla")}
                     />
@@ -1050,7 +1065,7 @@ export default function Admin3() {
               <div className="arbitro-card">
                 <form>
                   <div className="fotoContainer">
-                    <img className="img-fluid img" src={preview} alt="..." />
+                    <img className="img-fluid img" src={Object.keys(selection).length > 0 ? getUrl(selection.logoTorneo) : preview} alt="..." />
                     <Tooltip title="Elegir logo">
                       <div className="botonDiv-2">
                         <i className="fa fa-image"></i>

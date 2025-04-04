@@ -65,13 +65,13 @@ export const AuthProvider = ({ children }) => {
       setFailure(false);
     } catch (err) {
       console.log(err, err.message);
-      if (err.response) {
-        setMensaje(err.response.data.message);
+      if (err.message) {
+        setMensaje(err.message);
         Swal.fire({
           icon: "error",
           title: "¡Denegado!",
           text:
-            err.response?.data?.message ||
+            err.message ||
             "Algo salió mal, inténtalo nuevamente",
           customClass: {
             confirmButton: "btn-confirm",
@@ -169,7 +169,7 @@ export const AuthProvider = ({ children }) => {
         api_url,
         decodeToken,
         getUrl,
-        getout
+        getout,
       }}
     >
       {children}

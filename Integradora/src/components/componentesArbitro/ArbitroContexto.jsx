@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import ArbitroLista from "./ArbitroLista";
 import ArbitroPartidaje from "./ArbitroPartidaje";
@@ -6,6 +6,10 @@ import ArbitroPartidaje from "./ArbitroPartidaje";
 export default function ArbitroContexto() {
   const [componenteActual, setComponenteActual] = useState("A");
   const [partidoSeleccionado, setPartidoSeleccionado] = useState(null);
+
+  useEffect(() => {
+    document.title = 'Arbitros'
+  },[])
 
   const renderizarComponente = () => {
     switch (componenteActual) {

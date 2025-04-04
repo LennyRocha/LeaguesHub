@@ -14,7 +14,6 @@ import "./App.css";
 export default function User() {
   const [componenteActual, setComponenteActual] = useState("A");
   const renderizarComponente = () => {
-    console.log(componenteActual);
     switch (componenteActual) {
       case "A":
         return <UsuarioMain cambiarComponente={setComponenteActual} />;

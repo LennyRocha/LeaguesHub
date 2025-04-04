@@ -3,6 +3,8 @@ import "bootstrap";
 import "../../css/usuario.css";
 import axios from "axios";
 import MiniLoadingScreen from "../MiniLoadingScreen";
+import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 
 export default function UsuarioTabla2() {
   const [torneos, setTorneos] = useState([]);
@@ -75,9 +77,7 @@ export default function UsuarioTabla2() {
             setPaginaActual(0);
           }}
         >
-          <option value={''}>
-            Selecciona un torneo
-          </option>
+          <option value={""}>Selecciona un torneo</option>
           {torneos.map((torneo) => (
             <option key={torneo.id} value={torneo.id}>
               {torneo.nombreTorneo}
@@ -134,22 +134,24 @@ export default function UsuarioTabla2() {
           </div>
 
           {jugadores.length > porPagina && (
-            <div className="pagination-container">
+            <div className="pagination-container gap-5">
               <button
+                className="p-0 pag-btn"
                 disabled={paginaActual === 0}
                 onClick={() => setPaginaActual(paginaActual - 1)}
               >
-                Anterior
+                <ArrowLeftIcon fontSize="large" />
               </button>
-              <span>
+              <span className="mx-2">
                 Página {paginaActual + 1} de{" "}
                 {Math.ceil(jugadores.length / porPagina)}
               </span>
               <button
+                className="p-0 pag-btn"
                 disabled={end >= jugadores.length}
                 onClick={() => setPaginaActual(paginaActual + 1)}
               >
-                Siguiente
+                <ArrowRightIcon fontSize="large" />
               </button>
             </div>
           )}
