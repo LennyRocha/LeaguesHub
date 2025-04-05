@@ -559,7 +559,7 @@ export default function Admin4() {
           <div className="w-100 align-items-center d-flex row justify-content-center">
             <div className="my-spinner"></div>
           </div>
-        ) : (
+        ) : fallo1 === "" ? (
           <TableContainer component={Paper}>
             <Table>
               <TableHead className="myThead theadContainer">
@@ -597,17 +597,34 @@ export default function Admin4() {
               </TableBody>
             </Table>
           </TableContainer>
+        ) : (
+          <div>
+            <div className="w-100 align-items-center d-flex flex-column gap-1">
+              <lord-icon
+                id="input-icon-2"
+                src="../../../public/icons/pin.json"
+                trigger="loop"
+                stroke="bold"
+                state="hover-swipe"
+                colors="primary:#333333,secondary:#9A0000"
+                style={{ width: "9em", height: "9em" }}
+              ></lord-icon>
+              <h5>{fallo1}</h5>
+            </div>
+          </div>
         )}
       </div>
-      <div className="centered">
-        <iframe
-          title="HERE Map"
-          width="95%"
-          height="400"
-          className="map-frame map1"
-          src={`https://www.google.com/maps?q=${location.lat},${location.lng}&z=15&output=embed`}
-        />
-      </div>
+      {fallo1 === "" && (
+        <div className="centered-map">
+          <iframe
+            title="HERE Map"
+            width="95%"
+            height="400"
+            className="map-frame map1"
+            src={`https://www.google.com/maps?q=${location.lat},${location.lng}&z=15&output=embed`}
+          />
+        </div>
+      )}
       <div className="row px-2">
         <div className="col-lg-6">
           <iframe

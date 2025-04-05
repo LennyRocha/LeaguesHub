@@ -400,15 +400,15 @@ export default function Admin5() {
           </div>
         </div>
         <div className="col-lg-8">
-          <TableContainer
-            component={Paper}
-            className="quitarScroll table-height"
-          >
-            {loadArb ? (
-              <div className="centered-div">
-                <div className="my-spinner"></div>
-              </div>
-            ) : fallo1 === "" ? (
+          {loadArb ? (
+            <div className="centered-div w-100 cont">
+              <div className="my-spinner"></div>
+            </div>
+          ) : fallo1 === "" ? (
+            <TableContainer
+              component={Paper}
+              className="quitarScroll table-height"
+            >
               <Table>
                 <TableHead className="myThead">
                   <TableRow>
@@ -454,12 +454,21 @@ export default function Admin5() {
                   ))}
                 </TableBody>
               </Table>
-            ) : (
-              <div className="derecha">
-                <h5 id="confirm">{fallo1}</h5>
-              </div>
-            )}
-          </TableContainer>
+            </TableContainer>
+          ) : (
+            <div className="w-100 align-items-center d-flex flex-column gap-1">
+              <lord-icon
+                id="input-icon-2"
+                src="../../../public/icons/demanda.json"
+                trigger="loop"
+                stroke="bold"
+                state="hover-swipe"
+                colors="primary:#333333,secondary:#9A0000"
+                style={{ width: "9em", height: "9em" }}
+              ></lord-icon>
+              <h5>{fallo1}</h5>
+            </div>
+          )}
         </div>
       </div>
     </div>

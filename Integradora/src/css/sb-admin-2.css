@@ -1140,6 +1140,15 @@ select:focus {
   margin-bottom: 1rem;
 }
 
+
+.centered-map {
+  align-self: center;
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
 .map1 {
   border: 1px solid var(--color-domin-1-1);
 }
