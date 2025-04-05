@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Swal from "sweetalert2";
 import "bootstrap";
 import lottie from "lottie-web";
@@ -24,6 +24,64 @@ import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 // define "lord-icon" custom element with default properties
 defineElement(lottie.loadAnimation);
+
+const torneo = yup.object().shape({
+  id: yup.number(),
+  foto: yup.string(),
+  iniciado: yup.boolean(),
+  nombreTorneo: yup.string("No válido").required("El nombre es requerido"),
+  descripcion: yup
+    .string("No válido")
+    .max(500, "Tamaño de descripción excedido")
+    .required("La descripción del torneo es requerida"),
+  fechaInicio: yup
+    .string("No válido")
+    .required("La fecha de inicio es requerida")
+    .test("es-futura", "La fecha debe ser hoy o en el futuro", (value) => {
+      const fechaIngresada = new Date(value);
+      const fechaActual = new Date();
+      fechaActual.setHours(0, 0, 0, 0);
+      return fechaIngresada >= fechaActual;
+    })
+    .test("es-domingo", "La fecha debe ser un domingo", (value) => {
+      const fechaIngresada = new Date(value);
+      return fechaIngresada.getDay() === 6; // 0 representa el domingo en JavaScript
+    }),
+  minEquipos: yup
+    .number("No válido")
+    .typeError("Debe ser un número")
+    .integer("Se requiere un número entero")
+    .min(2, "Debe ser al menos 2")
+    .test("es-par", "El número debe ser par", (value) => value % 2 === 0)
+    .required("Este campo es obligatorio")
+    .test("max-min", "Debe ser menor o igual al máximo", function (value) {
+      return value <= this.parent.maxEquipos;
+    }),
+  maxEquipos: yup
+    .number("No válido")
+    .typeError("Debe ser un número")
+    .integer("Se requiere un número entero")
+    .min(2, "Debe ser al menos 2")
+    .test("es-par", "El número debe ser par", (value) => value % 2 === 0)
+    .required("Este campo es obligatorio")
+    .test("min-max", "Debe ser mayor o igual al mínimo", function (value) {
+      return value >= this.parent.minEquipos;
+    }),
+  equiposLiguilla: yup
+    .number()
+    .typeError("Debe ser un número")
+    .integer("Debe ser un número entero")
+    .min(4, "Debe ser al menos 4")
+    .required("Debes especificar cuántos pasan a liguilla")
+    .max(yup.ref("maxEquipos"), "No puede ser mayor que el máximo de equipos"),
+  vueltas: yup
+    .number("No válido")
+    .typeError("Debe ser un número")
+    .integer("Debe ser un número entero")
+    .min(1, "Debe ser mayor a 0")
+    .required("Se requieren las vueltas"),
+  premio: yup.string().required("Se requiere especificar premio"),
+});
 
 export default function Admin3() {
   const [reload, setReload] = useState(false);
@@ -53,6 +111,7 @@ export default function Admin3() {
   const [loadBtn, setLoadBtn] = useState(false);
 
   const [statColor, setStatColor] = useState("");
+  const inputRef = useRef(null);
 
   const getEstadoTorneo = (tor) => {
     if (tor.motivoFinalizacion) return "torCancel"; // Cancelado
@@ -64,19 +123,21 @@ export default function Admin3() {
     return "torAct"; // Por defecto
   };
 
-  //conectar el schema con el form
   const {
     register,
     handleSubmit,
-    setError,
     setValue,
-    watch,
-    trigger,
-    clearErrors,
+    getValues,
+    control,
     reset,
+    trigger,
     resetField,
-    formState: { errors },
-  } = useForm();
+    clearErrors, // ✅ Extraído correctamente desde useForm()
+    formState: { errors, isValid },
+  } = useForm({
+    resolver: yupResolver(torneo),
+    mode: "onChange",
+  });
 
   const validateFields = (data) => {
     const errors = {};
@@ -381,12 +442,34 @@ export default function Admin3() {
   };
 
   const [id, setId] = useState(0);
-  const [selection, setSelection] = useState({})
+  const [selection, setSelection] = useState({});
 
   const doEdit = (tor) => {
-    setSelection(tor);
+    setValue("id", tor.id);
+    setValue("nombreTorneo", tor.nombreTorneo);
+    setValue("descripcion", tor.descripcion);
+    setValue("fechaInicio", tor.fechaInicio);
+    setValue("minEquipos", tor.minEquipos);
+    setValue("maxEquipos", tor.maxEquipos);
+    setValue("equiposLiguilla", tor.equiposLiguilla);
+    setValue("vueltas", tor.vueltas);
+    setValue("premio", tor.premio);
+    setValue("foto", tor.logoTorneo);
+    trigger("nombreTorneo");
+    trigger("descripcion");
+    trigger("fechaInicio");
+    trigger("minEquipos");
+    trigger("maxEquipos");
+    trigger("equiposLiguilla");
+    trigger("vueltas");
+    trigger("premio");
+    setPreview(tor.logoTorneo);
     setEditar(true);
   };
+
+  function handleClick() {
+    inputRef.current.focus();
+  }
 
   async function submitTorneo(data, image) {
     const validationErrors = validateFields(data);
@@ -434,6 +517,15 @@ export default function Admin3() {
           },
         });
         setReload(!reload);
+        setPreview(
+          "https://th.bing.com/th/id/OIP.vxFF12mSgYf6Cs5z9O2i7QAAAA?rs=1&pid=ImgDetMain"
+        );
+        setEditar(false);
+        setSelection({});
+        reset();
+        clearErrors();
+        resetField("descripcion");
+        setValue("descripcion", "");
       } catch (err) {
         console.log(err, err.message, err.response);
         if (err.response) {
@@ -482,8 +574,12 @@ export default function Admin3() {
         );
 
         formData.append("torneo", duenoData);
-        formData.append("imagen", selectedFile);
-        const response = await axios.post(`${api_url}/api/arbitros`, formData, {
+        if (selectedFile) {
+          formData.append("imagen", selectedFile);
+        }else{
+          formData.append("imagen", null);
+        }        
+        const response = await axios.put(`${api_url}/api/torneos/${data.id}`, formData, {
           headers: {
             // "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${tokData}`,
@@ -500,6 +596,15 @@ export default function Admin3() {
             denyButton: "btn-deny",
           },
         });
+        setPreview(
+          "https://th.bing.com/th/id/OIP.vxFF12mSgYf6Cs5z9O2i7QAAAA?rs=1&pid=ImgDetMain"
+        );
+        setEditar(false);
+        setSelection({});
+        reset();
+        clearErrors();
+        resetField("descripcion");
+        setValue("descripcion", "");
       } catch (err) {
         console.log(err, err.message);
         if (err.response) {
@@ -524,103 +629,6 @@ export default function Admin3() {
 
   const onSubmit = async (data) => {
     console.log(data);
-    if (!selectedFile) {
-      Swal.fire({
-        icon: "error",
-        title: "Imagen no seleccionada",
-        text: `Elige una imagen para continuar`,
-        customClass: {
-          confirmButton: "btn-confirm",
-          cancelButton: "btn-cancel",
-          denyButton: "btn-deny",
-        },
-      });
-      return;
-    }
-
-    if (!data.nombreTorneo) {
-      setError("nombreTorneo", {
-        type: "manual",
-        message: "El nombre es requerido",
-      });
-    }
-
-    if (!data.descripcion) {
-      setError("descripcion", {
-        type: "manual",
-        message: "La descripción es requerida",
-      });
-    } else if (data.descripcion.length > 500) {
-      setError("descripcion", {
-        type: "manual",
-        message: "Tamaño de descripción excedido",
-      });
-    }
-
-    if (!data.fechaInicio) {
-      setError("fechaInicio", {
-        type: "manual",
-        message: "La fecha de inicio es requerida",
-      });
-    } else {
-      const fechaIngresada = new Date(data.fechaInicio);
-      const fechaActual = new Date();
-      fechaActual.setHours(0, 0, 0, 0);
-      if (fechaIngresada < fechaActual) {
-        setError("fechaInicio", {
-          type: "manual",
-          message: "La fecha debe ser hoy o en el futuro",
-        });
-      }
-    }
-
-    if (
-      !data.minEquipos ||
-      isNaN(data.minEquipos) ||
-      data.minEquipos < 2 ||
-      data.minEquipos % 2 !== 0
-    ) {
-      setError("minEquipos", {
-        type: "manual",
-        message: "Debe ser al menos 2 y un número par",
-      });
-    }
-
-    if (
-      !data.maxEquipos ||
-      isNaN(data.maxEquipos) ||
-      data.maxEquipos < data.minEquipos
-    ) {
-      setError("maxEquipos", {
-        type: "manual",
-        message: "Debe ser mayor o igual al mínimo",
-      });
-    }
-
-    if (
-      !data.equiposLiguilla ||
-      isNaN(data.equiposLiguilla) ||
-      data.equiposLiguilla > data.maxEquipos
-    ) {
-      setError("equiposLiguilla", {
-        type: "manual",
-        message: "No puede ser mayor que el máximo de equipos",
-      });
-    }
-
-    if (!data.vueltas || isNaN(data.vueltas)) {
-      setError("vueltas", {
-        type: "manual",
-        message: "Debe ser un número entero",
-      });
-    }
-
-    if (!data.premio) {
-      setError("premio", {
-        type: "manual",
-        message: "Se requiere especificar premio",
-      });
-    }
 
     !editar
       ? await submitTorneo(data, selectedFile)
@@ -696,7 +704,7 @@ export default function Admin3() {
     setValue("equiposLiguilla", "");
     setValue("vueltas", "");
     setValue("premio", "");
-  }, [setValue]);
+  }, []);
 
   const showDetails = (t) => {
     Swal.fire({
@@ -767,7 +775,7 @@ export default function Admin3() {
                     <img
                       src={getUrl(t.logoTorneo)}
                       alt={t.nombreTorneo}
-                      className="teamImage"
+                      className="teamImage  torImg"
                       width={"50%"}
                       height={"50%"}
                     />
@@ -895,8 +903,16 @@ export default function Admin3() {
               );
             })
           ) : (
-            <div className="derecha">
-              <h5 id="confirm">{falloT}</h5>
+            <div className="w-100 align-items-center d-flex flex-column gap-1">
+              <lord-icon
+                src="https://cdn.lordicon.com/lewtedlh.json"
+                trigger="loop"
+                stroke="bold"
+                state="hover-swipe"
+                colors="primary:#333333,secondary:#9A0000"
+                style={{ width: "8em", height: "8em" }}
+              ></lord-icon>
+              <h5>{falloT}</h5>
             </div>
           )}
         </div>
@@ -904,7 +920,7 @@ export default function Admin3() {
           <div className="col-lg-8">
             <div className="bg-light form-div">
               <div className="">
-                <div className="d-sm-flex align-items-center justify-content-left mb-4">
+                <div className="d-flex w-100 flex-row align-items-center justify-content-left mb-4">
                   <h3 className="mb-0">
                     {editar ? "Editar torneo" : "Nuevo torneo"}
                   </h3>
@@ -912,8 +928,15 @@ export default function Admin3() {
                     <Tooltip title="Crear un torneo">
                       <IconButton
                         onClick={() => {
+                          setPreview(
+                            "https://th.bing.com/th/id/OIP.vxFF12mSgYf6Cs5z9O2i7QAAAA?rs=1&pid=ImgDetMain"
+                          );
                           setEditar(false);
                           setSelection({});
+                          reset();
+                          clearErrors();
+                          resetField("descripcion");
+                          setValue("descripcion", "");
                         }}
                       >
                         <EmojiEvents color="warning" />
@@ -928,7 +951,8 @@ export default function Admin3() {
                     <TextField
                       fullWidth
                       label="Nombre del torneo"
-                      value={Object.keys(selection).length > 0 ? selection.nombreTorneo : ''}
+                      value={getValues("nombreTorneo")}
+                      focused={getValues("nombreTorneo") !== ""}
                       className="txtAr txtCon mb-2 w-100"
                       {...register("nombreTorneo")}
                     />
@@ -942,7 +966,8 @@ export default function Admin3() {
                     <TextField
                       fullWidth
                       label="Premio"
-                      value={Object.keys(selection).length > 0 ? selection.premio : ''}
+                      value={getValues("premio")}
+                      focused={getValues("premio") !== ""}
                       className="txtAr txtCon mb-2 w-100"
                       {...register("premio")}
                     />
@@ -957,7 +982,8 @@ export default function Admin3() {
                   multiline
                   rows={6}
                   fullWidth
-                  value={Object.keys(selection).length > 0 ? selection.descripcion : ''}
+                  value={getValues("descripcion")}
+                  focused={getValues("descripcion") !== ""}
                   className="txtAr txtCon mb-2"
                   {...register("descripcion")}
                 />
@@ -970,7 +996,8 @@ export default function Admin3() {
                   <TextField
                     type="date"
                     fullWidth
-                    value={Object.keys(selection).length > 0 ? selection.fechaInicio : ''}
+                    value={getValues("fechaInicio")}
+                    focused={getValues("fechaInicio") !== ""}
                     inputProps={{ min: new Date().toISOString().split("T")[0] }}
                     className="txtAr txtCon mb-2"
                     {...register("fechaInicio")}
@@ -986,7 +1013,9 @@ export default function Admin3() {
                       fullWidth
                       label="# máximo de equipos"
                       type="number"
-                      value={Object.keys(selection).length > 0 ? selection.maxEquipos : ''}
+                      inputProps={{ min: 0 }}
+                      focused={getValues("maxEquipos") !== ""}
+                      value={getValues("maxEquipos")}
                       className="txtAr txtCon mb-2 w-33"
                       {...register("maxEquipos")}
                     />
@@ -999,8 +1028,9 @@ export default function Admin3() {
                       fullWidth
                       label="# mínimo de equipos"
                       type="number"
-                      min={0}
-                      value={Object.keys(selection).length > 0 ? selection.minEquipos : ''}
+                      inputProps={{ min: 0 }}
+                      focused={getValues("minEquipos") !== ""}
+                      value={getValues("minEquipos")}
                       className="txtAr txtCon mb-2"
                       {...register("minEquipos")}
                     />
@@ -1013,8 +1043,9 @@ export default function Admin3() {
                       fullWidth
                       label="# de vueltas"
                       type="number"
-                      min={0}
-                      value={Object.keys(selection).length > 0 ? selection.vueltas : ''}
+                      inputProps={{ min: 0 }}
+                      value={getValues("vueltas")}
+                      focused={getValues("vueltas") !== ""}
                       className="txtAr txtCon mb-2"
                       {...register("vueltas")}
                     />
@@ -1027,8 +1058,9 @@ export default function Admin3() {
                       fullWidth
                       label="Equipos en liguilla"
                       type="number"
-                      min={0}
-                      value={Object.keys(selection).length > 0 ? selection.equiposLiguilla : ''}
+                      inputProps={{ min: 0 }}
+                      value={getValues("equiposLiguilla")}
+                      focused={getValues("equiposLiguilla") !== ""}
                       className="txtAr txtCon mb-2"
                       {...register("equiposLiguilla")}
                     />
@@ -1040,15 +1072,15 @@ export default function Admin3() {
                   </div>
                 </div>
 
-                <div className="button-group justify-content-center">
+                <div className="button-group justify-content-center w-100">
                   {loadBtn ? (
                     <div className="my-spinner"></div>
                   ) : (
                     <button
                       type="submit"
-                      className="slide-btn text-black w-50 align-items-center"
+                      className="slide-btn w-50 text-black align-items-center w-chiqui-100"
                     >
-                      {editar ? "Actualizar torneo" : "Crear torneo"}
+                      {editar ? "Actualizar" : "Crear torneo"}
                     </button>
                   )}
                 </div>
@@ -1065,7 +1097,11 @@ export default function Admin3() {
               <div className="arbitro-card">
                 <form>
                   <div className="fotoContainer">
-                    <img className="img-fluid img" src={Object.keys(selection).length > 0 ? getUrl(selection.logoTorneo) : preview} alt="..." />
+                    <img
+                      className="img-fluid img my-img"
+                      src={getValues("foto") !== "" ? getUrl(preview) : preview}
+                      alt="..."
+                    />
                     <Tooltip title="Elegir logo">
                       <div className="botonDiv-2">
                         <i className="fa fa-image"></i>

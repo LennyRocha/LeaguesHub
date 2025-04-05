@@ -156,20 +156,20 @@ export default function Admin2({ cambiarComponent, setDueno }) {
           <h2 className="mb-0">Dueños de equipos</h2>
         </div>
         <div className="gridNest quitarScroll">
-          <div className="myDuenoGrid">
-            {loadDuenos ? (
-              <div className="centered-div w-100">
-                <div className="my-spinner"></div>
-              </div>
-            ) : falloD === "" ? (
-              currentItems.map((d) => (
+          {loadDuenos ? (
+            <div className="centered-div w-100 cont">
+              <div className="my-spinner"></div>
+            </div>
+          ) : falloD === "" ? (
+            <div className="myDuenoGrid">
+              {currentItems.map((d) => (
                 <div
                   className={`dueno-container ${
                     d.usuario.estatus ? "bg-light" : "bg-gray"
                   }`}
                   key={d.id}
                 >
-                  <div className="dueno-head-row">
+                  <div className="dueno-head-row w-100">
                     <div className="_row">
                       <img
                         className="img_dueno"
@@ -212,33 +212,43 @@ export default function Admin2({ cambiarComponent, setDueno }) {
                     Ver equipos
                   </a>
                 </div>
-              ))
-            ) : (
-              <div className="derecha">
-                <h5 id="confirm">{falloD}</h5>
-              </div>
-            )}
+              ))}
+            </div>
+          ) : (
+            <div className="w-100 align-items-center d-flex flex-column gap-1">
+              <lord-icon
+                src="../../../public/icons/lupa.json"
+                trigger="loop"
+                stroke="bold"
+                state="hover-rotation"
+                colors="primary:#333333,secondary:#9A0000"
+                style={{ width: "8em", height: "8em" }}
+              ></lord-icon>
+              <h5>{falloD}</h5>
+            </div>
+          )}
+        </div>
+        {falloD === "" && (
+          <div className="flex-row d-flex align-items-center mt-3 gap-3 justify-content-center">
+            <button
+              className="p-0 pag-btn"
+              onClick={prevPage}
+              disabled={currentPage === 1}
+            >
+              <ArrowLeftIcon fontSize="large" />
+            </button>
+            <span>
+              Página {currentPage} de {totalPages}
+            </span>
+            <button
+              className="p-0 pag-btn"
+              onClick={nextPage}
+              disabled={currentPage === totalPages}
+            >
+              <ArrowRightIcon fontSize="large" />
+            </button>
           </div>
-        </div>
-        <div className="flex-row d-flex align-items-center mt-3 gap-3 justify-content-center">
-          <button
-            className="p-0 pag-btn"
-            onClick={prevPage}
-            disabled={currentPage === 1}
-          >
-            <ArrowLeftIcon fontSize="large" />
-          </button>
-          <span>
-            Página {currentPage} de {totalPages}
-          </span>
-          <button
-            className="p-0 pag-btn"
-            onClick={nextPage}
-            disabled={currentPage === totalPages}
-          >
-            <ArrowRightIcon fontSize="large" />
-          </button>
-        </div>
+        )}
         <br />
       </div>
     </div>

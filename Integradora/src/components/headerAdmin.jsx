@@ -80,7 +80,7 @@ function AdminDashboard() {
         const fetchedToken = await getToken();
         const rol = await getUserRole();
         const correo = await getUserEmail();
-        if(rol !== 'ROLE_ADMIN'){
+        if (rol !== "ROLE_ADMIN") {
           setNoData(true);
           return;
         }
@@ -182,9 +182,13 @@ function AdminDashboard() {
   const renderComponent = () => {
     switch (activeComponent) {
       case "home":
-        return <Admin1 cambiarComponent={setActiveComponent} setTeam={setTeam} />;
+        return (
+          <Admin1 cambiarComponent={setActiveComponent} setTeam={setTeam} />
+        );
       case "equipos":
-        return <Admin2 cambiarComponent={setActiveComponent} setDueno={setDueno} />;
+        return (
+          <Admin2 cambiarComponent={setActiveComponent} setDueno={setDueno} />
+        );
       case "torneos":
         return <Admin3 />;
       case "campos":
@@ -196,9 +200,21 @@ function AdminDashboard() {
       case "publicidad":
         return <Admin7 />;
       case "dueno":
-        return <Admin8 cambiarComponent={setActiveComponent} dueno={dueno} setDueno={setDueno} />;
-        case "equipo":
-      return <Admin9 cambiarComponent={setActiveComponent} team={team} setTeam={setTeam} />;
+        return (
+          <Admin8
+            cambiarComponent={setActiveComponent}
+            dueno={dueno}
+            setDueno={setDueno}
+          />
+        );
+      case "equipo":
+        return (
+          <Admin9
+            cambiarComponent={setActiveComponent}
+            team={team}
+            setTeam={setTeam}
+          />
+        );
       default:
         return <Admin1 />;
     }
@@ -220,9 +236,7 @@ function AdminDashboard() {
           denyButton: "btn-deny",
         },
       }).then((result) => {
-        if (result.isConfirmed) {
-          Swal.fire("Saved!", "", "success");
-        } else if (result.isDenied) {
+        if (result.isDenied) {
           logout();
         }
       });
@@ -274,7 +288,11 @@ function AdminDashboard() {
           <hr className="sidebar-divider my-0" />
 
           <li
-            className={`nav-item ${activeComponent === "home" || activeComponent === "equipo" ? "active" : ""}`}
+            className={`nav-item ${
+              activeComponent === "home" || activeComponent === "equipo"
+                ? "active"
+                : ""
+            }`}
           >
             <a className="nav-link" onClick={() => setActiveComponent("home")}>
               <i className="fa-solid fa-house fap"></i>

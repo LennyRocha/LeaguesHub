@@ -105,18 +105,19 @@ export default function Admin7() {
             },
           }).then((resutlt) => logout());
           return;
-        }else{
+        } else {
           Swal.fire({
             icon: "warning",
             title: "¡Denegado!",
-            text: error.response?.message || 'Algo salió mal, intentalo nuevamente',
+            text:
+              error.response?.message || "Algo salió mal, intentalo nuevamente",
             confirmButtonText: "Aceptar",
             customClass: {
               confirmButton: "btn-confirm",
               cancelButton: "btn-cancel",
               denyButton: "btn-deny",
             },
-          })
+          });
         }
       });
   }
@@ -128,15 +129,15 @@ export default function Admin7() {
         </div>
         <div className={`${loadTorneos ? "h-100vh" : ""}`}>
           {loadTorneos ? (
-            <div className="container-fluid w-100 h-100 align-items-center justify-content-center d-flex">
-              <div className="my-spinner mt-3"></div>
+            <div className="centered-div w-100 cont">
+              <div className="my-spinner"></div>
             </div>
-          ) : falloTor !== "" ? (
+          ) : falloTor === "" ? (
             <div className="row">
               <div className="col-lg-8 div-margin">
                 <select
                   name="torneos"
-                  className="text-black my-3 sel-con"
+                  className="text-black my-3 sel-con p-1"
                   id="#torneosSel"
                   onChange={(e) => {
                     // Encuentra el torneo seleccionado usando el 'id' del option
@@ -153,8 +154,8 @@ export default function Admin7() {
                     </option>
                   ))}
                 </select>
-                <div className="bg-light form-div">
-                  {selection && (
+                {selection && (
+                  <div className="bg-light form-div">
                     <form>
                       <TextField
                         fullWidth
@@ -209,13 +210,13 @@ export default function Admin7() {
                         </button>
                       </div>
                     </form>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
               <div className="col-lg-4 div-margin">
                 <h5 className="mb-1">Vista vértical</h5>
                 <img
-                  src={poster === '' ? Poster1 : poster}
+                  src={poster === "" ? Poster1 : poster}
                   alt="BannerPlantilla"
                   className="img-fluid d-block w-100"
                 />
@@ -230,7 +231,19 @@ export default function Admin7() {
               />
             </div>
           ) : (
-            <h5>{falloTor}</h5>
+            <div className="w-100 align-items-center d-flex flex-column gap-1">
+              <lord-icon
+                id="input-icon-2"
+                src="../../../public/icons/documento.json"
+                trigger="loop"
+                stroke="bold"
+                state="hover-swipe"
+                colors="primary:#333333,secondary:#9A0000"
+                style={{ width: "15em", height: "15em" }}
+              ></lord-icon>
+              <h3>¡Oh no!</h3>
+              <h5>{falloTor}</h5>
+            </div>
           )}
         </div>
       </div>
