@@ -12,7 +12,21 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
     $(".collapse").collapse();
 
     // Toggle the side navigation
-    $("#sidebarToggle, #sidebarToggleTop").on("click", function () {
+    $("#sidebarToggle").on("click", function () {
+      $("body").toggleClass("sidebar-toggled");
+      $(".sidebar").toggleClass("toggled");
+
+      if ($(".sidebar").hasClass("toggled")) {
+        // Animar el ocultamiento del collapse en 350 ms
+        $(".sidebar .collapse").slideToggle(100);
+      } else {
+        // Animar la expansión del collapse en 350 ms
+        $(".sidebar .collapse").slideToggle(100);
+      }
+    });
+
+    // Toggle the side navigation
+    $("#sidebarToggleTop").on("click", function () {
       $("body").toggleClass("sidebar-toggled");
       $(".sidebar").toggleClass("toggled");
 
@@ -81,5 +95,4 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
     console.log("Bootstrap collapse:", typeof jQuery.fn.collapse); // Debe imprimir "function"
     console.log("jQuery version:", jQuery.fn.jquery); // Debe imprimir "3.7.1"
   });
-
 })(jQuery); // End of use strict

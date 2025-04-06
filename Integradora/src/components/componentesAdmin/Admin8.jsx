@@ -161,8 +161,18 @@ export default function Admin8({ cambiarComponent, dueno, setDueno }) {
               );
             })
           ) : (
-            <div className="w-100 justify-content-center d-flex mt-5">
-              <h3>{fallo}</h3>
+            <div className="w-100 align-items-center d-flex flex-column gap-1">
+              <lord-icon
+                id="input-icon-2"
+                src="../../../public/icons/folder.json"
+                trigger="morph"
+                stroke="bold"
+                state="morph-open"
+                colors="primary:#333333,secondary:#9A0000"
+                style={{ width: "10em", height: "10em" }}
+              ></lord-icon>
+              <h3>¿Primera vez?</h3>
+              <h5>{fallo}</h5>
             </div>
           )}
         </div>
@@ -228,7 +238,16 @@ export default function Admin8({ cambiarComponent, dueno, setDueno }) {
               })}
             </div>
           ) : (
-            <div className="w-100 justify-content-center d-flex mt-5">
+            <div className="w-100 align-items-center d-flex flex-column gap-1">
+              <lord-icon
+                id="input-icon-2"
+                src="../../../public/icons/jugador.json"
+                trigger="hover"
+                stroke="bold"
+                state="hover-nodding"
+                colors="primary:#333333,secondary:#9A0000"
+                style={{ width: "10em", height: "10em" }}
+              ></lord-icon>
               <h3>{falloJ}</h3>
             </div>
           )}

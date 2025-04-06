@@ -213,7 +213,16 @@ export default function Admin9({ cambiarComponent, team, setTeam }) {
               })}
             </div>
           ) : (
-            <div className="w-100 justify-content-center d-flex mt-5">
+            <div className="w-100 align-items-center d-flex flex-column gap-1">
+              <lord-icon
+                id="input-icon-2"
+                src="../../../public/icons/jugador.json"
+                trigger="hover"
+                stroke="bold"
+                state="hover-jump"
+                colors="primary:#333333,secondary:#9A0000"
+                style={{ width: "10em", height: "10em" }}
+              ></lord-icon>
               <h3>{falloJ}</h3>
             </div>
           )}

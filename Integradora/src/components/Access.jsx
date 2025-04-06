@@ -168,7 +168,22 @@ const Access = ({ cambiarComponente }) => {
           Swal.fire({
             icon: "error",
             title: "¡Oh no!",
-            text: err.message === 'Network Error' ? 'Comprueba tu conexión a internet, y vuelve a intentarlo' : "Algo salió mal, inténtalo nuevamente",
+            text:
+              err.message === "Network Error"
+                ? "Comprueba tu conexión a internet, y vuelve a intentarlo"
+                : "Algo salió mal, inténtalo nuevamente",
+            customClass: {
+              confirmButton: "btn-confirm",
+              cancelButton: "btn-cancel",
+              denyButton: "btn-deny",
+            },
+          });
+        }
+        if (err.response.status === 401) {
+          Swal.fire({
+            icon: "error",
+            title: "¡Denegado!",
+            text: "Datos incorrectos, intentalo nuevamente",
             customClass: {
               confirmButton: "btn-confirm",
               cancelButton: "btn-cancel",

@@ -24,9 +24,10 @@ export default function Admin7() {
   const [torneos, setTorneos] = useState([]);
   const [loadTorneos, setLoadTorneos] = useState(false);
   const [falloTor, setFalloTor] = useState("");
-  const { api_url } = useContext(AuthContext);
+  const { api_url, getToken, getUrl } = useContext(AuthContext);
   const [selection, setSelection] = useState(null);
   const [poster, setPoster] = useState("");
+  const [loadBtn, setLoadBtn] = useState(false);
   useEffect(() => {
     const getTorneos = async () => {
       axios
@@ -66,7 +67,10 @@ export default function Admin7() {
   useEffect(() => {
     console.log(selection);
   }, [selection]);
-  async function crearConvocatoria() {
+  async function crearConvocatoria(e) {
+    e.preventDefault();
+    console.log("Creando");
+    setLoadBtn(true);
     const tokData = await getToken();
     await axios
       .post(`${api_url}/api/convocatorias/publicar/${selection.id}`, null, {
@@ -86,7 +90,7 @@ export default function Admin7() {
           },
         });
         console.log(res.data);
-        setPoster("");
+        setPoster(res.data);
       })
       .catch((error) => {
         console.error(error, error.response?.data?.message);
@@ -119,7 +123,8 @@ export default function Admin7() {
             },
           });
         }
-      });
+      })
+      .finally(() => setLoadBtn(false));
   }
   return (
     <div>
@@ -201,13 +206,19 @@ export default function Admin7() {
                         value={selection.descripcion}
                       />
                       <div className="button-group">
-                        <button className="slide-btn text-black">Ver</button>
-                        <button
-                          className="slide-btn text-black"
-                          onClick={async () => crearConvocatoria()}
-                        >
-                          Crear
-                        </button>
+                        <button className={`${loadBtn && 'w-50'} slide-btn text-black`} onClick={(e) => {e.preventDefault(); console.log("Quitar si no funciona react canvas")}}>Ver</button>
+                        {loadBtn ? (
+                          <div className={`${loadBtn && 'w-50'} align-items-center d-flex justify-content-center`}>
+                            <div className="my-spinner"></div>
+                          </div>
+                        ) : (
+                          <button
+                            className="slide-btn text-black"
+                            onClick={async (e) => crearConvocatoria(e)}
+                          >
+                            Crear
+                          </button>
+                        )}
                       </div>
                     </form>
                   </div>
@@ -216,7 +227,7 @@ export default function Admin7() {
               <div className="col-lg-4 div-margin">
                 <h5 className="mb-1">Vista vértical</h5>
                 <img
-                  src={poster === "" ? Poster1 : poster}
+                  src={poster === "" ? Poster1 : getUrl(poster)}
                   alt="BannerPlantilla"
                   className="img-fluid d-block w-100"
                 />

@@ -82,6 +82,10 @@ hr {
 
 /* De aquí */
 
+#sidebarToggleTop:focus{
+  outline: none !important;
+}
+
 .cont{
   height: 100vh;
   margin: 0;
@@ -748,6 +752,11 @@ select:focus {
   }
 }
 
+.teamImage{
+  max-width: 100px !important;
+  max-height: 100px !important;
+}
+
 .slide-btn-sm {
   display: inline-block;
   padding: 0.5rem 1rem;
@@ -1055,7 +1064,7 @@ select:focus {
 }
 
 .suggestions-list {
-  max-height: 6rem;
+  max-height: 7.5rem;
   overflow: auto;
   width: 100%;
   filter: drop-shadow(0.25rem 0.25rem 0.5rem #0005);
@@ -4624,18 +4633,21 @@ fieldset:disabled a.btn {
 
 .btn-link {
   font-weight: 400;
-  color: #4e73df;
+  color: var(--color-acento-2-3);
   text-decoration: none;
+  outline: none;
 }
 
 .btn-link:hover {
-  color: #224abe;
+  color: var(--color-acento-2-1);
   text-decoration: underline;
+  outline: none;
 }
 
 .btn-link:focus,
 .btn-link.focus {
   text-decoration: underline;
+  outline: none;
 }
 
 .btn-link:disabled,

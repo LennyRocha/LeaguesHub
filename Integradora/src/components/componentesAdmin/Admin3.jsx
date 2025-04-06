@@ -442,9 +442,32 @@ export default function Admin3() {
   };
 
   const [id, setId] = useState(0);
-  const [selection, setSelection] = useState({});
+  const [selection, setSelection] = useState({
+    id: "",
+    nombreTorneo: "",
+    descripcion: "",
+    fechaInicio: "",
+    minEquipos: "",
+    maxEquipos: "",
+    equiposLiguilla: "",
+    vueltas: "",
+    premio: "",
+    foto: "",
+  });
 
   const doEdit = (tor) => {
+    setSelection({
+      id: tor.id,
+      nombreTorneo: tor.nombreTorneo,
+      descripcion: tor.descripcion,
+      fechaInicio: tor.fechaInicio,
+      minEquipos: tor.minEquipos,
+      maxEquipos: tor.maxEquipos,
+      equiposLiguilla: tor.equiposLiguilla,
+      vueltas: tor.vueltas,
+      premio: tor.premio,
+      foto: tor.logoTorneo,
+    });
     setValue("id", tor.id);
     setValue("nombreTorneo", tor.nombreTorneo);
     setValue("descripcion", tor.descripcion);
@@ -455,21 +478,12 @@ export default function Admin3() {
     setValue("vueltas", tor.vueltas);
     setValue("premio", tor.premio);
     setValue("foto", tor.logoTorneo);
-    trigger("nombreTorneo");
-    trigger("descripcion");
-    trigger("fechaInicio");
-    trigger("minEquipos");
-    trigger("maxEquipos");
-    trigger("equiposLiguilla");
-    trigger("vueltas");
-    trigger("premio");
+    trigger();
     setPreview(tor.logoTorneo);
     setEditar(true);
   };
 
-  function handleClick() {
-    inputRef.current.focus();
-  }
+  const [nombreTorneo, setNombreTorneo] = useState("");
 
   async function submitTorneo(data, image) {
     const validationErrors = validateFields(data);
@@ -521,7 +535,18 @@ export default function Admin3() {
           "https://th.bing.com/th/id/OIP.vxFF12mSgYf6Cs5z9O2i7QAAAA?rs=1&pid=ImgDetMain"
         );
         setEditar(false);
-        setSelection({});
+        setSelection({
+          id: "",
+          nombreTorneo: "",
+          descripcion: "",
+          fechaInicio: "",
+          minEquipos: "",
+          maxEquipos: "",
+          equiposLiguilla: "",
+          vueltas: "",
+          premio: "",
+          foto: "",
+        });
         reset();
         clearErrors();
         resetField("descripcion");
@@ -576,15 +601,19 @@ export default function Admin3() {
         formData.append("torneo", duenoData);
         if (selectedFile) {
           formData.append("imagen", selectedFile);
-        }else{
+        } else {
           formData.append("imagen", null);
-        }        
-        const response = await axios.put(`${api_url}/api/torneos/${data.id}`, formData, {
-          headers: {
-            // "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${tokData}`,
-          },
-        });
+        }
+        const response = await axios.put(
+          `${api_url}/api/torneos/${data.id}`,
+          formData,
+          {
+            headers: {
+              // "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${tokData}`,
+            },
+          }
+        );
         console.log("Respuesta del servidor:", response.data);
         Swal.fire({
           icon: "success",
@@ -600,7 +629,18 @@ export default function Admin3() {
           "https://th.bing.com/th/id/OIP.vxFF12mSgYf6Cs5z9O2i7QAAAA?rs=1&pid=ImgDetMain"
         );
         setEditar(false);
-        setSelection({});
+        setSelection({
+          id: "",
+          nombreTorneo: "",
+          descripcion: "",
+          fechaInicio: "",
+          minEquipos: "",
+          maxEquipos: "",
+          equiposLiguilla: "",
+          vueltas: "",
+          premio: "",
+          foto: "",
+        });
         reset();
         clearErrors();
         resetField("descripcion");
@@ -775,7 +815,7 @@ export default function Admin3() {
                     <img
                       src={getUrl(t.logoTorneo)}
                       alt={t.nombreTorneo}
-                      className="teamImage  torImg"
+                      className="torImg"
                       width={"50%"}
                       height={"50%"}
                     />
@@ -932,7 +972,18 @@ export default function Admin3() {
                             "https://th.bing.com/th/id/OIP.vxFF12mSgYf6Cs5z9O2i7QAAAA?rs=1&pid=ImgDetMain"
                           );
                           setEditar(false);
-                          setSelection({});
+                          setSelection({
+                            id: "",
+                            nombreTorneo: "",
+                            descripcion: "",
+                            fechaInicio: "",
+                            minEquipos: "",
+                            maxEquipos: "",
+                            equiposLiguilla: "",
+                            vueltas: "",
+                            premio: "",
+                            foto: "",
+                          });
                           reset();
                           clearErrors();
                           resetField("descripcion");
@@ -951,7 +1002,13 @@ export default function Admin3() {
                     <TextField
                       fullWidth
                       label="Nombre del torneo"
-                      value={getValues("nombreTorneo")}
+                      value={selection.nombreTorneo}
+                      onInput={(e) =>
+                        setSelection({
+                          ...selection, // Mantén los valores actuales
+                          nombreTorneo: e.target.value, // Actualiza solo el campo 'nombreTorneo'
+                        })
+                      }
                       focused={getValues("nombreTorneo") !== ""}
                       className="txtAr txtCon mb-2 w-100"
                       {...register("nombreTorneo")}
@@ -966,7 +1023,13 @@ export default function Admin3() {
                     <TextField
                       fullWidth
                       label="Premio"
-                      value={getValues("premio")}
+                      value={selection.premio}
+                      onInput={(e) =>
+                        setSelection({
+                          ...selection, // Mantén los valores actuales
+                          premio: e.target.value, // Actualiza solo el campo 'nombreTorneo'
+                        })
+                      }
                       focused={getValues("premio") !== ""}
                       className="txtAr txtCon mb-2 w-100"
                       {...register("premio")}
@@ -982,7 +1045,13 @@ export default function Admin3() {
                   multiline
                   rows={6}
                   fullWidth
-                  value={getValues("descripcion")}
+                  value={selection.descripcion}
+                  onInput={(e) =>
+                    setSelection({
+                      ...selection, // Mantén los valores actuales
+                      descripcion: e.target.value, // Actualiza solo el campo 'nombreTorneo'
+                    })
+                  }
                   focused={getValues("descripcion") !== ""}
                   className="txtAr txtCon mb-2"
                   {...register("descripcion")}
@@ -1015,7 +1084,13 @@ export default function Admin3() {
                       type="number"
                       inputProps={{ min: 0 }}
                       focused={getValues("maxEquipos") !== ""}
-                      value={getValues("maxEquipos")}
+                      value={selection.maxEquipos}
+                      onInput={(e) =>
+                        setSelection({
+                          ...selection, // Mantén los valores actuales
+                          maxEquipos: e.target.value, // Actualiza solo el campo 'nombreTorneo'
+                        })
+                      }
                       className="txtAr txtCon mb-2 w-33"
                       {...register("maxEquipos")}
                     />
@@ -1030,7 +1105,13 @@ export default function Admin3() {
                       type="number"
                       inputProps={{ min: 0 }}
                       focused={getValues("minEquipos") !== ""}
-                      value={getValues("minEquipos")}
+                      value={selection.minEquipos}
+                      onInput={(e) =>
+                        setSelection({
+                          ...selection, // Mantén los valores actuales
+                          minEquipos: e.target.value, // Actualiza solo el campo 'nombreTorneo'
+                        })
+                      }
                       className="txtAr txtCon mb-2"
                       {...register("minEquipos")}
                     />
@@ -1044,7 +1125,13 @@ export default function Admin3() {
                       label="# de vueltas"
                       type="number"
                       inputProps={{ min: 0 }}
-                      value={getValues("vueltas")}
+                      value={selection.vueltas}
+                      onInput={(e) =>
+                        setSelection({
+                          ...selection, // Mantén los valores actuales
+                          vueltas: e.target.value, // Actualiza solo el campo 'nombreTorneo'
+                        })
+                      }
                       focused={getValues("vueltas") !== ""}
                       className="txtAr txtCon mb-2"
                       {...register("vueltas")}
@@ -1059,7 +1146,13 @@ export default function Admin3() {
                       label="Equipos en liguilla"
                       type="number"
                       inputProps={{ min: 0 }}
-                      value={getValues("equiposLiguilla")}
+                      value={selection.equiposLiguilla}
+                      onInput={(e) =>
+                        setSelection({
+                          ...selection, // Mantén los valores actuales
+                          equiposLiguilla: e.target.value, // Actualiza solo el campo 'nombreTorneo'
+                        })
+                      }
                       focused={getValues("equiposLiguilla") !== ""}
                       className="txtAr txtCon mb-2"
                       {...register("equiposLiguilla")}
@@ -1078,7 +1171,10 @@ export default function Admin3() {
                   ) : (
                     <button
                       type="submit"
-                      className="slide-btn w-50 text-black align-items-center w-chiqui-100"
+                      className={`slide-btn w-50 text-black align-items-center w-chiqui-100 ${
+                        isValid ? "" : "opa-0"
+                      }`}
+                      disabled={!isValid}
                     >
                       {editar ? "Actualizar" : "Crear torneo"}
                     </button>

@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import axios from "axios";
 import {
   Table,
@@ -30,171 +32,116 @@ export default function Admin4() {
   const [marker, setMarker] = useState(null);
   const [isFirst, setIsFirst] = useState(false);
   const [isFull, setIsFull] = useState(false);
-  const [location, setLocation] = useState({
-    lat: 18.849136305780387,
-    lng: -99.20017382614945,
-  }); // CDMX
+  const [finding, setFinding] = useState(false);
+  const [location, setLocation] = useState(null); // CDMX
+  const [location2, setLocation2] = useState(null); // CDMX
+  const [src, setSrc] = useState("");
+  const [restart, setRestart] = useState(false);
+  const searchRef = useRef("");
 
-  const [location2, setLocation2] = useState({
-    lat: 18.849136305780387,
-    lng: -99.20017382614945,
-  }); // CDMX
-
-  const addressInput = useRef(null);
-
-  const data = [
-    {
-      id: 1,
-      name: "The Field",
-      dir: "Av sin esquinas s/n",
-      canchas: 3,
-      lat: 18.852205,
-      lon: -99.201187,
-    },
-    {
-      id: 2,
-      name: "Deportivo Galaxy",
-      dir: "Calle pollo #12",
-      canchas: 4,
-      lat: 18.852461,
-      lon: -99.20014,
-    },
-    {
-      id: 3,
-      name: "Campo el rayo",
-      dir: "Blvd of broken dreams",
-      canchas: 9,
-      lat: 18.851852,
-      lon: -99.200673,
-    },
-    {
-      id: 4,
-      name: "Footbalistica",
-      dir: "Calle cuaderno #21",
-      canchas: 5,
-      lat: 18.851132,
-      lon: -99.200403,
-    },
-    {
-      id: 5,
-      name: "El Rayo",
-      dir: "Av Acatlipa #02",
-      canchas: 1,
-      lat: 18.85005,
-      lon: -99.201182,
-    },
-    {
-      id: 6,
-      name: "El campo cascarudo",
-      dir: "Calle concha s/n",
-      canchas: 5,
-      lat: 18.849287,
-      lon: -99.201373,
-    },
-    {
-      id: 7,
-      name: "Estadio Azteca",
-      dir: "México",
-      canchas: 1,
-      lat: 18.849643,
-      lon: -99.200279,
-    }, // Ciudad de México
-  ];
-  const [src, setSrc] = useState(
-    `https://www.google.com/maps?q=${location2.lat},${location2.lng}&z=15&output=embed`
-  );
-
-  // Función para obtener sugerencias de direcciones
-  const handleSearch = async (query) => {
-    if (query.length > 2) {
-      const res = await axios.get(
-        `https://autocomplete.search.hereapi.com/v1/autocomplete?q=${query.toLowerCase()}&in=countryCode:MEX&apiKey=${hereApiKey}`
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setLocation({ lat: latitude, lng: longitude });
+          setLocation2({ lat: latitude, lng: longitude });
+          setSrc(
+            `https://www.google.com/maps?q=${latitude},${longitude}&z=15&output=embed`
+          );
+        },
+        (error) => {
+          console.error("Error al obtener la ubicación:", error.message);
+          // Aquí puedes usar IP como respaldo
+        }
       );
-      setSuggestions(res.data.items);
-      setAddress(res.data.items[0].address.label);
     } else {
-      setSuggestions([]);
-      setAddress("");
+      console.warn("Geolocalización no disponible en este navegador");
+      setLocation({
+        lat: 18.849136305780387,
+        lng: -99.20017382614945,
+      });
+      setLocation2({
+        lat: 18.849136305780387,
+        lng: -99.20017382614945,
+      });
+      setSrc(
+        `https://www.google.com/maps?q=${18.849136305780387},${-99.20017382614945}&z=15&output=embed`
+      );
     }
-  };
+  }, [restart]);
 
   // Función para obtener sugerencias de direcciones
   const handleSearchPlaces = async (query) => {
-    setSearch(query);
+    setFinding(true);
     if (query.length > 2) {
       try {
+        // Hacemos una solicitud GET a la API de búsqueda de Nominatim
         const res = await axios.get(
-          `https://discover.search.hereapi.com/v1/discover?q=${query.toLowerCase()}&in=countryCode:MEX&at=${
-            location.lat
-          },${location.lng}&apikey=${hereApiKey}`
+          `https://corsproxy.io/?https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+            query.toLowerCase()
+          )}&countrycodes=MX&format=json`
         );
-        setSuggestions(res.data.items);
+
+        // Se puede utilizar los resultados de 'res.data' para obtener los lugares sugeridos
+        setSuggestions(res.data);
+
+        if (res.data.length > 0) {
+          // Si hay resultados, el primer lugar es el más relevante
+          const firstPlace = res.data[0];
+          setAddress(firstPlace.display_name);
+          setLocation2({
+            lat: firstPlace.lat,
+            lng: firstPlace.lon,
+          });
+        }
       } catch (error) {
         console.error("Error obteniendo lugares:", error);
+        console.log(error.toJSON());
         setSuggestions([]);
+      } finally {
+        setFinding(false);
       }
     } else {
       setSuggestions([]);
       setAddress("");
+      setFinding(false);
     }
   };
 
   // Función para seleccionar un lugar y obtener coordenadas
   const handleSelect = async (place) => {
-    const res = await axios.get(
-      `https://geocode.search.hereapi.com/v1/geocode?q=${place.title}&in=countryCode:MEX&apiKey=${hereApiKey}`
+    console.log(place);
+    // Separar el nombre del lugar y la dirección
+    const addressParts = place.display_name.split(",");
+    const name = addressParts[0]; // Nombre del lugar
+    const address = addressParts.slice(1).join(","); // Dirección (todo menos el nombre)
+
+    setLocation2({ lat: place.lat, lng: place.lon });
+    setSuggestions([]); // Limpia las sugerencias
+    setMarker({ lat: place.lat, lng: place.lon }); // Actualiza marcador
+    setValue("direccion", address); // Establece la dirección
+    trigger("direccion");
+
+    setSrc(
+      `https://www.google.com/maps?q=${place.lat},${place.lon}&z=15&output=embed`
     );
-    const { lat, lng } = res.data.items[0].position;
-    if (res.data.items.length > 0) {
-      setAddress(res.data.items[0].address.label);
-      addressInput.current = address;
-    } else {
-      setAddress(" ");
-      addressInput.current = address;
-    }
-    setLocation({ lat, lng });
-    setSearch(place.title);
-    setSuggestions([]);
-    setMarker({ lat, lng }); // 📌 Agregar marcador
-    setSrc(`https://www.google.com/maps?q=${lat},${lng}&z=15&output=embed`);
   };
 
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = `https://js.api.here.com/v3/3.1/mapsjs-core.js`;
-    script.async = true;
-    document.body.appendChild(script);
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
+  // Función para deseleccionar un lugar
+  const handleDiselect = () => {
+    setSearch(""); // Limpia la búsqueda
+    setSuggestions([]); // Limpia las sugerencias
+    setAddress(""); // Limpia la dirección
+    setMarker(null); // Restablece el marcador
+    setSrc(""); // Restablece la vista del mapa
+    setRestart(!restart);
+    reset();
+    clearErrors();
+  };
   const submitCampo = (e) => {
     e.preventDefault();
     console.log("Guardando campo");
-  };
-
-  // 🔹 Función para obtener la dirección de coordenadas
-  const getAddress = async (lat, lng) => {
-    try {
-      const res = await axios.get(
-        `https://revgeocode.search.hereapi.com/v1/revgeocode?at=${lat},${lng}&apikey=${hereApiKey}`
-      );
-
-      if (res.data.items.length > 0) {
-        setAddress(res.data.items[0].address.label);
-        setSearch(res.data.items[0].title);
-      } else {
-        setAddress("Dirección no encontrada");
-      }
-
-      console.log(res.data.res.data.items[0].address.label);
-
-      setMarker({ lat, lng }); // 📌 Agregar marcador
-    } catch (error) {
-      console.error("Error obteniendo la dirección:", error);
-      setAddress("Error al obtener la dirección");
-    }
   };
 
   // 🔹 Función para manejar clics en el mapa
@@ -202,7 +149,6 @@ export default function Admin4() {
     console.log(event, "Si");
     const [lat, lng] = event.latLng.split(",").map(Number);
     setLocation2({ lat, lng });
-    getAddress(lat, lng);
   };
 
   //Importado de Native
@@ -237,20 +183,20 @@ export default function Admin4() {
   const [reload, setReload] = useState(false);
 
   //esquema para validaciones
-  // const campo = yup.object().shape({
-  //   id: yup.number(),
-  //   nombre: yup.string().required("El nombre es requerido"),
-  //   direccion: yup.string().required("La dirección es requerida"),
-  //   latitud: yup
-  //     .number("No válido")
-  //     .typeError("Debe ser un número")
-  //     .required("Latitud Requerida"),
-  //   longitud: yup
-  //     .number("No válido")
-  //     .typeError("Debe ser un número")
-  //     .required("Longitud Requerida"),
-  //   cancha: yup.string().required("Debes registrar al menos 1 cancha"),
-  // });
+  const campo = yup.object().shape({
+    id: yup.number(),
+    nombre: yup.string().required("El nombre es requerido"),
+    direccion: yup.string().required("La dirección es requerida"),
+    latitud: yup
+      .number("No válido")
+      .typeError("Debe ser un número")
+      .required("Latitud Requerida"),
+    longitud: yup
+      .number("No válido")
+      .typeError("Debe ser un número")
+      .required("Longitud Requerida"),
+    cancha: yup.string().required("Debes registrar al menos 1 cancha"),
+  });
 
   // Al momento de editar, puedes establecer estos valores como predeterminados
   const setEdicion = (campo, cancha, canchas) => {
@@ -285,16 +231,22 @@ export default function Admin4() {
     register,
     handleSubmit,
     setValue,
+    getValues,
     control,
+    reset,
+    trigger,
+    resetField,
+    clearErrors, // ✅ Extraído correctamente desde useForm()
     formState: { errors, isValid },
   } = useForm({
-    mode: "onBlur",
+    resolver: yupResolver(campo),
+    mode: "onChange",
   });
 
   const crearCampo = async (data) => {
     try {
-      const res = await api.post(
-        `/api/campos`,
+      const res = await axios.post(
+        `${api_url}/api/campos`,
         JSON.stringify({
           nombre: data.nombre,
           direccion: data.direccion,
@@ -338,8 +290,8 @@ export default function Admin4() {
 
   const registrarCancha = async (desc, pos, id) => {
     try {
-      const res = await api.post(
-        `/api/canchas`,
+      const res = await axios.post(
+        `${api_url}/api/canchas`,
         JSON.stringify({
           numeroCancha: pos,
           descripcion: desc,
@@ -376,8 +328,8 @@ export default function Admin4() {
 
   const quitarCancha = async (id) => {
     try {
-      const res = await api.put(
-        `/api/canchas/estatus/${id}`,
+      const res = await axios.put(
+        `${api_url}/api/canchas/estatus/${id}`,
         {},
         {
           headers: {
@@ -413,11 +365,10 @@ export default function Admin4() {
   };
 
   const updateCampo = async (data) => {
-    console.log(data, "Wey");
     const token = await getToken();
     try {
-      const res = await api.put(
-        `/api/campos/${data.id || id}`,
+      const res = await axios.put(
+        `${api_url}/api/campos/${data.id || id}`,
         JSON.stringify({
           nombre: data.nombre,
           direccion: data.direccion,
@@ -466,8 +417,8 @@ export default function Admin4() {
   const updateCancha = async (desc, pos, id, idCan) => {
     const token = await getToken();
     try {
-      const res = await api.put(
-        `/api/canchas/${idCan}`,
+      const res = await axios.put(
+        `${api_url}/api/canchas/${idCan}`,
         JSON.stringify({
           numeroCancha: pos,
           descripcion: desc,
@@ -547,6 +498,10 @@ export default function Admin4() {
     setCanchas([{ id: Date.now(), pos: 0, desc: "" }]);
   }, [reload]);
 
+  const onSubmit = async (data) => {
+    console.log(data);
+  };
+
   return (
     <div>
       <div className="container-fluid">
@@ -621,14 +576,18 @@ export default function Admin4() {
             width="95%"
             height="400"
             className="map-frame map1"
-            src={`https://www.google.com/maps?q=${location.lat},${location.lng}&z=15&output=embed`}
+            src={
+              location === null
+                ? `https://www.google.com/maps?q=${18.849136305780387},${-99.20017382614945}&z=15&output=embed`
+                : `https://www.google.com/maps?q=${location.lat},${location.lng}&z=15&output=embed`
+            }
           />
         </div>
       )}
       <div className="row px-2">
         <div className="col-lg-6">
           <iframe
-            title="HERE Map"
+            title="Mapa registro"
             width="100%"
             height="400"
             className="map-frame"
@@ -638,43 +597,50 @@ export default function Admin4() {
               iframe.addEventListener("click", handleMapClick);
             }}
           />
-          {marker && (
-            <p
-              style={{
-                textAlign: "center",
-                fontSize: "14px",
-                color: "#9a0000",
-                marginTop: "5px",
-              }}
-            >
-              📍 Marcador en: {marker.lat}, {marker.lng}
-            </p>
-          )}
         </div>
         <div className="col-lg-6">
           <div className="card bg-light shadow p-4 h-100">
-            <div className="card-header bg-red container-fluid">
-              <p className="font-weight-bold body-small text-white ml-1 tit-campo">
+            <div className="card-header bg-red d-flex justify-content-between align-items-center flex-row container-fluid">
+              <p className="font-weight-bold body-small text-white">
                 Registrar campo
               </p>
+              {finding ? (
+                <div className="my-spinner-sm"></div>
+              ) : (
+                <Tooltip title="Reinciar campos">
+                  <IconButton onClick={() => handleDiselect()}>
+                    <Delete color="warning" />
+                  </IconButton>
+                </Tooltip>
+              )}
             </div>
-            <form onSubmit={(e) => submitCampo(e)} className="gap-5">
+            <form onSubmit={handleSubmit(onSubmit)} className="gap-5">
               <TextField
                 className="txtAr"
                 label="Nombre del campo"
                 fullWidth
                 margin="dense"
-                name="nombre"
+                name="nombreCampo"
                 required
-                value={search}
-                onChange={(e) => handleSearchPlaces(e.target.value)}
+                focused={getValues("nombre") !== ""}
+                value={getValues("nombre")} // Asegúrate de que sea una cadena vacía si undefined
+                {...register("nombre")}
+                onInput={(e) => {
+                  handleSearchPlaces(e.target.value); // Realiza la búsqueda en tiempo real
+                }}
                 placeholder="Buscar lugar..."
               />
-              {Object.keys(suggestions).length > 0 && (
-                <ul className="suggestions-list">
+
+              {errors.nombre && (
+                <p className="text-danger">{errors.nombre.message}</p>
+              )}
+
+              {suggestions.length > 0 && (
+                <ul className="suggestions-list quitarScroll w-100">
                   {suggestions.map((place) => (
                     <li key={place.id} onClick={() => handleSelect(place)}>
-                      {place.title}
+                      {place.display_name}{" "}
+                      {/* Aquí puedes mostrar el nombre del lugar */}
                     </li>
                   ))}
                 </ul>
@@ -686,13 +652,26 @@ export default function Admin4() {
                 margin="dense"
                 name="direccion"
                 required
-                value={address}
-                onChange={(e) => handleSearch(e.target.value)}
+                focused={getValues("direccion") !== ""}
+                value={getValues("direccion")}
                 placeholder="Buscar dirección..."
+                {...register("direccion")}
               />
+              {errors.direccion && (
+                <p className="text-danger">{errors.direccion.message}</p>
+              )}
+              {errors.latitud && (
+                <p className="text-danger">{errors.latitud.message}</p>
+              )}
+              {errors.longitud && (
+                <p className="text-danger">{errors.longitud.message}</p>
+              )}
               <button type="submit" id="submitArb" className="text-black">
                 Registrar
               </button>
+              {errors.cancha && (
+                <p className="text-danger">{errors.cancha.message}</p>
+              )}
             </form>
           </div>
         </div>

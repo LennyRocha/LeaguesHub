@@ -154,6 +154,16 @@ button:focus-visible {
   animation: spin 1s infinite;
 }
 
+.my-spinner-sm {
+  width: 20px;
+  height: 20px;
+  border: solid 3px var(--color-base-1-1);
+  border-radius: 50%;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  animation: spin 1s infinite;
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
