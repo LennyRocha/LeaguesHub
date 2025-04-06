@@ -82,11 +82,11 @@ hr {
 
 /* De aquí */
 
-#sidebarToggleTop:focus{
+#sidebarToggleTop:focus {
   outline: none !important;
 }
 
-.cont{
+.cont {
   height: 100vh;
   margin: 0;
   place-items: center;
@@ -149,8 +149,8 @@ hr {
   opacity: 0.5;
 }
 
-.but-black{
-  font-family: 'Oswald', 'Courier New', Courier, monospace !important;
+.but-black {
+  font-family: "Oswald", "Courier New", Courier, monospace !important;
 }
 
 .gray-back {
@@ -752,7 +752,7 @@ select:focus {
   }
 }
 
-.teamImage{
+.teamImage {
   max-width: 100px !important;
   max-height: 100px !important;
 }
@@ -1148,7 +1148,6 @@ select:focus {
   margin-top: 0.5rem;
   margin-bottom: 1rem;
 }
-
 
 .centered-map {
   align-self: center;
@@ -4638,6 +4637,11 @@ fieldset:disabled a.btn {
   outline: none;
 }
 
+.btn-link:active {
+  background: transparent !important;
+  outline: none;
+}
+
 .btn-link:hover {
   color: var(--color-acento-2-1);
   text-decoration: underline;
@@ -4648,6 +4652,7 @@ fieldset:disabled a.btn {
 .btn-link.focus {
   text-decoration: underline;
   outline: none;
+  background-color: transparent !important;
 }
 
 .btn-link:disabled,

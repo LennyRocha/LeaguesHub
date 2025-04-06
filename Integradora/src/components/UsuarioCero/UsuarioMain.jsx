@@ -27,7 +27,7 @@ export default function UsuarioMain() {
   };
 
   return (
-    <div id="main">
+    <div id="main" className="container-fluid">
       <UsuarioRow getUrl={transformarUrl} api={api} />
 
       {vista === "LISTA" && (

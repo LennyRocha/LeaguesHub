@@ -52,7 +52,7 @@ export default function Admin2({ cambiarComponent, setDueno }) {
             }).then((resutlt) => logout());
             return;
           }
-          if (e.res.message) setFalloD(e.res.message);
+          if (e.response.message) setFalloD(e.response.message);
           else setFalloD("Error al obtener dueños");
         })
         .finally(() => setLoadDuenos(false));
@@ -217,7 +217,7 @@ export default function Admin2({ cambiarComponent, setDueno }) {
           ) : (
             <div className="w-100 align-items-center d-flex flex-column gap-1">
               <lord-icon
-                src="../../../public/icons/lupa.json"
+                src="/icons/lupa.json"
                 trigger="loop"
                 stroke="bold"
                 state="hover-rotation"

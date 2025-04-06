@@ -148,6 +148,12 @@ export const AuthProvider = ({ children }) => {
     window.location.href = "/";
   };
 
+  const clearData = () => {
+    removeToken();
+    removeUser();
+    setUser(null);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -170,6 +176,7 @@ export const AuthProvider = ({ children }) => {
         decodeToken,
         getUrl,
         getout,
+        clearData
       }}
     >
       {children}

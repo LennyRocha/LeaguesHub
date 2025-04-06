@@ -402,8 +402,8 @@ export default function Admin6() {
             <lord-icon
               id="input-icon-2"
               src={fallo === "Error al obtener pagos"
-              ? "../../../public/icons/puerco.json"
-              : "../../../public/icons/confetti.json"}
+              ? "/icons/puerco.json"
+              : "/icons/confetti.json"}
               trigger="loop"
               stroke="bold"
               state={fallo === 'Error al obtener pagos' ? "morph-destroyed" : "in-reveal"}

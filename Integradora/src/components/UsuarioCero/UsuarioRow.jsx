@@ -24,26 +24,42 @@ export default function UsuarioRow({ getUrl, api }) {
       .finally(() => setLoad(false));
   }, []);
 
+  const [touchedIndex, setTouchedIndex] = useState(null);
+
+  const handleTouch = (index) => {
+    setTouchedIndex(index);
+    setTimeout(() => {
+      setTouchedIndex(null);
+    }, 2000); // Cierra después de 2 segundos
+  };
+
   return (
     <div className="rowTeams" id="inicio">
       {load ? (
         <MiniLoadingScreen />
       ) : (
-        teams.map((e, index) => {
-          return (
-            <div key={e.id}>
-              <Tooltip title={e.nombreEquipo}>
-                <img
-                  src={getUrl(e.logoEquipo)}
-                  alt={e.nombreEquipo}
-                  width={40}
-                  height={40}
-                  className="half-round"
-                />
-              </Tooltip>
-            </div>
-          );
-        })
+        teams.map((e, index) => (
+          <div key={e.id}>
+            <Tooltip
+              title={e.nombreEquipo}
+              open={touchedIndex === index}
+              disableFocusListener
+              disableHoverListener
+              disableTouchListener
+            >
+              <img
+                src={getUrl(e.logoEquipo)}
+                alt={e.nombreEquipo}
+                width={40}
+                height={40}
+                className="half-round"
+                onTouchStart={() => handleTouch(index)} // para móviles
+                onMouseEnter={() => setTouchedIndex(index)} // para escritorio
+                onMouseLeave={() => setTouchedIndex(null)} // para escritorio
+              />
+            </Tooltip>
+          </div>
+        ))
       )}
     </div>
   );

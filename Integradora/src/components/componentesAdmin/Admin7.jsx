@@ -38,7 +38,7 @@ export default function Admin7() {
           else setTorneos(res.data);
         })
         .catch((e) => {
-          console.error(e, e.res.message);
+          console.error(e, e.response.message);
           if (e.response.status === 403) {
             console.log("⚠️ Token expirado, redirigiendo a login...");
             Swal.fire({
@@ -245,7 +245,7 @@ export default function Admin7() {
             <div className="w-100 align-items-center d-flex flex-column gap-1">
               <lord-icon
                 id="input-icon-2"
-                src="../../../public/icons/documento.json"
+                src="/icons/documento.json"
                 trigger="loop"
                 stroke="bold"
                 state="hover-swipe"

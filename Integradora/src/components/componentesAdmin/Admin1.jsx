@@ -3,6 +3,7 @@ import { AuthContext } from "../../context/AuthContext";
 import Calendar from "react-calendar";
 import Swal from "sweetalert2";
 import axios from "axios";
+import fotoPlace from "../../assets/images/foto-placeholder.png"
 
 function Admin1({ cambiarComponent, setTeam }) {
   const [date, setDate] = useState(new Date());
@@ -142,7 +143,7 @@ function Admin1({ cambiarComponent, setTeam }) {
           else setSolicitudes(res.data);
         })
         .catch((e) => {
-          console.error(e, e.res.message);
+          console.error(e, e.response.message);
           console.error(e, e.response.message);
           if (err.response.status === 403) {
             console.log("⚠️ Token expirado, redirigiendo a login...");
@@ -195,7 +196,7 @@ function Admin1({ cambiarComponent, setTeam }) {
           setTorneos(res.data);
         })
         .catch((e) => {
-          console.error(e, e.res.message);
+          console.error(e, e.response.message);
           if (e.response.status === 403) {
             console.log("⚠️ Token expirado, redirigiendo a login...");
             Swal.fire({
@@ -224,7 +225,7 @@ function Admin1({ cambiarComponent, setTeam }) {
           else setTotPagos(res.data);
         })
         .catch((e) => {
-          console.error(e, e.res.message);
+          console.error(e, e.response.message);
           if (e.response.status === 403) {
             console.log("⚠️ Token expirado, redirigiendo a login...");
             Swal.fire({
@@ -262,7 +263,7 @@ function Admin1({ cambiarComponent, setTeam }) {
         else setEquipos(res.data);
       })
       .catch((e) => {
-        console.error(e, e.res.message);
+        console.error(e, e.response.message);
         if (e.response.status === 403) {
           console.log("⚠️ Token expirado, redirigiendo a login...");
           Swal.fire({
@@ -278,7 +279,7 @@ function Admin1({ cambiarComponent, setTeam }) {
           }).then((resutlt) => logout());
           return;
         }
-        if (e.res.message) setFallo2(e.res.message);
+        if (e.response.message) setFallo2(e.response.message);
         else setFallo2("Error al obtener equipos");
       })
       .finally(() => setLoadEqu(false));
@@ -290,7 +291,7 @@ function Admin1({ cambiarComponent, setTeam }) {
         else setTorEspera(res.data.length);
       })
       .catch((e) => {
-        console.error(e, e.res.message);
+        console.error(e, e.response.message);
         if (e.response.status === 403) {
           console.log("⚠️ Token expirado, redirigiendo a login...");
           Swal.fire({
@@ -413,7 +414,7 @@ function Admin1({ cambiarComponent, setTeam }) {
     if (torneo) {
       return getUrl(torneo.logoTorneo);
     } else {
-      return "https://th.bing.com/th/id/OIP.vxFF12mSgYf6Cs5z9O2i7QAAAA?rs=1&pid=ImgDetMain"; // Imagen de respaldo
+      return fotoPlace; // Imagen de respaldo
     }
   }
 

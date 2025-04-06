@@ -8,6 +8,7 @@ import "../css/fonts.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import Swal from "sweetalert2";
 import { AuthContext } from "../context/AuthContext";
+import userPlace from "../assets/images/user-placeholder.png"
 
 import lottie from "lottie-web";
 import { defineElement } from "@lordicon/element";
@@ -38,7 +39,7 @@ const Access = ({ cambiarComponente }) => {
   const [emptyField, setEmptyField] = useState("");
 
   const [preview, setPreview] = useState(
-    "https://th.bing.com/th/id/OIP.vxFF12mSgYf6Cs5z9O2i7QAAAA?rs=1&pid=ImgDetMain"
+    userPlace
   );
 
   const [selectedFile, setSelectedFile] = useState(null);
@@ -96,7 +97,7 @@ const Access = ({ cambiarComponente }) => {
   const handleChangeImg = async (e) => {
     if (
       preview !==
-      "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
+      userPlace
     ) {
       setUserS({ ...userS, img: preview });
     }
@@ -235,7 +236,7 @@ const Access = ({ cambiarComponente }) => {
       });
     } else if (
       preview ===
-      "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
+      userPlace
     ) {
       Swal.fire({
         icon: "error",

@@ -7,6 +7,8 @@ import LoadingScreen from "./LoadingScreen";
 import TokenPage from "./componentesExternos/TokenPage";
 import NoAuthPage from "./componentesExternos/NoAuthPage";
 import { AuthContext } from "../context/AuthContext";
+import jQuery from "jquery";
+import "bootstrap/dist/js/bootstrap.bundle.min";
 import Swal from "sweetalert2";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "@popperjs/core";
@@ -43,7 +45,7 @@ function AdminDashboard() {
 
   const { getToken, decodeToken, getUserEmail, getUserRole } =
     useContext(AuthContext);
-  const { logout, removeToken, removeUser, getout } = useContext(AuthContext);
+  const { logout, removeToken, removeUser, getout, clearData } = useContext(AuthContext);
 
   const [tokenData, setTokenData] = useState("");
   const [expire, setExpire] = useState(false);
@@ -220,6 +222,31 @@ function AdminDashboard() {
     }
   };
 
+  window.$ = window.jQuery = jQuery;
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const toggleBtn = document.getElementById("sidebarToggleTop");
+      const collapseEl = document.querySelector(".collapse");
+  
+      if (toggleBtn && collapseEl) {
+        console.log("Elementos listos, se conecta el evento");
+  
+        // Conectar evento de toggle aquí
+        toggleBtn.addEventListener("click", () => {
+          document.body.classList.toggle("sidebar-toggled");
+          document.querySelector(".sidebar").classList.toggle("toggled");
+          $(collapseEl).slideToggle(100);
+        });
+  
+        clearInterval(interval); // Ya no hace falta seguir buscando
+      }
+    }, 100); // Reintenta cada 100ms
+  
+    return () => clearInterval(interval); // Limpieza
+  }, []);
+  
+
   useEffect(() => {
     const handlePopState = (e) => {
       window.history.pushState(null, "", window.location.href); // Mantiene la URL
@@ -247,6 +274,7 @@ function AdminDashboard() {
 
     return () => {
       window.onpopstate = null; // Limpia el evento al desmontar el componente
+      //clearData();
     };
   }, []);
 
@@ -680,8 +708,8 @@ function AdminDashboard() {
                     aria-haspopup="true"
                     aria-expanded="false"
                   >
-                    <span className="mr-3 d-none d-lg-inline text-gray-600 small">
-                      {userName} #0000000001
+                    <span className="mr-3 d-none d-lg-inline text-white-600 small">
+                      Usuario administrador
                     </span>
                     <img
                       className="img-profile rounded-circle"

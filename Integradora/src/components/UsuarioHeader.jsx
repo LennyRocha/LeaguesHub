@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "bootstrap";
 import miImagen from "../img/logo1.png";
 import "../css/UsuarioHeader.css";
@@ -11,6 +11,25 @@ import UsuarioLista from "./UsuarioCero/UsuarioLista";
 import bootstrap from "bootstrap/dist/js/bootstrap.bundle.min";
 
 export default function Usuario0({ cambiarComponente }) {
+  const [id1, setId1] = useState("");
+  const [id2, setId2] = useState("");
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setId1("#clasif-sm");
+        setId2("#goleo-sm");
+      } else {
+        setId1("#clasif");
+        setId2("#goleo");
+      }
+    };
+
+    handleResize(); // Ejecutar al inicio
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="sticky-header">
       <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
@@ -36,7 +55,7 @@ export default function Usuario0({ cambiarComponente }) {
             </a>
           </li> */}
           <li>
-            <a href="#clasif" className="nav-link px-2 texto-blanco">
+            <a href={id1} className="nav-link px-2 texto-blanco">
               Clasificación
             </a>
           </li>
@@ -46,7 +65,7 @@ export default function Usuario0({ cambiarComponente }) {
             </a>
           </li> */}
           <li>
-            <a href="#goleo" className="nav-link px-2 texto-blanco">
+            <a href={id2} className="nav-link px-2 texto-blanco">
               Goleadores
             </a>
           </li>

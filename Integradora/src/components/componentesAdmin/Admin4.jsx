@@ -269,7 +269,7 @@ export default function Admin4() {
       Alert.alert("¡Éxito!", "Campo registrado exitosamente");
       setReload(!reload);
     } catch (err) {
-      console.error(err, err.res.message);
+      console.error(err, err.response.message);
       if (err.response.status === 403) {
         console.log("⚠️ Token expirado, redirigiendo a login...");
         Swal.fire({
@@ -473,7 +473,7 @@ export default function Admin4() {
           console.log(res.data);
         })
         .catch((e) => {
-          console.error(e, e.res.message);
+          console.error(e, e.response.message);
           if (e.response.status === 403) {
             console.log("⚠️ Token expirado, redirigiendo a login...");
             Swal.fire({
@@ -489,7 +489,7 @@ export default function Admin4() {
             }).then((resutlt) => logout());
             return;
           }
-          if (e.res.message) setFallo1(e.res.message);
+          if (e.response.message) setFallo1(e.response.message);
           else setFallo1("Error al obtener campos");
         })
         .finally(() => setLoadCamps(false));
@@ -557,7 +557,7 @@ export default function Admin4() {
             <div className="w-100 align-items-center d-flex flex-column gap-1">
               <lord-icon
                 id="input-icon-2"
-                src="../../../public/icons/pin.json"
+                src="/icons/pin.json"
                 trigger="loop"
                 stroke="bold"
                 state="hover-swipe"

@@ -3,6 +3,8 @@ import Swal from "sweetalert2";
 import "bootstrap";
 import lottie from "lottie-web";
 import { defineElement } from "@lordicon/element";
+import userPlace from "../../assets/images/user-placeholder.png"
+import fotoPlace from "../../assets/images/foto-placeholder.png"
 import {
   Table,
   TableBody,
@@ -283,7 +285,7 @@ export default function Admin3() {
   });
 
   const [preview, setPreview] = useState(
-    "https://th.bing.com/th/id/OIP.vxFF12mSgYf6Cs5z9O2i7QAAAA?rs=1&pid=ImgDetMain"
+    fotoPlace
   );
 
   const iniciarTorneo = async (id) => {
@@ -532,7 +534,7 @@ export default function Admin3() {
         });
         setReload(!reload);
         setPreview(
-          "https://th.bing.com/th/id/OIP.vxFF12mSgYf6Cs5z9O2i7QAAAA?rs=1&pid=ImgDetMain"
+          fotoPlace
         );
         setEditar(false);
         setSelection({
@@ -626,7 +628,7 @@ export default function Admin3() {
           },
         });
         setPreview(
-          "https://th.bing.com/th/id/OIP.vxFF12mSgYf6Cs5z9O2i7QAAAA?rs=1&pid=ImgDetMain"
+          fotoPlace
         );
         setEditar(false);
         setSelection({
@@ -969,7 +971,7 @@ export default function Admin3() {
                       <IconButton
                         onClick={() => {
                           setPreview(
-                            "https://th.bing.com/th/id/OIP.vxFF12mSgYf6Cs5z9O2i7QAAAA?rs=1&pid=ImgDetMain"
+                            fotoPlace
                           );
                           setEditar(false);
                           setSelection({

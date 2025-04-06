@@ -81,7 +81,12 @@ export default function UsuarioTabla1({ api }) {
 
   return (
     <div className="my-5">
-      <h1 id="clasif">Tablas de Clasificación</h1>
+      <h1 id="clasif" className="d-none d-md-block">
+        Tabla de Clasificación
+      </h1>
+      <h2 id="clasif-sm" className="d-block d-md-none">
+        Tabla de Clasificación
+      </h2>
       <div className="partidoFilter">
         <select
           value={selectedTorneo}
@@ -89,6 +94,7 @@ export default function UsuarioTabla1({ api }) {
             setSelectedTorneo(e.target.value);
             setCurrentPage(0);
           }}
+          className="mb-1"
         >
           <option value="">Selecciona un torneo</option>
           {torneos.map((torneo) => (
@@ -102,54 +108,56 @@ export default function UsuarioTabla1({ api }) {
       {loading ? (
         <MiniLoadingScreen />
       ) : (
-        <div className="over-auto">
-          <table className="table">
-            <thead className="myThead">
-              <tr>
-                <th>POS</th>
-                <th></th>
-                <th>EQUIPO</th>
-                <th>JJ</th>
-                <th>JG</th>
-                <th>JE</th>
-                <th>JP</th>
-                <th>GF</th>
-                <th>GC</th>
-                <th>DIFF</th>
-                <th>PTS</th>
-              </tr>
-            </thead>
-            <tbody>
-              {displayedTeams.map((team, index) => (
-                <tr key={team.id}>
-                  <td>{startIndex + index + 1}</td>
-                  <td className="imgCell">
-                    <img
-                      src={transformarUrl(team.logo)}
-                      alt={team.nombreEquipo}
-                      width={30}
-                      height={30}
-                    />
-                  </td>
-                  <td>{team.nombreEquipo}</td>
-                  <td>
-                    {team.partidosGanados +
-                      team.partidosEmpatados +
-                      team.partidosPerdidos}
-                  </td>
-                  <td className="jg">{team.partidosGanados}</td>
-                  <td className="je">{team.partidosEmpatados}</td>
-                  <td className="jp">{team.partidosPerdidos}</td>
-                  <td>{team.golesAFavor}</td>
-                  <td>{team.golesEnContra}</td>
-                  <td className="diff">
-                    {team.golesAFavor - team.golesEnContra}
-                  </td>
-                  <td className="pts">{team.puntos}</td>
+        <div>
+          <div className="over-auto quitarScroll">
+            <table className="table">
+              <thead className="myThead">
+                <tr>
+                  <th>POS</th>
+                  <th></th>
+                  <th>EQUIPO</th>
+                  <th>JJ</th>
+                  <th>JG</th>
+                  <th>JE</th>
+                  <th>JP</th>
+                  <th>GF</th>
+                  <th>GC</th>
+                  <th>DIFF</th>
+                  <th>PTS</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {displayedTeams.map((team, index) => (
+                  <tr key={team.id}>
+                    <td>{startIndex + index + 1}</td>
+                    <td className="imgCell">
+                      <img
+                        src={transformarUrl(team.logo)}
+                        alt={team.nombreEquipo}
+                        width={30}
+                        height={30}
+                      />
+                    </td>
+                    <td>{team.nombreEquipo}</td>
+                    <td>
+                      {team.partidosGanados +
+                        team.partidosEmpatados +
+                        team.partidosPerdidos}
+                    </td>
+                    <td className="jg">{team.partidosGanados}</td>
+                    <td className="je">{team.partidosEmpatados}</td>
+                    <td className="jp">{team.partidosPerdidos}</td>
+                    <td>{team.golesAFavor}</td>
+                    <td>{team.golesEnContra}</td>
+                    <td className="diff">
+                      {team.golesAFavor - team.golesEnContra}
+                    </td>
+                    <td className="pts">{team.puntos}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
           <div className="pagination-container gap-5">
             <button
               className="p-0 pag-btn"

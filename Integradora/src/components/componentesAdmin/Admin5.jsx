@@ -11,6 +11,7 @@ import {
   TextField,
   Tooltip,
 } from "@mui/material";
+import userPlace from "../../assets/images/user-placeholder.png";
 import { Edit, Delete } from "@mui/icons-material";
 import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
@@ -59,43 +60,14 @@ export default function Admin5() {
   });
 
   //conectar el schema con el form
-  const [errors, setErrors] = useState({});
+  const [errorss, setErrors] = useState({});
   const {
     register,
     handleSubmit,
-    formState: { isValid },
-  } = useForm({ mode: "onBlur" });
-
-  // Función para validar manualmente los campos
-  const validateFields = (data) => {
-    const errors = {};
-
-    // Validación de campo 'nombreCompleto'
-    if (!data.nombreCompleto) {
-      errors.nombreCompleto = "El nombre es requerido";
-    }
-
-    // Validación de campo 'email'
-    if (!data.email) {
-      errors.email = "El correo es requerido";
-    } else if (!/\S+@\S+\.\S+/.test(data.email)) {
-      errors.email = "Formato de correo inválido";
-    }
-
-    // Validación de campo 'password'
-    if (!data.password) {
-      errors.password = "Contraseña requerida";
-    }
-
-    // Validación de campo 'password2' (confirmación de contraseña)
-    if (!data.password2) {
-      errors.password2 = "Confirma tu contraseña";
-    } else if (data.password2 !== data.password) {
-      errors.password2 = "Las contraseñas no coinciden";
-    }
-
-    return errors;
-  };
+    reset,
+    clearErrors,
+    formState: { errors, isValid },
+  } = useForm({ resolver: yupResolver(arbitro), mode: "onChange" });
 
   const desactivarArbitro = async (id, name) => {
     console.log(id);
@@ -111,7 +83,6 @@ export default function Admin5() {
           },
         }
       );
-      console.log("Registro exitoso:", res.data);
       // Swal.fire({
       //   icon: "success",
       //   title: "¡Exito!",
@@ -180,7 +151,7 @@ export default function Admin5() {
           else setArbitros(res.data);
         })
         .catch((e) => {
-          console.error(e, e.res.message, e.res.code);
+          console.error(e, e.response.message, e.res.code);
           if (e.response.status === 403) {
             console.log("⚠️ Token expirado, redirigiendo a login...");
             Swal.fire({
@@ -196,7 +167,7 @@ export default function Admin5() {
             }).then((resutlt) => logout());
             return;
           }
-          if (e.res.message) Alert.alert("Error", e.res.message);
+          if (e.response.message) Alert.alert("Error", e.response.message);
           Alert.alert("Error", "Error al obtener árbitros");
         })
         .finally(() => setLoadArb(false));
@@ -205,69 +176,63 @@ export default function Admin5() {
   }, [reload]);
 
   const [accion, setAccion] = useState("Agregar árbitro");
-  const [preview, setPreview] = useState(
-    "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
-  );
+  const [preview, setPreview] = useState(userPlace);
 
   async function submitArbitro(data, image) {
-    const validationErrors = validateFields(data);
+    setLoadArbit(true);
+    try {
+      const formData = new FormData();
+      const duenoData = new Blob(
+        [
+          JSON.stringify({
+            email: data.email,
+            password: data.password,
+            nombreCompleto: data.nombreCompleto,
+          }),
+        ],
+        { type: "application/json" }
+      );
 
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors); // Establecer errores en el estado
-      return;
-    } else {
-      setLoadArbit(true);
-      try {
-        const formData = new FormData();
-        const duenoData = new Blob(
-          [
-            JSON.stringify({
-              email: data.email,
-              password: data.password,
-              nombreCompleto: data.nombreCompleto,
-            }),
-          ],
-          { type: "application/json" }
-        );
-
-        formData.append("arbitro", duenoData);
-        formData.append("imagen", selectedFile);
-        const response = await axios.post(`${api_url}/api/arbitros`, formData, {
-          headers: {
-            // "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${tokData}`,
-          },
-        });
-        console.log("Respuesta del servidor:", response.data);
+      formData.append("arbitro", duenoData);
+      formData.append("imagen", selectedFile);
+      const response = await axios.post(`${api_url}/api/arbitros`, formData, {
+        headers: {
+          // "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${tokData}`,
+        },
+      });
+      Swal.fire({
+        icon: "success",
+        title: "¡OK!",
+        text: `Usuario creado exitosamente`,
+        customClass: {
+          confirmButton: "btn-confirm",
+          cancelButton: "btn-cancel",
+          denyButton: "btn-deny",
+        },
+      });
+      reset();
+      clearErrors();
+      setPreview(userPlace);
+      setSelectedFile(null);
+    } catch (err) {
+      console.log(err, err.message);
+      if (err.response) {
         Swal.fire({
-          icon: "success",
-          title: "¡OK!",
-          text: `Usuario creado exitosamente`,
+          icon: "error",
+          title: "¡Denegado!",
+          text:
+            err.response?.data?.message ||
+            "Algo salió mal, inténtalo nuevamente",
           customClass: {
             confirmButton: "btn-confirm",
             cancelButton: "btn-cancel",
             denyButton: "btn-deny",
           },
         });
-      } catch (err) {
-        console.log(err, err.message);
-        if (err.response) {
-          Swal.fire({
-            icon: "error",
-            title: "¡Denegado!",
-            text:
-              err.response?.data?.message ||
-              "Algo salió mal, inténtalo nuevamente",
-            customClass: {
-              confirmButton: "btn-confirm",
-              cancelButton: "btn-cancel",
-              denyButton: "btn-deny",
-            },
-          });
-        }
-      } finally {
-        setLoadArbit(false);
       }
+    } finally {
+      setLoadArbit(false);
     }
   }
 
@@ -346,7 +311,9 @@ export default function Admin5() {
                   id="arbName"
                   {...register("nombreCompleto")}
                 />
-                <p className="text-danger">{errors.nombreCompleto}</p>
+                {errors.nombreCompleto && (
+                  <p className="text-danger">{errors.nombreCompleto.message}</p>
+                )}
                 <TextField
                   className="txtAr"
                   type="email"
@@ -358,7 +325,9 @@ export default function Admin5() {
                   id="arbMail"
                   {...register("email")}
                 />
-                <p className="text-danger">{errors.email}</p>
+                {errors.email && (
+                  <p className="text-danger">{errors.email.message}</p>
+                )}
                 <TextField
                   className="txtAr"
                   type="password"
@@ -370,7 +339,9 @@ export default function Admin5() {
                   id="arbPass1"
                   {...register("password")}
                 />
-                <p className="text-danger">{errors.password}</p>
+                {errors.password && (
+                  <p className="text-danger">{errors.password.message}</p>
+                )}
                 <TextField
                   className="txtAr"
                   type="password"
@@ -382,7 +353,9 @@ export default function Admin5() {
                   id="arbPass2"
                   {...register("password2")}
                 />
-                <p className="text-danger">{errors.password2}</p>
+                {errors.password2 && (
+                  <p className="text-danger">{errors.password2.message}</p>
+                )}
                 {loadArbit ? (
                   <div className="my-spinner"></div>
                 ) : (
@@ -459,7 +432,7 @@ export default function Admin5() {
             <div className="w-100 align-items-center d-flex flex-column gap-1">
               <lord-icon
                 id="input-icon-2"
-                src="../../../public/icons/demanda.json"
+                src="/icons/demanda.json"
                 trigger="loop"
                 stroke="bold"
                 state="hover-swipe"

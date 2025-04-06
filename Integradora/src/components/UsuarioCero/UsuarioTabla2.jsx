@@ -67,7 +67,8 @@ export default function UsuarioTabla2() {
 
   return (
     <div className="my-5">
-      <h1 id="goleo">Tablas de Goleo</h1>
+      <h1 id="goleo" className="d-none d-md-block">Tabla de Goleo</h1>
+      <h2 id="goleo-sm" className="d-block d-md-none">Tabla de Goleo</h2>
 
       <div className="partidoFilter">
         <select
@@ -76,6 +77,7 @@ export default function UsuarioTabla2() {
             setTorneoSeleccionado(e.target.value);
             setPaginaActual(0);
           }}
+          className="mb-1"
         >
           <option value={""}>Selecciona un torneo</option>
           {torneos.map((torneo) => (
@@ -91,7 +93,7 @@ export default function UsuarioTabla2() {
         <MiniLoadingScreen />
       ) : (
         <>
-          <div className="over-auto">
+          <div className="over-auto quitarScroll">
             <table className="table">
               <thead className="myThead">
                 <tr>

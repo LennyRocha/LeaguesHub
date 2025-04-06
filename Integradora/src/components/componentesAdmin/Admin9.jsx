@@ -216,7 +216,7 @@ export default function Admin9({ cambiarComponent, team, setTeam }) {
             <div className="w-100 align-items-center d-flex flex-column gap-1">
               <lord-icon
                 id="input-icon-2"
-                src="../../../public/icons/jugador.json"
+                src="/icons/jugador.json"
                 trigger="hover"
                 stroke="bold"
                 state="hover-jump"
