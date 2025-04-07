@@ -19,8 +19,7 @@ import {
 } from "@mui/material";
 import { Edit, Delete, Map, FilterList } from "@mui/icons-material";
 import Swal from "sweetalert2";
-import TestMap from "./testMap";
-
+import logo1 from "../../img/logo1.png";
 const hereApiKey = import.meta.env.VITE_HERE_MAPS_API_KEY;
 
 export default function Admin4() {
@@ -37,7 +36,17 @@ export default function Admin4() {
   const [location2, setLocation2] = useState(null); // CDMX
   const [src, setSrc] = useState("");
   const [restart, setRestart] = useState(false);
-  const searchRef = useRef("");
+  const [linkMaps, setLinkMaps] = useState("");
+  const [found, setFound] = useState(false);
+  const [linkVis, setLinkVis] = useState(false);
+  const [selection, setSelection] = useState({
+    nombre: "",
+    direccion: "",
+    latitud: "",
+    longitud: "",
+    cancha: "",
+  });
+  const [loadBtn, setLoadBtn] = useState(false);
 
   useEffect(() => {
     if ("geolocation" in navigator) {
@@ -71,6 +80,18 @@ export default function Admin4() {
     }
   }, [restart]);
 
+  const handleShowToast = () => {
+    const toastEl = document.getElementById("liveToast");
+    const toast = new bootstrap.Toast(toastEl); // 👈 crea la instancia
+    toast.show(); // 👈 muestra el toast
+  };
+
+  const handleShowToast2 = () => {
+    const toastEl = document.getElementById("liveToastQuest");
+    const toast = new bootstrap.Toast(toastEl); // 👈 crea la instancia
+    toast.show(); // 👈 muestra el toast
+  };
+
   // Función para obtener sugerencias de direcciones
   const handleSearchPlaces = async (query) => {
     setFinding(true);
@@ -85,6 +106,12 @@ export default function Admin4() {
 
         // Se puede utilizar los resultados de 'res.data' para obtener los lugares sugeridos
         setSuggestions(res.data);
+        if (res.data.length === 0) {
+          handleShowToast();
+          setLinkVis(true);
+        } else {
+          setLinkVis(false);
+        }
 
         if (res.data.length > 0) {
           // Si hay resultados, el primer lugar es el más relevante
@@ -97,7 +124,6 @@ export default function Admin4() {
         }
       } catch (error) {
         console.error("Error obteniendo lugares:", error);
-        console.log(error.toJSON());
         setSuggestions([]);
       } finally {
         setFinding(false);
@@ -116,12 +142,22 @@ export default function Admin4() {
     const addressParts = place.display_name.split(",");
     const name = addressParts[0]; // Nombre del lugar
     const address = addressParts.slice(1).join(","); // Dirección (todo menos el nombre)
+    setFound(false);
 
     setLocation2({ lat: place.lat, lng: place.lon });
     setSuggestions([]); // Limpia las sugerencias
     setMarker({ lat: place.lat, lng: place.lon }); // Actualiza marcador
     setValue("direccion", address); // Establece la dirección
-    trigger("direccion");
+    setValue("longitud", place.lat); // Establece la longitud
+    setValue("latitud", place.lon); // Establece la latitud
+    trigger();
+    setSelection({
+      ...selection,
+      nombre: name,
+      direccion: address,
+      latitud: place.lat,
+      longitud: place.lon,
+    });
 
     setSrc(
       `https://www.google.com/maps?q=${place.lat},${place.lon}&z=15&output=embed`
@@ -138,6 +174,17 @@ export default function Admin4() {
     setRestart(!restart);
     reset();
     clearErrors();
+    setSelection({
+      nombre: "",
+      direccion: "",
+      latitud: "",
+      longitud: "",
+      cancha: "",
+    });
+    setLinkVis(false);
+    setInputs({});
+    setCounter(1);
+    setFound(false);
   };
   const submitCampo = (e) => {
     e.preventDefault();
@@ -152,7 +199,8 @@ export default function Admin4() {
   };
 
   //Importado de Native
-  const { getUserId, getUserRole, getToken, api_url } = useContext(AuthContext);
+  const { getUserId, getUserRole, getToken, api_url, logout } =
+    useContext(AuthContext);
   const [tokData, setTokData] = useState("");
   const [vis, setVis] = useState(false);
   const [editando, setEditando] = useState(false);
@@ -210,6 +258,7 @@ export default function Admin4() {
     setValue("longitud", campo.longitud);
     setValue("cancha", cancha);
     setCanchasEdit(canchas);
+    trigger();
     canchas.map((c) => {
       console.log(c);
     });
@@ -236,14 +285,17 @@ export default function Admin4() {
     reset,
     trigger,
     resetField,
-    clearErrors, // ✅ Extraído correctamente desde useForm()
+    clearErrors,
     formState: { errors, isValid },
   } = useForm({
     resolver: yupResolver(campo),
     mode: "onChange",
   });
 
+  const [edit, setEdit] = useState(false);
+
   const crearCampo = async (data) => {
+    setLoadBtn(true);
     try {
       const res = await axios.post(
         `${api_url}/api/campos`,
@@ -262,14 +314,26 @@ export default function Admin4() {
       );
       console.log(res.data);
       if (res.data.id) {
-        canchas.map((c) => {
-          registrarCancha(c.desc, c.pos, res.data.id);
+        Object.entries(inputs).forEach(([key, value]) => {
+          console.log(`Clave: ${key}, Valor: ${value}`);
+          registrarCancha(value, key + 1, res.data.id);
         });
       }
-      Alert.alert("¡Éxito!", "Campo registrado exitosamente");
+      Swal.fire({
+        icon: "success",
+        title: "¡Éxito!",
+        text: "Campo registrado exitosamente",
+        customClass: {
+          confirmButton: "btn-confirm",
+          cancelButton: "btn-cancel",
+          denyButton: "btn-deny",
+        },
+      });
       setReload(!reload);
+      handleDiselect();
     } catch (err) {
-      console.error(err, err.response.message);
+      console.log(err)
+      console.error(err, err.response?.message);
       if (err.response.status === 403) {
         console.log("⚠️ Token expirado, redirigiendo a login...");
         Swal.fire({
@@ -285,6 +349,8 @@ export default function Admin4() {
         }).then((resutlt) => logout());
         return;
       }
+    } finally {
+      setLoadBtn(false);
     }
   };
 
@@ -306,8 +372,8 @@ export default function Admin4() {
       );
       console.log(res.data);
     } catch (err) {
-      console.log(err.toJSON());
-      console.error(err, err.response.message);
+      console.log(err);
+      console.error(err, err.response?.message);
       if (err.response.status === 403) {
         console.log("⚠️ Token expirado, redirigiendo a login...");
         Swal.fire({
@@ -323,6 +389,7 @@ export default function Admin4() {
         }).then((resutlt) => logout());
         return;
       }
+      return;
     }
   };
 
@@ -339,7 +406,17 @@ export default function Admin4() {
         }
       );
       console.log(res.data);
-      Alert.alert("¡Éxito!", "operación exitosa");
+
+      Swal.fire({
+        icon: "success",
+        title: "¡Éxito!",
+        text: res.data || "Operación exitosa",
+        customClass: {
+          confirmButton: "btn-confirm",
+          cancelButton: "btn-cancel",
+          denyButton: "btn-deny",
+        },
+      });
       setReload(!reload);
     } catch (err) {
       console.log(err.toJSON());
@@ -389,7 +466,16 @@ export default function Admin4() {
           console.log(c);
         });
       }
-      Alert.alert("¡Éxito!", "Campo actualizado exitosamente");
+      Swal.fire({
+        icon: "success",
+        title: "¡Éxito!",
+        text: "Campo actualizado exitosamente",
+        customClass: {
+          confirmButton: "btn-confirm",
+          cancelButton: "btn-cancel",
+          denyButton: "btn-deny",
+        },
+      });
       setReload(!reload);
       removeEdicion();
       setCampoEdit({});
@@ -453,6 +539,51 @@ export default function Admin4() {
     }
   };
 
+  function extraerCoordenadas(url) {
+    // Expresión regular para extraer coordenadas de una URL de Google Maps
+    const regex = /@(-?\d+\.\d+),(-?\d+\.\d+)/;
+    const resultado = url.match(regex);
+
+    if (resultado) {
+      const latitud = resultado[1];
+      const longitud = resultado[2];
+
+      console.log("Coordenadas extraídas: ", latitud, longitud);
+      setValue("longitud", longitud); // Establece la longitud
+      setValue("latitud", latitud); // Establece la latitud
+      trigger();
+      setSelection({
+        ...selection,
+        latitud: latitud,
+        longitud: longitud,
+      });
+      setFound(true);
+      setLinkVis(false);
+    } else {
+      // Si no se pueden extraer coordenadas, mostrar un Sweet Alert
+      Swal.fire({
+        icon: "error",
+        title: "¡Error!",
+        text: "No se pudieron extraer las coordenadas del enlace de Google Maps. ",
+        confirmButtonText: "Ingresar manualmente",
+        showCancelButton: true,
+        cancelButtonText: "Cancelar",
+        customClass: {
+          confirmButton: "btn-confirm",
+          cancelButton: "btn-cancel",
+          denyButton: "btn-deny",
+        },
+      }).then((resutlt) => {
+        if (resutlt.isConfirmed) {
+          setFound(true);
+          setLinkVis(false);
+        } else {
+          handleDiselect();
+        }
+      });
+    }
+  }
+
   useEffect(() => {
     const getCampos = async () => {
       const id = await getUserRole();
@@ -500,6 +631,8 @@ export default function Admin4() {
 
   const onSubmit = async (data) => {
     console.log(data);
+    console.log(inputs);
+    !edit ? crearCampo(data) : updateCampo(data);
   };
 
   return (
@@ -509,7 +642,7 @@ export default function Admin4() {
           <h2 className="mb-0">Menú de campos</h2>
         </div>
       </div>
-      <div className="container-fluid table-overflow mb-0">
+      <div className="px-3 table-overflow mb-1">
         {loadCamps ? (
           <div className="w-100 align-items-center d-flex row justify-content-center">
             <div className="my-spinner"></div>
@@ -615,35 +748,59 @@ export default function Admin4() {
               )}
             </div>
             <form onSubmit={handleSubmit(onSubmit)} className="gap-5">
-              <TextField
-                className="txtAr"
-                label="Nombre del campo"
-                fullWidth
-                margin="dense"
-                name="nombreCampo"
-                required
-                focused={getValues("nombre") !== ""}
-                value={getValues("nombre")} // Asegúrate de que sea una cadena vacía si undefined
-                {...register("nombre")}
-                onInput={(e) => {
-                  handleSearchPlaces(e.target.value); // Realiza la búsqueda en tiempo real
-                }}
-                placeholder="Buscar lugar..."
-              />
+              <div className="input-group mt-2">
+                <TextField
+                  className="txtAr w-90"
+                  label="Nombre del campo"
+                  margin="none"
+                  name="nombreCampo"
+                  required
+                  fullWidth
+                  focused={getValues("nombre") !== ""}
+                  value={selection.nombre}
+                  {...register("nombre")}
+                  onInput={(e) => {
+                    setSelection({
+                      ...selection,
+                      nombre: e.target.value,
+                    });
+                  }}
+                  placeholder="Buscar lugar..."
+                />
+                <div className="input-group-append w-10">
+                  <button
+                    className="btn red-btn"
+                    type="button"
+                    onClick={() => handleSearchPlaces(selection.nombre)}
+                  >
+                    <i className="fas fa-search fa-sm"></i>
+                  </button>
+                </div>
+              </div>
 
               {errors.nombre && (
                 <p className="text-danger">{errors.nombre.message}</p>
               )}
 
               {suggestions.length > 0 && (
-                <ul className="suggestions-list quitarScroll w-100">
-                  {suggestions.map((place) => (
-                    <li key={place.id} onClick={() => handleSelect(place)}>
-                      {place.display_name}{" "}
-                      {/* Aquí puedes mostrar el nombre del lugar */}
-                    </li>
-                  ))}
-                </ul>
+                <div>
+                  <a
+                    className="link"
+                    onClick={() => {
+                      setLinkVis(true);
+                      setSuggestions([]);
+                    }}
+                  >
+                    Ingresar manualmente
+                  </a>
+                  <ul className="suggestions-list quitarScroll w-100">
+                    {suggestions.map((place) => (
+                      <li key={place.id} onClick={() => handleSelect(place)}>
+                        {place.display_name}{" "}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               )}
               <TextField
                 className="txtAr mt-1 mb-1"
@@ -653,22 +810,104 @@ export default function Admin4() {
                 name="direccion"
                 required
                 focused={getValues("direccion") !== ""}
-                value={getValues("direccion")}
+                value={selection.direccion}
+                onInput={(e) =>
+                  setSelection({
+                    ...selection,
+                    direccion: e.target.value,
+                  })
+                }
                 placeholder="Buscar dirección..."
                 {...register("direccion")}
               />
               {errors.direccion && (
                 <p className="text-danger">{errors.direccion.message}</p>
               )}
+              {found && (
+                <TextField
+                  className="txtAr mt-1 mb-1"
+                  label="Latitud"
+                  fullWidth
+                  margin="dense"
+                  name="latitud"
+                  required
+                  focused={getValues("latitud")}
+                  value={selection.latitud}
+                  onInput={(e) =>
+                    setSelection({
+                      ...selection,
+                      latitud: e.target.value,
+                    })
+                  }
+                  placeholder="Ingresa la longitud"
+                  {...register("latitud")}
+                />
+              )}
               {errors.latitud && (
                 <p className="text-danger">{errors.latitud.message}</p>
+              )}
+              {found && (
+                <TextField
+                  className="txtAr mt-1 mb-1"
+                  label="Longitud"
+                  fullWidth
+                  margin="dense"
+                  name="longitud"
+                  placeholder="Ingresa la longitud"
+                  required
+                  focused={getValues("longitud")}
+                  value={selection.longitud}
+                  onInput={(e) =>
+                    setSelection({
+                      ...selection,
+                      longitud: e.target.value,
+                    })
+                  }
+                  {...register("longitud")}
+                />
               )}
               {errors.longitud && (
                 <p className="text-danger">{errors.longitud.message}</p>
               )}
-              <button type="submit" id="submitArb" className="text-black">
-                Registrar
-              </button>
+              {linkVis && (
+                <div className="input-group mt-2 mb-2">
+                  <TextField
+                    className="txtAr w-90"
+                    label="Enlace de google maps"
+                    margin="none"
+                    name="nombreCampo"
+                    required
+                    fullWidth
+                    onChange={(e) => {
+                      extraerCoordenadas(e.target.value);
+                    }}
+                    placeholder="Ingresa el enlace para obtener sus coordenadas"
+                  />
+                  <div className="input-group-append w-10">
+                    <button
+                      className="btn red-btn"
+                      type="button"
+                      onClick={() => handleShowToast2()}
+                    >
+                      <i className="fas fa-circle-info fa-sm"></i>
+                    </button>
+                  </div>
+                </div>
+              )}
+              {loadBtn ? (
+                <div className="w-100 mt-3 d-flex align-items-center justify-content-center">
+                  <div className="my-spinner"></div>
+                </div>
+              ) : (
+                <button
+                  type="submit"
+                  id="submitArb"
+                  disabled={!isValid}
+                  className={`${isValid ? "" : "opa-0"} text-black`}
+                >
+                  Registrar
+                </button>
+              )}
               {errors.cancha && (
                 <p className="text-danger">{errors.cancha.message}</p>
               )}
@@ -680,7 +919,7 @@ export default function Admin4() {
             <h4 className="mb-0">Asignacion de canchas</h4>
           </div>
         </div>
-        <div className="canchas-group quitarScroll">
+        <div className="canchas-group bg-light quitarScroll">
           {Array.from({ length: counter }).map((_, index) => {
             const handleInputChange = (i, text) => {
               setInputs((prev) => ({
@@ -699,52 +938,164 @@ export default function Admin4() {
             };
 
             return (
-              <div className="input-group grupo bg-light" key={index}>
-                <TextField
-                  className="txtAr canchaName inputo hide-when"
-                  margin="dense"
-                  name="nombre"
-                  disabled
-                  value={`#${index + 1}`}
-                />
-                <TextField
-                  className="txtAr canchaDesc inputo"
-                  type="text"
-                  label="Descripción"
-                  margin="dense"
-                  name="correo"
-                  required
-                  onInput={(e) => handleInputChange(index, e.target.value)}
-                />
-                <Button
-                  className={`butWidth text-white ${
-                    index === 0 ? "btn-blue" : "btn-red"
-                  }`}
-                  onClick={() => {
-                    if (index === 0) {
-                      setCounter((prev) => prev + 1);
-                    } else {
-                      handleRemove(index);
+              <div className="w-100 mb-2" key={index}>
+                <div className="row align-items-center gap-0 justify-content-center container-fluid">
+                  <div className="col-1 text-center p-1 hide-when">
+                    <TextField
+                      className="txtAr canchaName inputo hide-when"
+                      margin="dense"
+                      name="nombre"
+                      disabled
+                      value={`#${index + 1}`}
+                      fullWidth
+                      variant="outlined"
+                    />
+                  </div>
+                  <div
+                    className={
+                      window.innerWidth >= 991 ? "col-8 p-1" : "col-10"
                     }
-                  }}
-                >
-                  {index === 0 ? (
-                    <i
-                      className="fa fa-plus icon"
-                      aria-hidden="true"
-                      color="white"
-                    ></i>
-                  ) : (
-                    <i
-                      className="fa fa-minus icon"
-                      aria-hidden="true"
-                      color="white"
-                    ></i>
-                  )}
-                </Button>
+                  >
+                    {index === 0 ? (
+                      <TextField
+                        className="txtAr canchaDesc inputo"
+                        type="text"
+                        label="Descripción"
+                        margin="dense"
+                        name="correo"
+                        required
+                        value={selection.cancha}
+                        fullWidth
+                        variant="outlined"
+                        {...register("cancha")}
+                        onInput={(e) => {
+                          setSelection({
+                            ...selection,
+                            cancha: e.target.value,
+                          });
+                          handleInputChange(index, e.target.value);
+                        }}
+                      />
+                    ) : (
+                      <TextField
+                        className="txtAr canchaDesc inputo"
+                        type="text"
+                        label="Descripción"
+                        margin="dense"
+                        name="correo"
+                        required
+                        fullWidth
+                        variant="outlined"
+                        onInput={(e) =>
+                          handleInputChange(index, e.target.value)
+                        }
+                      />
+                    )}
+                  </div>
+                  <div className="col-2 d-flex justify-content-center p-1">
+                    <Button
+                      className={`butWidth mb-1 text-white ${
+                        index === 0 ? "btn-blue" : "btn-red"
+                      }`}
+                      onClick={() => {
+                        if (index === 0) {
+                          setCounter((prev) => prev + 1);
+                        } else {
+                          handleRemove(index);
+                        }
+                      }}
+                      fullWidth
+                    >
+                      {index === 0 ? (
+                        <i className="fa fa-plus icon" aria-hidden="true"></i>
+                      ) : (
+                        <i className="fa fa-minus icon" aria-hidden="true"></i>
+                      )}
+                    </Button>
+                  </div>
+                </div>
               </div>
             );
           })}
+        </div>
+        <div
+          className="position-fixed bottom-0 end-0 p-3"
+          style={{ zIndex: 11 }}
+        >
+          <div
+            id="liveToast"
+            className="toast hide fade"
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
+          >
+            <div className="toast-header bg-dark-base">
+              <img
+                src={logo1}
+                className="rounded me-2"
+                alt="Logo"
+                width="15rem"
+                height="15rem"
+              />
+              <strong className="me-auto text-white">
+                ¡Lugar no encontrado!
+              </strong>
+              <small className="text-white">Justo ahora</small>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="toast"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="toast-body">
+              No se pudo encontrar el lugar desado, localice el lugar en el
+              mapa, obtenga el enlace de google Maps, y peguelo en campo de
+              texto correspondiente
+            </div>
+          </div>
+        </div>
+        <div
+          className="position-fixed bottom-0 end-0 p-3"
+          style={{ zIndex: 11 }}
+        >
+          <div
+            id="liveToastQuest"
+            className="toast hide fade"
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
+          >
+            <div className="toast-header bg-dark-base">
+              <img
+                src={logo1}
+                className="rounded me-2"
+                alt="Logo"
+                width="15rem"
+                height="15rem"
+              />
+              <strong className="me-auto text-white">
+                ¿No encontraste tu ubicación deseada?
+              </strong>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="toast"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="toast-body">
+              No te preocupes, localice el lugar en el mapa, da click en
+              'Ampliar el mapa' y obtenga el enlace de google Maps, y peguelo en
+              campo de texto correspondiente
+              <p>El formato del enlace debe ser similar a este:</p>
+              <pre>
+                <code>
+                  https://www.google.com/maps/place/Some+Location/@latitud,longitud
+                </code>
+              </pre>
+            </div>
+          </div>
         </div>
       </div>
     </div>

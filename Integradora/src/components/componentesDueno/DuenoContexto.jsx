@@ -76,6 +76,7 @@ export default function DuenoContexto() {
           tokenRef.current = fetchedToken; // Actualizar el token más reciente
           console.log(fetchedToken, "obtenido");
           validateToken(fetchedToken); //Verifica que el token esté disponible
+          programarAlertaExpiracion(fetchedToken); // 👈 aquí
           setRol(rol);
           setCorreo(correo);
           setId(id);
@@ -105,27 +106,20 @@ export default function DuenoContexto() {
 
       if (!expirationDate || expirationDate < currentDate) {
         setExpire(true);
-        console.log("El token ha expirado ❌");
-        //Si quitaste lo de las notificaciones, quita esto
         if (Notification.permission === "granted") {
-          const notif = new Notification("¡Hola!", {
-            body: "El token ha expirado ❌",
+          const notif = new Notification("¡Sesión expirada! ❌", {
+            body: "Haz click aqui para iniciar sesión nuevamente",
             icon: miImagen,
+            priority: "high",
+            vibrate: [200, 100, 200],
           });
           notif.onclick = () => {
-            window.open("http://localhost:5173/acceso", "_blank");
+            window.location.href = "/acceso";
           };
         }
       } else {
         setExpire(false);
-        console.log("Token válido ✅");
-        //Si quitaste lo de las notificaciones, quita esto
-        if (Notification.permission === "granted") {
-          new Notification("¡Hola!", {
-            body: "Token válido ✅",
-            icon: miImagen,
-          });
-        }
+        console.log("Sesión válida ✅");
       }
     };
 
@@ -133,12 +127,48 @@ export default function DuenoContexto() {
 
     // Verificar cada 5 minutos con el token más reciente
     intervalId = setInterval(() => {
-      console.log("Revisando expiración del token...");
       validateToken(tokenRef.current);
     }, tokenCheckInterval);
 
     return () => clearInterval(intervalId); // Limpiar intervalo al desmontar
   }, [switcht]);
+
+  const FIVE_MINUTES = 5 * 60 * 1000;
+
+  const programarAlertaExpiracion = (token) => {
+    const expirationDate = decodeToken(token);
+    const currentDate = new Date();
+
+    if (!expirationDate || expirationDate < currentDate) {
+      setExpire(true);
+      console.log("Token inválido o ya expirado ❌");
+      return;
+    }
+
+    const tiempoRestante = expirationDate - currentDate;
+    const tiempoAntesDeExpirar = tiempoRestante - FIVE_MINUTES;
+
+    if (tiempoAntesDeExpirar <= 0) {
+      // Ya estamos a menos de 5 minutos o expirado
+      notificarExpiracionCercana();
+    } else {
+      setTimeout(() => {
+        notificarExpiracionCercana();
+      }, tiempoAntesDeExpirar);
+    }
+  };
+
+  const notificarExpiracionCercana = () => {
+    if (Notification.permission === "granted") {
+      const notif = new Notification("¡Atención!", {
+        body: "Tu sesión finalizará en menos de 5 minutos",
+        icon: miImagen,
+        priority: "high",
+        vibrate: [200, 100, 200],
+        actions: [{ action: "cerrar", title: "Cerrar" }],
+      });
+    }
+  };
 
   const [expand, setExpand] = useState(false);
 

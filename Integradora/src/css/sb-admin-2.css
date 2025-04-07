@@ -121,6 +121,10 @@ hr {
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
+.bg-dark-base{
+  background: var(--color-base-3-1) !important;
+}
+
 .bar-wrap {
   top: 0;
   left: 0;
@@ -1124,9 +1128,93 @@ select:focus {
 }
 
 .butWidth {
-  max-width: 10%;
   height: 3.5rem;
-  border-radius: 10% !important;
+}
+
+.w-90{
+  width: 85% !important;
+}
+
+.w-95{
+  width: 95% !important;
+}
+
+.w-10{
+  width: 10% !important;
+}
+
+@media screen and (min-width: 370px) {
+  .w-90{
+    width: 88% !important;
+  }
+  
+  .w-95{
+    width: 95% !important;
+  }
+  
+  .w-10{
+    width: 10% !important;
+  }
+}
+
+@media screen and (min-width: 450px) {
+  .w-90{
+    width: 90% !important;
+  }
+  
+  .w-95{
+    width: 95% !important;
+  }
+  
+  .w-10{
+    width: 10% !important;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .w-90{
+    width: 91% !important;
+  }
+  
+  .w-95{
+    width: 95% !important;
+  }
+  
+  .w-10{
+    width: 9% !important;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .w-90{
+    width: 90% !important;
+  }
+  
+  .w-95{
+    width: 95% !important;
+  }
+  
+  .w-10{
+    width: 5% !important;
+  }
+}
+
+
+@media screen and (min-width: 992px) {
+  .butWidth{
+    width: 100% !important;
+  }
+  .w-90{
+    width: 90% !important;
+  }
+  
+  .w-95{
+    width: 95% !important;
+  }
+  
+  .w-10{
+    width: 5% !important;
+  }
 }
 
 .inputo {

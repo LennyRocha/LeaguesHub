@@ -14,7 +14,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import "@popperjs/core";
 import "../css/sb-admin-2.css";
 import "../css/fonts.css";
-import "../js/sb-admin-2";
+//import "../js/sb-admin-2";
 
 import lottie from "lottie-web";
 import { defineElement } from "@lordicon/element";
@@ -45,7 +45,8 @@ function AdminDashboard() {
 
   const { getToken, decodeToken, getUserEmail, getUserRole } =
     useContext(AuthContext);
-  const { logout, removeToken, removeUser, getout, clearData } = useContext(AuthContext);
+  const { logout, removeToken, removeUser, getout, clearData } =
+    useContext(AuthContext);
 
   const [tokenData, setTokenData] = useState("");
   const [expire, setExpire] = useState(false);
@@ -59,12 +60,18 @@ function AdminDashboard() {
   // useRef para mantener el valor más reciente del token
   const tokenRef = useRef("");
 
+  const handleShowToast = () => {
+    const toastEl = document.getElementById("liveToast");
+    const toast = new bootstrap.Toast(toastEl); // 👈 crea la instancia
+    toast.show(); // 👈 muestra el toast
+  };
+
   useEffect(() => {
     let intervalId;
 
     // Solicitar permisos para notificaciones
     const requestNotificationPermission = () => {
-      if (Notification.permission !== "granted") {
+      if (Notification.permission === "default") {
         Notification.requestPermission().then((permission) => {
           if (permission === "granted") {
             console.log("Permiso concedido para notificaciones");
@@ -91,6 +98,7 @@ function AdminDashboard() {
           tokenRef.current = fetchedToken; // Actualizar el token más reciente
           console.log(fetchedToken, "obtenido");
           validateToken(fetchedToken);
+          programarAlertaExpiracion(fetchedToken); // 👈 aquí
           setRol(rol);
           setCorreo(correo);
           setNoData(false);
@@ -120,12 +128,14 @@ function AdminDashboard() {
         setExpire(true);
         console.log("El token ha expirado ❌");
         if (Notification.permission === "granted") {
-          const notif = new Notification("¡Hola!", {
-            body: "El token ha expirado ❌",
+          const notif = new Notification("¡Sesión expirada! ❌", {
+            body: "Haz click aqui para iniciar sesión nuevamente",
             icon: miImagen,
+            priority: 'high',
+            vibrate: [200, 100, 200],
           });
           notif.onclick = () => {
-            window.open("http://localhost:5173/acceso", "_blank");
+            window.location.href="/acceso";
           };
         }
       } else {
@@ -150,6 +160,46 @@ function AdminDashboard() {
 
     return () => clearInterval(intervalId); // Limpiar intervalo al desmontar
   }, [switcht]);
+
+  const FIVE_MINUTES = 5 * 60 * 1000;
+
+  const programarAlertaExpiracion = (token) => {
+    const expirationDate = decodeToken(token);
+    const currentDate = new Date();
+
+    if (!expirationDate || expirationDate < currentDate) {
+      setExpire(true);
+      console.log("Token inválido o ya expirado ❌");
+      return;
+    }
+
+    const tiempoRestante = expirationDate - currentDate;
+    const tiempoAntesDeExpirar = tiempoRestante - FIVE_MINUTES;
+
+    if (tiempoAntesDeExpirar <= 0) {
+      // Ya estamos a menos de 5 minutos o expirado
+      notificarExpiracionCercana();
+    } else {
+      console.log(
+        `Notificación programada en ${tiempoAntesDeExpirar / 1000} segundos`
+      );
+      setTimeout(() => {
+        notificarExpiracionCercana();
+      }, tiempoAntesDeExpirar);
+    }
+  };
+
+  const notificarExpiracionCercana = () => {
+    if (Notification.permission === "granted") {
+      const notif = new Notification("¡Atención!", {
+        body: "Tu sesión finalizará en menos de 5 minutos",
+        icon: miImagen,
+        priority: 'high',
+        vibrate: [200, 100, 200],
+        actions: [{ action: "cerrar", title: "Cerrar" }],
+      });
+    }
+  };
 
   // Función para agregar ceros a la izquierda
   const zeroPadding = (num, digit) => {
@@ -227,25 +277,24 @@ function AdminDashboard() {
   useEffect(() => {
     const interval = setInterval(() => {
       const toggleBtn = document.getElementById("sidebarToggleTop");
-      const collapseEl = document.querySelector(".collapse");
-  
+      const collapseEl = document.querySelector("#accordionSidebar");
+
       if (toggleBtn && collapseEl) {
         console.log("Elementos listos, se conecta el evento");
-  
+
         // Conectar evento de toggle aquí
         toggleBtn.addEventListener("click", () => {
           document.body.classList.toggle("sidebar-toggled");
           document.querySelector(".sidebar").classList.toggle("toggled");
           $(collapseEl).slideToggle(100);
         });
-  
+
         clearInterval(interval); // Ya no hace falta seguir buscando
       }
     }, 100); // Reintenta cada 100ms
-  
+
     return () => clearInterval(interval); // Limpieza
   }, []);
-  
 
   useEffect(() => {
     const handlePopState = (e) => {
@@ -764,6 +813,38 @@ function AdminDashboard() {
               </div>
             </div>
           </footer>
+        </div>
+        {/* Toast */}
+        <div
+          className="position-fixed bottom-0 start-0 p-3"
+          style={{ zIndex: 11 }}
+        >
+          <div
+            id="liveToast"
+            className="toast hide fade"
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
+          >
+            <div className="toast-header bg-dark-base">
+              <img
+                src={miImagen}
+                className="rounded me-2"
+                alt="Logo"
+                width="15rem"
+                height="15rem"
+              />
+              <strong className="me-auto text-white">Hola</strong>
+              <small className="text-white">Justo ahora</small>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="toast"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="toast-body">Token válido ✅</div>
+          </div>
         </div>
       </div>
     </>
