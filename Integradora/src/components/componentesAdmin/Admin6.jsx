@@ -231,8 +231,11 @@ export default function Admin6() {
   return (
     <div>
       <div className="container-fluid">
-        <div className="d-sm-flex align-items-center justify-content-between mb-4">
+        <div className="d-flex flex-row align-items-center justify-content-left gap-1 mb-4">
           <h2 className="mb-0">Menú de pagos</h2>
+          <IconButton>
+            <Edit color="primary" />
+          </IconButton>
         </div>
         {loadPagos ? (
           <div className="centered-div w-100 cont">
@@ -401,12 +404,18 @@ export default function Admin6() {
           <div className="w-100 align-items-center d-flex flex-column gap-1">
             <lord-icon
               id="input-icon-2"
-              src={fallo === "Error al obtener pagos"
-              ? "/icons/puerco.json"
-              : "/icons/confetti.json"}
+              src={
+                fallo === "Error al obtener pagos"
+                  ? "/icons/puerco.json"
+                  : "/icons/confetti.json"
+              }
               trigger="loop"
               stroke="bold"
-              state={fallo === 'Error al obtener pagos' ? "morph-destroyed" : "in-reveal"}
+              state={
+                fallo === "Error al obtener pagos"
+                  ? "morph-destroyed"
+                  : "in-reveal"
+              }
               colors="primary:#333333,secondary:#9A0000"
               style={{ width: "15em", height: "15em" }}
             ></lord-icon>
