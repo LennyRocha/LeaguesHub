@@ -44,7 +44,6 @@ export const AuthProvider = ({ children }) => {
       });
       saveToken(res.data.token);
       saveUser(res.data.roles, res.data.id, res.data.correo);
-      console.log(res.data);
 
       switch (res.data.roles) {
         case "ROLE_ADMIN":
@@ -64,7 +63,6 @@ export const AuthProvider = ({ children }) => {
 
       setFailure(false);
     } catch (err) {
-      console.log(err, err.message);
       if (err.message) {
         setMensaje(err.message);
         Swal.fire({
@@ -88,8 +86,6 @@ export const AuthProvider = ({ children }) => {
 
   function decodeToken(token) {
     try {
-      console.log(token);
-
       if (token !== null) {
         const base64Url = token.split(".")[1]; // Extraer el payload (segunda parte del token)
         const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/"); // Corregir formato base64
@@ -99,19 +95,9 @@ export const AuthProvider = ({ children }) => {
         const expirationDate = new Date(decodedPayload.exp * 1000);
         const currentDate = new Date();
 
-        console.log("Expiración del token:", expirationDate);
-
-        // Validar si el token ha expirado
-        if (expirationDate < currentDate) {
-          console.log("El token ha expirado.");
-        } else {
-          console.log("El token aún es válido.");
-        }
-
         return expirationDate;
       }
     } catch (error) {
-      console.error("Error al decodificar el token:", error);
       return null;
     }
   }

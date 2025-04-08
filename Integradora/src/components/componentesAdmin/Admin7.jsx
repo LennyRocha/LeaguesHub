@@ -64,12 +64,8 @@ export default function Admin7() {
     };
     getTorneos();
   }, []);
-  useEffect(() => {
-    console.log(selection);
-  }, [selection]);
   async function crearConvocatoria(e) {
     e.preventDefault();
-    console.log("Creando");
     setLoadBtn(true);
     const tokData = await getToken();
     await axios
@@ -89,12 +85,10 @@ export default function Admin7() {
             denyButton: "btn-deny",
           },
         });
-        console.log(res.data);
         setPoster(res.data);
       })
       .catch((error) => {
-        console.error(error, error.response?.data?.message);
-        console.log(error.toJSON());
+        console.error(error);
         if (error.response?.status === 403) {
           console.log("⚠️ Token expirado, redirigiendo a login...");
           Swal.fire({

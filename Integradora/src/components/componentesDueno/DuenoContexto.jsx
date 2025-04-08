@@ -74,7 +74,6 @@ export default function DuenoContexto() {
         if (fetchedToken) {
           setTokenData(fetchedToken);
           tokenRef.current = fetchedToken; // Actualizar el token más reciente
-          console.log(fetchedToken, "obtenido");
           validateToken(fetchedToken); //Verifica que el token esté disponible
           programarAlertaExpiracion(fetchedToken); // 👈 aquí
           setRol(rol);
@@ -83,11 +82,9 @@ export default function DuenoContexto() {
           setNoData(false);
           //Aqui ya tienes lo que necesitas de datos creo
         } else {
-          console.log("Token no encontrado o está vacío.");
           setNoData(true); //Si no encontró algun dato
         }
       } catch (error) {
-        console.log("Error al obtener el token:", error);
         setNoData(true);
       } finally {
         setLoadData(false);
@@ -97,7 +94,6 @@ export default function DuenoContexto() {
     const validateToken = (token) => {
       if (!token) {
         setExpire(true);
-        console.log("Token inválido ❌");
         return;
       }
 
@@ -119,7 +115,7 @@ export default function DuenoContexto() {
         }
       } else {
         setExpire(false);
-        console.log("Sesión válida ✅");
+        console.log("Sesión activa ✅");
       }
     };
 
@@ -141,7 +137,6 @@ export default function DuenoContexto() {
 
     if (!expirationDate || expirationDate < currentDate) {
       setExpire(true);
-      console.log("Token inválido o ya expirado ❌");
       return;
     }
 

@@ -146,6 +146,7 @@ export default function ArbitroPartidaje({
       Swal.fire("¡Éxito!", "Resultado registrado correctamente", "success");
       cambiarComponente("A");
     } catch (err) {
+      console.error(err);
       Swal.fire(
         "Error",
         err.response?.data?.message || "No se pudo registrar",

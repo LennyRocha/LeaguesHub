@@ -26,7 +26,6 @@ export default function Perfil({ cambiarComponente }) {
       const reader = new FileReader();
       reader.onload = () => setPreview(reader.result);
       reader.readAsDataURL(file);
-      console.log(file.name);
     }
   };
 

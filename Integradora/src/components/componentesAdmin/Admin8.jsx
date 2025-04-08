@@ -5,10 +5,6 @@ import "bootstrap";
 
 export default function Admin8({ cambiarComponent, dueno, setDueno }) {
   const [visible, setVisible] = useState(false);
-  const [equipo, setEquipo] = useState([]);
-  useEffect(() => {
-    console.log(dueno, dueno.usuario);
-  }, []);
 
   const [teams, setTeams] = useState([]);
   const [loadTeams, setLoadTeams] = useState(false);
@@ -36,7 +32,7 @@ export default function Admin8({ cambiarComponent, dueno, setDueno }) {
         setNombreTeam(name);
       })
       .catch((e) => {
-        console.error(e, e.response?.message);
+        console.error(e);
         if (e.response.status === 403) {
           console.log("⚠️ Token expirado, redirigiendo a login...");
           Swal.fire({
@@ -74,7 +70,7 @@ export default function Admin8({ cambiarComponent, dueno, setDueno }) {
           else setTeams(res.data);
         })
         .catch((e) => {
-          console.error(e, e.response?.message);
+          console.error(e);
           if (e.response.status === 403) {
             console.log("⚠️ Token expirado, redirigiendo a login...");
             Swal.fire({

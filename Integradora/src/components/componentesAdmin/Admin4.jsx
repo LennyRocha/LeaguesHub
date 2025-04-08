@@ -114,7 +114,6 @@ export default function Admin4() {
     setSrc(
       `https://www.google.com/maps?q=${campo.latitud},${campo.longitud}&z=15&output=embed`
     );
-    console.log(campo);
     setEdit(true);
   };
 
@@ -149,7 +148,7 @@ export default function Admin4() {
           });
         }
       } catch (error) {
-        console.error("Error obteniendo lugares:", error);
+        console.error("Error obteniendo campos:", error);
         setSuggestions([]);
       } finally {
         setFinding(false);
@@ -163,7 +162,6 @@ export default function Admin4() {
 
   // Función para seleccionar un lugar y obtener coordenadas
   const handleSelect = async (place) => {
-    console.log(place);
     // Separar el nombre del lugar y la dirección
     const addressParts = place.display_name.split(",");
     const name = addressParts[0]; // Nombre del lugar
@@ -228,14 +226,9 @@ export default function Admin4() {
     setCampoEd({});
     if (edit) handleDisEdit();
   };
-  const submitCampo = (e) => {
-    e.preventDefault();
-    console.log("Guardando campo");
-  };
 
   // 🔹 Función para manejar clics en el mapa
   const handleMapClick = (event) => {
-    console.log(event, "Si");
     const [lat, lng] = event.latLng.split(",").map(Number);
     setLocation2({ lat, lng });
   };
@@ -301,9 +294,6 @@ export default function Admin4() {
     setValue("cancha", cancha);
     setCanchasEdit(canchas);
     trigger();
-    canchas.map((c) => {
-      console.log(c);
-    });
   };
 
   // Al momento de editar, puedes establecer estos valores como predeterminados
@@ -354,10 +344,8 @@ export default function Admin4() {
           },
         }
       );
-      console.log(res.data);
       if (res.data.id) {
         Object.entries(inputs).forEach(([key, value]) => {
-          console.log(`Clave: ${key}, Valor: ${value}`);
           registrarCancha(value, key + 1, res.data.id);
         });
       }
@@ -374,8 +362,7 @@ export default function Admin4() {
       setReload(!reload);
       handleDiselect();
     } catch (err) {
-      console.log(err);
-      console.error(err, err.response?.message);
+      console.error(err);
       if (err.response.status === 403) {
         console.log("⚠️ Token expirado, redirigiendo a login...");
         Swal.fire({
@@ -412,10 +399,8 @@ export default function Admin4() {
           },
         }
       );
-      console.log(res.data);
     } catch (err) {
-      console.log(err);
-      console.error(err, err.response?.message);
+      console.error(err);
       if (err.response.status === 403) {
         console.log("⚠️ Token expirado, redirigiendo a login...");
         Swal.fire({
@@ -438,7 +423,6 @@ export default function Admin4() {
   const quitarCancha = async (id) => {
     setCurrentId(id);
     setLoadCancha(true);
-    console.log(id)
     try {
       const res = await axios.put(
         `${api_url}/api/canchas/estatus/${id}`,
@@ -466,8 +450,7 @@ export default function Admin4() {
         },
       });
     } catch (err) {
-      console.log(err.toJSON());
-      console.error(err, err.response.message);
+      console.error(err);
       if (err.response.status === 403) {
         console.log("⚠️ Token expirado, redirigiendo a login...");
         Swal.fire({
@@ -511,10 +494,10 @@ export default function Admin4() {
       if (res.data.id) {
         try {
           canchas.map((c) => {
-            console.log(c);
             updateCancha(c.descripcion, c.numeroCancha, res.data.id, c.id);
           });
         } catch (e) {
+          console.error(err);
           console.log("⚠️ Token expirado, redirigiendo a login...");
           Swal.fire({
             icon: "warning",
@@ -546,7 +529,7 @@ export default function Admin4() {
       setCanchasEdit([]);
       handleDisEdit();
     } catch (err) {
-      console.error(err, err.response.message, err.toJSON());
+      console.error(err);
       if (err.response.status === 403) {
         console.log("⚠️ Token expirado, redirigiendo a login...");
         Swal.fire({
@@ -584,10 +567,8 @@ export default function Admin4() {
           },
         }
       );
-      console.log(res.data);
     } catch (err) {
-      console.log(err.toJSON());
-      console.error(err, err.response.message);
+      console.error(err);
       if (err.response.status === 403) {
         console.log("⚠️ Token expirado, redirigiendo a login...");
         Swal.fire({
@@ -615,7 +596,6 @@ export default function Admin4() {
       const latitud = resultado[1];
       const longitud = resultado[2];
 
-      console.log("Coordenadas extraídas: ", latitud, longitud);
       setValue("longitud", longitud); // Establece la longitud
       setValue("latitud", latitud); // Establece la latitud
       trigger();
@@ -668,10 +648,9 @@ export default function Admin4() {
         .then((res) => {
           if (res.data.length === 0) setFallo1("No hay campos registrados");
           else setCampos(res.data);
-          console.log(res.data);
         })
         .catch((e) => {
-          console.error(e, e.response.message);
+          console.error(e);
           if (e.response.status === 403) {
             console.log("⚠️ Token expirado, redirigiendo a login...");
             Swal.fire({
@@ -697,8 +676,6 @@ export default function Admin4() {
   }, [reload]);
 
   const onSubmit = async (data) => {
-    console.log(data);
-    console.log(inputs);
     !edit ? crearCampo(data) : updateCampo(data);
   };
 
@@ -706,18 +683,12 @@ export default function Admin4() {
     setCanchas((prevCanchas) => {
       // Verificamos si realmente hubo un cambio en la descripción
       const updatedCanchas = prevCanchas.map((cancha) => {
-        console.log(cancha.id === id, cancha.id, id);
         if (cancha.id === id && cancha.descripcion !== text) {
-          console.log(
-            `Updating cancha with id ${id} description from "${cancha.descripcion}" to "${text}"`
-          );
           return { ...cancha, descripcion: text };
         }
         return cancha;
       });
 
-      // Imprimir para verificar los cambios
-      console.log("Updated canchas:", updatedCanchas);
       return updatedCanchas;
     });
   };

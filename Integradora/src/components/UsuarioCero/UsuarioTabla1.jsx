@@ -23,7 +23,6 @@ export default function UsuarioTabla1({ api }) {
       try {
         const res = await axios.get(`${api}/api/torneos/iniciados`);
         setTorneos(res.data);
-        console.log(res.data, "X");
         if (res.data.length > 0) {
           setSelectedTorneo(res.data[0].id);
         }

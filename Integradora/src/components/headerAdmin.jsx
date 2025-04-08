@@ -96,18 +96,15 @@ function AdminDashboard() {
         if (fetchedToken) {
           setTokenData(fetchedToken);
           tokenRef.current = fetchedToken; // Actualizar el token más reciente
-          console.log(fetchedToken, "obtenido");
           validateToken(fetchedToken);
           programarAlertaExpiracion(fetchedToken); // 👈 aquí
           setRol(rol);
           setCorreo(correo);
           setNoData(false);
         } else {
-          console.log("Token no encontrado o está vacío.");
           setNoData(true);
         }
       } catch (error) {
-        console.log("Error al obtener el token:", error);
         setNoData(true);
       } finally {
         setLoadData(false);
@@ -117,7 +114,6 @@ function AdminDashboard() {
     const validateToken = (token) => {
       if (!token) {
         setExpire(true);
-        console.log("Token inválido ❌");
         return;
       }
 
@@ -126,7 +122,6 @@ function AdminDashboard() {
 
       if (!expirationDate || expirationDate < currentDate) {
         setExpire(true);
-        console.log("El token ha expirado ❌");
         if (Notification.permission === "granted") {
           const notif = new Notification("¡Sesión expirada! ❌", {
             body: "Haz click aqui para iniciar sesión nuevamente",
@@ -140,7 +135,6 @@ function AdminDashboard() {
         }
       } else {
         setExpire(false);
-        console.log("Token válido ✅");
         if (Notification.permission === "granted") {
           new Notification("¡Hola!", {
             body: "Token válido ✅",
@@ -154,7 +148,6 @@ function AdminDashboard() {
 
     // Verificar cada 5 minutos con el token más reciente
     intervalId = setInterval(() => {
-      console.log("Revisando expiración del token...");
       validateToken(tokenRef.current);
     }, tokenCheckInterval);
 
@@ -169,7 +162,6 @@ function AdminDashboard() {
 
     if (!expirationDate || expirationDate < currentDate) {
       setExpire(true);
-      console.log("Token inválido o ya expirado ❌");
       return;
     }
 
@@ -280,8 +272,6 @@ function AdminDashboard() {
       const collapseEl = document.querySelector("#accordionSidebar");
 
       if (toggleBtn && collapseEl) {
-        console.log("Elementos listos, se conecta el evento");
-
         // Conectar evento de toggle aquí
         toggleBtn.addEventListener("click", () => {
           document.body.classList.toggle("sidebar-toggled");
@@ -299,7 +289,6 @@ function AdminDashboard() {
   useEffect(() => {
     const handlePopState = (e) => {
       window.history.pushState(null, "", window.location.href); // Mantiene la URL
-      console.log("Saliendo...");
       Swal.fire({
         title: "¿Salir?",
         text: "¿Al hacer esto, su sesión se cerrará?",
