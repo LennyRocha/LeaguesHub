@@ -30,6 +30,7 @@ import Admin6 from "./componentesAdmin/Admin6";
 import Admin7 from "./componentesAdmin/Admin7";
 import Admin8 from "./componentesAdmin/Admin8";
 import Admin9 from "./componentesAdmin/Admin9";
+import { ToggleButton } from "react-bootstrap";
 
 function AdminDashboard() {
   const [userName, setUserName] = useState("Usuario");
@@ -126,21 +127,22 @@ function AdminDashboard() {
           const notif = new Notification("¡Sesión expirada! ❌", {
             body: "Haz click aqui para iniciar sesión nuevamente",
             icon: miImagen,
-            priority: 'high',
+            priority: "high",
             vibrate: [200, 100, 200],
           });
           notif.onclick = () => {
-            window.location.href="/acceso";
+            window.location.href = "/acceso";
           };
         }
       } else {
         setExpire(false);
-        if (Notification.permission === "granted") {
-          new Notification("¡Hola!", {
-            body: "Token válido ✅",
-            icon: miImagen,
-          });
-        }
+        console.log("Sesión activa ✅");
+        // if (Notification.permission === "granted") {
+        //   new Notification("¡Hola!", {
+        //     body: "Token válido ✅",
+        //     icon: miImagen,
+        //   });
+        // }
       }
     };
 
@@ -186,7 +188,7 @@ function AdminDashboard() {
       const notif = new Notification("¡Atención!", {
         body: "Tu sesión finalizará en menos de 5 minutos",
         icon: miImagen,
-        priority: 'high',
+        priority: "high",
         vibrate: [200, 100, 200],
         actions: [{ action: "cerrar", title: "Cerrar" }],
       });
@@ -268,15 +270,26 @@ function AdminDashboard() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const toggleBtn = document.getElementById("sidebarToggleTop");
+      const toggleBtnTop = document.getElementById("sidebarToggleTop");
+      const toggleBtn = document.getElementById("sidebarToggle");
       const collapseEl = document.querySelector("#accordionSidebar");
 
-      if (toggleBtn && collapseEl) {
+      if (toggleBtn && toggleBtnTop && collapseEl) {
         // Conectar evento de toggle aquí
-        toggleBtn.addEventListener("click", () => {
+        toggleBtnTop.addEventListener("click", () => {
           document.body.classList.toggle("sidebar-toggled");
           document.querySelector(".sidebar").classList.toggle("toggled");
           $(collapseEl).slideToggle(100);
+        });
+
+        // Conectar evento de toggle en el segundo botón (solo contraer/expandir sidebar)
+        toggleBtn.addEventListener("click", () => {
+          document.body.classList.toggle("sidebar-toggled");
+          const sidebar = document.querySelector(".sidebar");
+          sidebar.classList.toggle("toggled");
+
+          // Solo contraer/expandir el contenido, no ocultar todo el sidebar
+          $(sidebar.querySelector(".collapse")).slideToggle(100);
         });
 
         clearInterval(interval); // Ya no hace falta seguir buscando
@@ -543,7 +556,7 @@ function AdminDashboard() {
                   </div>
                 </li>
 
-                <li className="nav-item dropdown no-arrow mx-auto">
+                {/* <li className="nav-item dropdown no-arrow mx-auto">
                   <a
                     className="nav-link dropdown-toggle gray-back"
                     id="alertsDropdown"
@@ -732,7 +745,7 @@ function AdminDashboard() {
                       Read More Messages
                     </a>
                   </div>
-                </li>
+                </li> */}
 
                 <div className="topbar-divider d-none d-sm-block"></div>
 
@@ -760,7 +773,7 @@ function AdminDashboard() {
                     className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                     aria-labelledby="userDropdown"
                   >
-                    <a className="dropdown-item" href="#">
+                    {/* <a className="dropdown-item" href="#">
                       <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                       Profile
                     </a>
@@ -772,15 +785,15 @@ function AdminDashboard() {
                       <i className="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                       Activity Log
                     </a>
-                    <div className="dropdown-divider"></div>
+                    <div className="dropdown-divider"></div> */}
                     <a
-                      className="dropdown-item"
+                      className="dropdown-item d-item-red"
                       data-toggle="modal"
                       data-target="#logoutModal"
                       onClick={() => logout()}
                     >
                       <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                      Logout
+                      Cerrar sesión
                     </a>
                   </div>
                 </li>

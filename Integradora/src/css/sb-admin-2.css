@@ -1217,6 +1217,10 @@ select:focus {
   }
 }
 
+.d-item-red:active{
+  background-color: var(--color-domin-2-2) !important;
+}
+
 .inputo {
   height: 4rem !important;
 }

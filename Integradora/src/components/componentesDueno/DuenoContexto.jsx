@@ -70,7 +70,10 @@ export default function DuenoContexto() {
         const rol = await getUserRole();
         const correo = await getUserEmail();
         const id = await getUserId();
-
+        if (rol !== "ROLE_DUENO") {
+          setNoData(true);
+          return;
+        }
         if (fetchedToken) {
           setTokenData(fetchedToken);
           tokenRef.current = fetchedToken; // Actualizar el token más reciente
