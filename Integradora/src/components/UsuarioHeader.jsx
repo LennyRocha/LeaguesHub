@@ -38,7 +38,7 @@ export default function Usuario0({ cambiarComponente }) {
           id="logoHead"
         >
           <img src={miImagen} width={40} height={50} alt="Logo" />
-          <span class="fs-4 text-white">Leagues Hub</span>
+          <span className="fs-4 text-white">Leagues Hub</span>
         </a>
         <ul
           className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0"

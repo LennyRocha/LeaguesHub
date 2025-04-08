@@ -62,7 +62,6 @@ aside,
 figcaption,
 figure,
 footer,
-header,
 hgroup,
 main,
 nav,
@@ -5916,6 +5915,10 @@ input[type="button"].btn-block {
   color: #858796;
   pointer-events: none;
   cursor: default;
+}
+
+.arbi-link:hover, .arbi-link:focus{
+  background: transparent !important;
 }
 
 .nav-tabs {

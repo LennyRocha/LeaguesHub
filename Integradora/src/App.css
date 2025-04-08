@@ -11,6 +11,10 @@
   /* background: linear-gradient(to right, #8999A7, #0094DF, #FF0000); */
 }
 
+#arbitros{
+  min-height: 100vh;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
