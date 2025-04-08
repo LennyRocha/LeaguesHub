@@ -183,7 +183,6 @@ export default function Admin8({ cambiarComponent, dueno, setDueno }) {
           ) : falloJ === "" ? (
             <div className="players-grid">
               {players.map((j) => {
-                console.log(j.expulsado);
                 return (
                   <div className="over-card" key={j.id}>
                     <div className="kard">

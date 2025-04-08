@@ -802,6 +802,90 @@ select:focus {
   cursor: pointer;
 }
 
+.slide-btn-sm-green {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 1px;
+  border: 2px solid var(--color-acento-3-1);
+  cursor: pointer;
+  position: relative;
+  background-color: transparent;
+  text-decoration: none;
+  z-index: 1;
+  overflow: hidden;
+  font-family: inherit;
+  width: 80%;
+}
+
+.slide-btn-sm-green::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--color-acento-3-1);
+  transition: all 0.2s;
+  z-index: -1;
+  transform: translateX(-100%);
+}
+
+.slide-btn-sm-green:hover {
+  border-color: var(--color-acento-3-1);
+  color: white !important;
+}
+
+.slide-btn-sm-green:hover:before {
+  transform: translateX(0);
+  color: white !important;
+  cursor: pointer;
+}
+
+.slide-btn-sm-accent {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 1px;
+  border: 2px solid var(--color-acento-1-2);
+  cursor: pointer;
+  position: relative;
+  background-color: transparent;
+  text-decoration: none;
+  z-index: 1;
+  overflow: hidden;
+  font-family: inherit;
+  width: 80%;
+}
+
+.slide-btn-sm-accent::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--color-acento-1-2);
+  transition: all 0.2s;
+  z-index: -1;
+  transform: translateX(-100%);
+}
+
+.slide-btn-sm-accent:hover {
+  border-color: var(--color-acento-1-2);
+  color: white !important;
+}
+
+.slide-btn-sm-accent:hover:before {
+  transform: translateX(0);
+  color: white !important;
+  cursor: pointer;
+}
+
 @media screen and (max-width: 768px) {
   .slide-btn-sm:before {
     transform: translateX(0);
@@ -818,6 +902,14 @@ select:focus {
   }
 
   .slide-btn-sm {
+    color: white !important;
+  }
+
+  .slide-btn-sm-green {
+    color: white !important;
+  }
+
+  .slide-btn-sm-accent {
     color: white !important;
   }
 
