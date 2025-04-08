@@ -515,6 +515,11 @@ export default function DuenoContexto() {
                   className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                   aria-labelledby="userDropdown"
                 >
+                  <a className="dropdown-item d-item-red" href="/perfil">
+                    <i className="fas fa-user en-fa fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Mi Perfil
+                  </a>
+                  <div className="dropdown-divider"></div>
                   <a
                     className="dropdown-item"
                     data-toggle="modal"

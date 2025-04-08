@@ -16,7 +16,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
-function PerfilAppBar() {
+function PerfilAppBar({ rol }) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -76,7 +76,7 @@ function PerfilAppBar() {
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}></Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Regresar">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <IconButton onClick={() => rol === "ROLE_ARBITRO" ? window.location.href="/arbitro" : window.location.href="/dueno" } sx={{ p: 0 }}>
                 {/*<Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />*/}
                 <lord-icon
                   src="/icons/salir2-icon.json"
