@@ -68,9 +68,7 @@ export const AuthProvider = ({ children }) => {
         Swal.fire({
           icon: "error",
           title: "¡Denegado!",
-          text:
-            err.message ||
-            "Algo salió mal, inténtalo nuevamente",
+          text: err.message || "Algo salió mal, inténtalo nuevamente",
           customClass: {
             confirmButton: "btn-confirm",
             cancelButton: "btn-cancel",
@@ -102,10 +100,19 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  const getUrl = (url) => {
-    const match = url.match(/id=([^&]+)/); // Extrae el ID de la imagen
-    return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : url;
+  // const getUrl = (url) => {
+  //   const match = url.match(/id=([^&]+)/); // Extrae el ID de la imagen
+  //   return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : url;
+  // };
+
+    const getUrl = (url) => {
+    let idMatch = url.match(/id=([^&]+)/); // para ?id=...
+    if (!idMatch) {
+      idMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/); // para /d/...
+    }
+    return idMatch ? `https://lh3.googleusercontent.com/d/${idMatch[1]}` : url;
   };
+  
 
   const login = (username, password) => {
     validate(username.toLowerCase().trim(), password);
@@ -162,7 +169,7 @@ export const AuthProvider = ({ children }) => {
         decodeToken,
         getUrl,
         getout,
-        clearData
+        clearData,
       }}
     >
       {children}

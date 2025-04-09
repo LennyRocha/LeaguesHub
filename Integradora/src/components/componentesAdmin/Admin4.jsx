@@ -440,7 +440,7 @@ export default function Admin4() {
         icon: "success",
         title: "¡Éxito!",
         text: res.data || "Operación exitosa",
-        footer: 'Si no se ven los cambios, recarga la página',
+        footer: "Si no se ven los cambios, recarga la página",
         timer: 2000,
         showConfirmButton: false,
         customClass: {
@@ -847,15 +847,6 @@ export default function Admin4() {
 
               {suggestions.length > 0 && (
                 <div>
-                  <a
-                    className="link"
-                    onClick={() => {
-                      setLinkVis(true);
-                      setSuggestions([]);
-                    }}
-                  >
-                    Ingresar manualmente
-                  </a>
                   <ul className="suggestions-list quitarScroll w-100">
                     {suggestions.map((place) => (
                       <li key={place.id} onClick={() => handleSelect(place)}>
@@ -886,6 +877,15 @@ export default function Admin4() {
               {errors.direccion && (
                 <p className="text-danger">{errors.direccion.message}</p>
               )}
+              <a
+                className="link"
+                onClick={() => {
+                  setLinkVis(true);
+                  setSuggestions([]);
+                }}
+              >
+                Ingresar coordenadas manualmente
+              </a>
               {found && (
                 <TextField
                   className="txtAr mt-1 mb-1"

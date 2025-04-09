@@ -33,3 +33,7 @@ npm install react-router-dom
 npm i react-hook-form
 # yup
 npm i yup @hookform/resolvers
+# react pdf
+npm install @react-pdf/renderer
+# jspdf
+npm i jspdf
