@@ -30,7 +30,8 @@ import Admin6 from "./componentesAdmin/Admin6";
 import Admin7 from "./componentesAdmin/Admin7";
 import Admin8 from "./componentesAdmin/Admin8";
 import Admin9 from "./componentesAdmin/Admin9";
-import { ToggleButton } from "react-bootstrap";
+import { Person } from "@mui/icons-material";
+import Avatar from "@mui/material/Avatar";
 
 function AdminDashboard() {
   const [userName, setUserName] = useState("Usuario");
@@ -509,7 +510,9 @@ function AdminDashboard() {
                 </p>
               </form>
 
-              <p className="body-small mb-0 text-white d-sm-none">Dashboard admin</p>
+              <p className="body-small mb-0 text-white d-sm-none">
+                Dashboard admin
+              </p>
 
               <ul className="navbar-nav ml-auto">
                 {/* <li className="nav-item dropdown no-arrow d-sm-none">
@@ -754,11 +757,14 @@ function AdminDashboard() {
                     <span className="mr-3 d-none d-lg-inline text-white-600 small">
                       Usuario administrador
                     </span>
-                    <img
+                    <Avatar sx={{ bgcolor: '#ff5958' }} className="img-profile">
+                      <Person color="error"/>
+                    </Avatar>
+                    {/* <img
                       className="img-profile rounded-circle"
                       src="https://www.meme-arsenal.com/memes/a513f913ef43476bd2b494da4e599cbc.jpg"
                       alt="..."
-                    />
+                    /> */}
                   </a>
 
                   <div
