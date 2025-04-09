@@ -11897,6 +11897,22 @@ a:focus {
   display: flex;
 }
 
+.pay-head{
+  background-color: var(--color-domin-2-5);
+  transition: all .25s ease;
+}
+
+.pay-card:hover{
+  border: 1px solid var(--color-domin-1-1);
+  transform: translateY(-4px);
+  transition: all .25s ease;
+}
+
+.pay-card:hover .pay-head{
+  background: var(--color-domin-2-3);
+  transition: all .25s ease;
+}
+
 #wrapper #content-wrapper {
   background-color: var(--color-base-1-1);
   width: 100%;

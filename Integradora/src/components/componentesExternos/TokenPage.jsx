@@ -5,7 +5,7 @@ import 'bootstrap'
 
 export default function TokenPage({ removeToken, removeUser, logout, getout, clearData }) {
   return (
-    <div className="centered">
+    <div className="err-container">
       <img src={Balon} alt="Imagen" className="logo" />
       <h1 className="text-center">Cerrando la cancha...</h1>
       <p className="body-small text-center">Tu sesión ha expirado, inicia sesión nuevamente</p>

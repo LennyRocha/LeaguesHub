@@ -344,6 +344,7 @@ function AdminDashboard() {
         removeUser={removeUser}
         logout={logout}
         getout={getout}
+        clearData={clearData}
       />
     );
   }
@@ -503,24 +504,15 @@ function AdminDashboard() {
               </button>
 
               <form className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 navbar-search">
-                <div className="input-group">
-                  <input
-                    type="search"
-                    className="form-control border-0 small seark"
-                    placeholder="Search for..."
-                    aria-label="Search"
-                    aria-describedby="basic-addon2"
-                  />
-                  <div className="input-group-append">
-                    <button className="btn red-btn" type="button">
-                      <i className="fas fa-search fa-sm"></i>
-                    </button>
-                  </div>
-                </div>
+                <p className="body-med text-white mb-0">
+                  Módulo para administrador
+                </p>
               </form>
 
+              <p className="body-small mb-0 text-white d-sm-none">Dashboard admin</p>
+
               <ul className="navbar-nav ml-auto">
-                <li className="nav-item dropdown no-arrow d-sm-none">
+                {/* <li className="nav-item dropdown no-arrow d-sm-none">
                   <a
                     className="nav-link dropdown-toggle"
                     href="#"
@@ -554,7 +546,7 @@ function AdminDashboard() {
                       </div>
                     </form>
                   </div>
-                </li>
+                </li> */}
 
                 {/* <li className="nav-item dropdown no-arrow mx-auto">
                   <a
