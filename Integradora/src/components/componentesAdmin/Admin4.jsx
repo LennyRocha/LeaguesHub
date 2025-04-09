@@ -18,6 +18,7 @@ import {
   Button,
 } from "@mui/material";
 import { Edit, Delete, Map } from "@mui/icons-material";
+import { ReportProblem } from "@mui/icons-material";
 import Swal from "sweetalert2";
 import logo1 from "../../img/logo1.png";
 const hereApiKey = import.meta.env.VITE_HERE_MAPS_API_KEY;
@@ -149,6 +150,8 @@ export default function Admin4() {
         }
       } catch (error) {
         console.error("Error obteniendo campos:", error);
+        if (error.message === "Network Error")
+          mostrarError("Error de conexión");
         setSuggestions([]);
       } finally {
         setFinding(false);
@@ -587,6 +590,14 @@ export default function Admin4() {
     }
   };
 
+  const [errorMsj, setErrorMsj] = useState("");
+  function mostrarError(mensaje) {
+    setErrorMsj(mensaje);
+    setTimeout(() => {
+      setErrorMsj("");
+    }, 3000);
+  }
+
   function extraerCoordenadas(url) {
     // Expresión regular para extraer coordenadas de una URL de Google Maps
     const regex = /@(-?\d+\.\d+),(-?\d+\.\d+)/;
@@ -973,6 +984,15 @@ export default function Admin4() {
               )}
               {errors.cancha && (
                 <p className="text-danger">{errors.cancha.message}</p>
+              )}
+              {errorMsj !== "" && (
+                <div
+                  class="alert alert-warning d-flex align-items-center mt-1 gap-1"
+                  role="alert"
+                >
+                  <ReportProblem />
+                  <div>{errorMsj}</div>
+                </div>
               )}
             </form>
           </div>

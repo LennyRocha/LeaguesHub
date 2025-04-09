@@ -545,6 +545,7 @@ export default function Admin3() {
         clearErrors();
         resetField("descripcion");
         setValue("descripcion", "");
+        setReload(!reload);
       } catch (err) {
         console.error(err);
         if (err.response) {
@@ -638,6 +639,7 @@ export default function Admin3() {
         clearErrors();
         resetField("descripcion");
         setValue("descripcion", "");
+        setReload(!reload);
       } catch (err) {
         console.error(err);
         if (err.response) {

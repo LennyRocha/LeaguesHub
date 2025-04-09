@@ -204,6 +204,7 @@ export default function Admin5() {
       clearErrors();
       setPreview(userPlace);
       setSelectedFile(null);
+      setReload(!reload);
     } catch (err) {
       console.error(err);
       if (err.response) {
