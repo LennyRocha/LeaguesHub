@@ -1,302 +1,194 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Tooltip } from "@mui/material";
+import axios from "axios";
+import { AuthContext } from "../../context/AuthContext";
 
-const equipos = [
-  {
-    equipoId: 1,
-    nombre: "Chivas",
-    dt: {
-      id: 1,
-      nombre: "Juan Peréz",
-      correo: "juanperez@hotmail.com",
-      img: "https://th.bing.com/th/id/OIP.SVo8-p3WhGOnngP6K6tBsAHaKc?w=115&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7",
-    },
-    img: "https://drive.google.com/uc?export=view&id=1-FOLUn9u4T-D5ggneCO0nZm4jOOVXItI",
-  },
-  {
-    equipoId: 2,
-    nombre: "Cruz Azul",
-    dt: {
-      id: 2,
-      nombre: "Mauro Bahena",
-      correo: "maurodfr@hotmail.com",
-      img: "https://i.pinimg.com/originals/55/45/e2/5545e27dd7441dc888fa6e4669421bdc.png",
-    },
-    img: "https://drive.google.com/uc?export=view&id=1L4y6YuAZuIYWEOlWr0sBKmoutcMFyG54",
-  },
-  {
-    equipoId: 3,
-    nombre: "Monterrey",
-    dt: {
-      id: 1,
-      nombre: "Nick Fury",
-      correo: "vengadores@hotmail.com",
-      img: "https://th.bing.com/th/id/OIP.YoIWYEmDFaQof1wx6j8xBQHaKp?w=132&h=190&c=7&pcl=1b1a19&r=0&o=5&dpr=1.5&pid=1.7",
-    },
-    img: "https://drive.google.com/uc?export=view&id=1L_u5cuRI6pI78YOb-0PIt_vovmV8SLLX",
-  },
-  {
-    equipoId: 4,
-    nombre: "Necaxa",
-    dt: {
-      id: 1,
-      nombre: "Don Ramón",
-      correo: "mochito@gmail.com",
-      img: "https://th.bing.com/th/id/OIP.iox5J2IefKpTqQ3A0PovKwAAAA?rs=1&pid=ImgDetMain",
-    },
-    img: "https://drive.google.com/uc?export=view&id=1_bDUfg2szuTCPy6onk37wSbzOoZGyhWW",
-  },
-  {
-    equipoId: 5,
-    nombre: "Pumas",
-    dt: {
-      id: 1,
-      nombre: "Francisco Pulido",
-      correo: "camarapaino@utez.edu.mx",
-      img: "https://th.bing.com/th/id/OIP.crgqPqen60BHAPwu_jzyAgHaNK?rs=1&pid=ImgDetMain",
-    },
-    img: "https://drive.google.com/uc?export=view&id=1IdFsp723ipbBX95PWsXwpURsO5L4jGei",
-  },
-  {
-    equipoId: 6,
-    nombre: "America",
-    dt: {
-      id: 1,
-      nombre: "Daniel Aguilar",
-      correo: "daniel@aguilar.com",
-      img: "https://th.bing.com/th/id/OIP.9Uh0RFprWijPzuoxR2tcBQHaNL?w=115&h=181&c=7&pcl=1b1a19&r=0&o=5&dpr=1.5&pid=1.7",
-    },
-    img: "https://drive.google.com/uc?export=view&id=1hLeMo386b05HrRd2mruNXZZqlWJ_EbSC",
-  },
-  {
-    equipoId: 7,
-    nombre: "Atlas",
-    dt: {
-      id: 1,
-      nombre: "El piojo Herrera",
-      correo: "elpiojitoxd@gmail.com",
-      img: "https://th.bing.com/th/id/OIP.vEf5l5SjcnsD1mhWGM2uRAAAAA?rs=1&pid=ImgDetMain",
-    },
-    img: "https://drive.google.com/uc?export=view&id=1yeIzWN8Wl6TvIrEtqci874SU7MT6E8cg",
-  },
-  {
-    equipoId: 8,
-    nombre: "Tigres",
-    dt: {
-      id: 1,
-      nombre: "Tigre Toño",
-      correo: "grrriquisimas@hotmail.com",
-      img: "https://tecolotito.elsiglodetorreon.com.mx/i/2010/05/204363.jpeg",
-    },
-    img: "https://drive.google.com/uc?export=view&id=1HMF63odQw9WzQdVmfFbSP1H3_F8qY-uV",
-  },
-];
+const api_url = import.meta.env.VITE_API_URL; // Asegúrate de tener esto definido
 
 export default function DuenoPagos({ cambiarComponente }) {
-  const [load, setLoad] = useState(false);
+  const [load, setLoad] = useState(true);
+  const [equipo, setEquipo] = useState(null);
+  const { getToken, getUserId } = useContext(AuthContext);
+  const [equipoSeleccionado, setEquipoSeleccionado] = useState(null);
+  const [pagos, setPagos] = useState([]);
+
+  const fetchEquipo = async () => {
+    try {
+      const userId = getUserId();
+      const res = await axios.get(`${api_url}/api/equipos/porDueno/${userId}`, {
+        headers: { Authorization: `Bearer ${getToken()}` }
+      });
+  
+      setEquipo(res.data); // Guarda el arreglo completo
+      if (res.data.length > 0) {
+        setEquipoSeleccionado(res.data[0]); // Selecciona el primero por defecto
+      }
+  
+    } catch (e) {
+      console.error("Error al cargar el equipo:", e);
+      setEquipo([]);
+      setEquipoSeleccionado(null);
+    } finally {
+      setLoad(false);
+    }
+  };
+  const fetchPagosPorEquipo = async (idEquipo) => {
+    try {
+      const res = await axios.get(`${api_url}/api/pagos/equipo/${idEquipo}`, {
+        headers: { Authorization: `Bearer ${getToken()}` }
+      });
+      setPagos(res.data);
+    } catch (error) {
+      console.error("Error al cargar los pagos:", error);
+      setPagos([]);
+    }
+  };
+  
+  
+  useEffect(() => {
+    fetchEquipo();
+  }, []);
+  
+  useEffect(() => {
+    if (equipoSeleccionado) {
+      fetchPagosPorEquipo(equipoSeleccionado.id);
+    }
+  }, [equipoSeleccionado]);
+
   return (
     <div>
       <div className="d-flex flex-row align-items-center justify-content-left g-2 mb-4 container-fluid">
         <h2 className="mb-0">Menú de pagos</h2>
       </div>
-
+  
       <div className="flex-row gap-5 container-fluid">
         <h5>Pagos por equipo</h5>
-        {equipos.map((e) => (
-          <span class="badge bg-dark mx-1 p-1">{e.nombre}</span>
-        ))}
+        {load ? (
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Cargando...</span>
+          </div>
+        ) : equipo.length > 0 ? (
+          <div className="form-group">
+            <label htmlFor="selectorEquipo">Selecciona un equipo:</label>
+            <select
+              id="selectorEquipo"
+              className="form-select mt-1"
+              value={equipoSeleccionado?.id || ""}
+              onChange={(e) =>
+                setEquipoSeleccionado(
+                  equipo.find((eq) => eq.id === parseInt(e.target.value))
+                )
+              }
+            >
+              {equipo.map((eq) => (
+                <option key={eq.id} value={eq.id}>
+                  {eq.nombreEquipo}
+                </option>
+              ))}
+            </select>
+          </div>
+        ) : (
+          <span className="badge bg-warning mx-1 p-1">No tienes equipos</span>
+        )}
       </div>
-
-      <div class="row container-fluid my-2">
-        <div class="col-md-4 order-md-last">
+  
+      <div className="row container-fluid my-2">
+        <div className="col-md-4 order-md-last">
           <Tooltip title="Solo puedes realizar un pago por equipo">
-            <h4 class="d-flex justify-content-between align-items-center mb-3">
-              <span class="text-danger">Detalles del pago</span>
+            <h4 className="d-flex justify-content-between align-items-center mb-3">
+              <span className="text-danger">Detalles del pago</span>
             </h4>
           </Tooltip>
-          <ul class="list-group mb-3">
-            <li class="list-group-item d-flex justify-content-between lh-sm">
+          <ul className="list-group mb-3">
+            <li className="list-group-item d-flex justify-content-between lh-sm">
               <div>
-                <h6 class="my-0">Nombre del equipo</h6>
-                <small class="text-muted">a realizar el pago</small>
+                <h6 className="my-0">Nombre del equipo</h6>
+                <small className="text-muted">a realizar el pago</small>
               </div>
-              <span class="text-muted">Chivas</span>
+              <span className="text-muted">
+                {equipoSeleccionado ? equipoSeleccionado.nombreEquipo : "N/A"}
+              </span>
             </li>
-            <li class="list-group-item d-flex justify-content-between lh-sm">
+            <li className="list-group-item d-flex justify-content-between lh-sm">
               <div>
-                <h6 class="my-0">Total de pagos</h6>
-                <small class="text-muted">a realizar</small>
+                <h6 className="my-0">Total de pagos</h6>
+                <small className="text-muted">pendientes</small>
               </div>
-              <span class="text-muted">2</span>
+              <span className="text-muted">
+                {pagos.filter((p) => !p.estatusPago).length}
+              </span>
             </li>
-            <li class="list-group-item d-flex justify-content-between lh-sm">
+            <li className="list-group-item d-flex justify-content-between lh-sm">
               <div>
-                <h6 class="my-0">Fecha de pago</h6>
-                <small class="text-muted">a corte de</small>
+                <h6 className="my-0">Fecha de pago</h6>
+                <small className="text-muted">a corte de</small>
               </div>
-              <span class="text-muted">{new Date().toISOString().substring(0,10)}</span>
+              <span className="text-muted">
+                {new Date().toISOString().substring(0, 10)}
+              </span>
             </li>
-            {/* <li class="list-group-item d-flex justify-content-between bg-light">
-              <div class="text-success">
-                <h6 class="my-0">Promo code</h6>
-                <small>EXAMPLECODE</small>
-              </div>
-              <span class="text-success">−$5</span>
-            </li> */}
-            <li class="list-group-item d-flex justify-content-between">
+            <li className="list-group-item d-flex justify-content-between">
               <span>Precio total</span>
-              <strong>$20</strong>
+              <strong>
+                $
+                {pagos
+                  .filter((p) => !p.estatusPago)
+                  .reduce((total, p) => total + p.monto, 0)}
+              </strong>
             </li>
           </ul>
-
+  
           <button className="slide-btn text-black">Pagar</button>
         </div>
-        <div class="col-lg-8 pagos-list quitarScroll">
+  
+        <div className="col-lg-8 pagos-list quitarScroll">
           <div className="payments-grid">
-            {/* */}
-            <div className="card border-left-danger shadow h-100 p-0">
-              <div className="card-body">
-                <div className="row no-gutters align-items-center">
-                  <div className="col mr-1">
-                    <div className="text-xs font-weight-bold text-danger text-uppercase mb-2 card-text">
-                      Descripción: .
-                      <span className="text-black">
-                        Cancha - Chelsea Sub-17 vs Juventus Sub-17
-                      </span>
-                    </div>
-                    <div className="card-grid no-gutters align-items-center">
-                      <h6 className="mb-0 mr-3">
-                        <b className="text-gray-800">Tipo de pago:</b>
-                      </h6>
-                      <h6 className="mb-0 mr-3">Cancha</h6>
-                      <h6 className="mb-0 mr-3">
-                        <b className="text-gray-800">Monto:</b>
-                      </h6>
-                      <h6 className="mb-0 mr-3">$200</h6>
-                      <h6 className="mb-0 mr-3">
-                        <b className="text-gray-800">Fecha límite:</b>
-                      </h6>
-                      <h6 className="mb-0 mr-3">2025-05-07</h6>
-                      <h6 className="mb-0 mr-3">
-                        <b className="text-gray-800">Estado:</b>
-                      </h6>
-                      <h6 className="mb-0 mr-3">
-                        <span className="text-warning">Pendiente</span>
-                      </h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* */}
-            <div className="card border-left-danger shadow h-100 p-0">
-              <div className="card-body">
-                <div className="row no-gutters align-items-center">
-                  <div className="col mr-1">
-                    <div className="text-xs font-weight-bold text-danger text-uppercase mb-2 card-text">
-                      Descripción: .
-                      <span className="text-black">
-                        Cancha - Chelsea Sub-17 vs Juventus Sub-17
-                      </span>
-                    </div>
-                    <div className="card-grid no-gutters align-items-center">
-                      <h6 className="mb-0 mr-3">
-                        <b className="text-gray-800">Tipo de pago:</b>
-                      </h6>
-                      <h6 className="mb-0 mr-3">Cancha</h6>
-                      <h6 className="mb-0 mr-3">
-                        <b className="text-gray-800">Monto:</b>
-                      </h6>
-                      <h6 className="mb-0 mr-3">$200</h6>
-                      <h6 className="mb-0 mr-3">
-                        <b className="text-gray-800">Fecha límite:</b>
-                      </h6>
-                      <h6 className="mb-0 mr-3">2025-05-07</h6>
-                      <h6 className="mb-0 mr-3">
-                        <b className="text-gray-800">Estado:</b>
-                      </h6>
-                      <h6 className="mb-0 mr-3">
-                        <span className="text-warning">Pendiente</span>
-                      </h6>
+            {pagos.filter((p) => !p.estatusPago).length === 0 ? (
+              <div className="alert alert-info">No hay pagos pendientes.</div>
+            ) : (
+              pagos
+                .filter((pago) => !pago.estatusPago)
+                .map((pago) => (
+                  <div
+                    key={pago.id}
+                    className="card border-left-danger shadow h-100 p-0 mb-3"
+                  >
+                    <div className="card-body">
+                      <div className="row no-gutters align-items-center">
+                        <div className="col mr-1">
+                          <div className="text-xs font-weight-bold text-danger text-uppercase mb-2 card-text">
+                            Descripción:{" "}
+                            <span className="text-black">{pago.descripcion}</span>
+                          </div>
+                          <div className="card-grid no-gutters align-items-center">
+                            <h6 className="mb-0 mr-3">
+                              <b className="text-gray-800">Tipo de pago:</b>
+                            </h6>
+                            <h6 className="mb-0 mr-3">{pago.tipoPago}</h6>
+                            <h6 className="mb-0 mr-3">
+                              <b className="text-gray-800">Monto:</b>
+                            </h6>
+                            <h6 className="mb-0 mr-3">${pago.monto}</h6>
+                            <h6 className="mb-0 mr-3">
+                              <b className="text-gray-800">Fecha límite:</b>
+                            </h6>
+                            <h6 className="mb-0 mr-3">{pago.fechaLimitePago}</h6>
+                            <h6 className="mb-0 mr-3">
+                              <b className="text-gray-800">Estado:</b>
+                            </h6>
+                            <h6 className="mb-0 mr-3">
+                              <span className="text-warning">Pendiente</span>
+                            </h6>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
-            {/* */}
-            <div className="card border-left-danger shadow h-100 p-0">
-              <div className="card-body">
-                <div className="row no-gutters align-items-center">
-                  <div className="col mr-1">
-                    <div className="text-xs font-weight-bold text-danger text-uppercase mb-2 card-text">
-                      Descripción: .
-                      <span className="text-black">
-                        Cancha - Chelsea Sub-17 vs Juventus Sub-17
-                      </span>
-                    </div>
-                    <div className="card-grid no-gutters align-items-center">
-                      <h6 className="mb-0 mr-3">
-                        <b className="text-gray-800">Tipo de pago:</b>
-                      </h6>
-                      <h6 className="mb-0 mr-3">Cancha</h6>
-                      <h6 className="mb-0 mr-3">
-                        <b className="text-gray-800">Monto:</b>
-                      </h6>
-                      <h6 className="mb-0 mr-3">$200</h6>
-                      <h6 className="mb-0 mr-3">
-                        <b className="text-gray-800">Fecha límite:</b>
-                      </h6>
-                      <h6 className="mb-0 mr-3">2025-05-07</h6>
-                      <h6 className="mb-0 mr-3">
-                        <b className="text-gray-800">Estado:</b>
-                      </h6>
-                      <h6 className="mb-0 mr-3">
-                        <span className="text-warning">Pendiente</span>
-                      </h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* */}
-            <div className="card border-left-danger shadow h-100 p-0">
-              <div className="card-body">
-                <div className="row no-gutters align-items-center">
-                  <div className="col mr-1">
-                    <div className="text-xs font-weight-bold text-danger text-uppercase mb-2 card-text">
-                      Descripción: .
-                      <span className="text-black">
-                        Cancha - Chelsea Sub-17 vs Juventus Sub-17
-                      </span>
-                    </div>
-                    <div className="card-grid no-gutters align-items-center">
-                      <h6 className="mb-0 mr-3">
-                        <b className="text-gray-800">Tipo de pago:</b>
-                      </h6>
-                      <h6 className="mb-0 mr-3">Cancha</h6>
-                      <h6 className="mb-0 mr-3">
-                        <b className="text-gray-800">Monto:</b>
-                      </h6>
-                      <h6 className="mb-0 mr-3">$200</h6>
-                      <h6 className="mb-0 mr-3">
-                        <b className="text-gray-800">Fecha límite:</b>
-                      </h6>
-                      <h6 className="mb-0 mr-3">2025-05-07</h6>
-                      <h6 className="mb-0 mr-3">
-                        <b className="text-gray-800">Estado:</b>
-                      </h6>
-                      <h6 className="mb-0 mr-3">
-                        <span className="text-warning">Pendiente</span>
-                      </h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* */}
+                ))
+            )}
           </div>
         </div>
       </div>
     </div>
   );
-}
+};  

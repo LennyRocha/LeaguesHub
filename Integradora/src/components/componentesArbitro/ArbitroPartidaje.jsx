@@ -8,8 +8,8 @@ import Checkbox from "@mui/material/Checkbox";
 export default function ArbitroPartidaje({
   cambiarComponente,
   partidoSeleccionado,
-}) {
-  const { api_url, getToken } = useContext(AuthContext);
+}) {  const { api_url, getToken } = useContext(AuthContext);
+
 
   const [jugadoresLocal, setJugadoresLocal] = useState([]);
   const [jugadoresVisitante, setJugadoresVisitante] = useState([]);
