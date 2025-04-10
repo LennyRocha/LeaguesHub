@@ -1,313 +1,319 @@
-import React, { useState, useContext } from "react";
-import "bootstrap";
+import { useState, useContext, useEffect } from "react";
+import axios from "axios";
+import Swal from "sweetalert2";
 import { AuthContext } from "../../context/AuthContext";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  IconButton,
-  TextField,
-  Tooltip,
-} from "@mui/material";
-import { Edit } from "@mui/icons-material";
+import { TextField, FormControl, InputLabel, Select, MenuItem, Tooltip } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import Add from "@mui/icons-material/Add";  
+import userPlace from '../../assets/images/user-placeholder.png'
 
-const jugadoresPrueba = [
-  {
-    id: 1,
-    nombre: "Jugador #001",
-    goles: 9,
-    partidos: 5,
-    fallas: 0,
-    img: "https://lindamood.net/wp-content/uploads/2019/09/Blank-profile-image.jpg",
-    activo: true,
-  },
-  {
-    id: 2,
-    nombre: "Jugador #002",
-    goles: 3,
-    partidos: 8,
-    fallas: 0,
-    img: "https://lindamood.net/wp-content/uploads/2019/09/Blank-profile-image.jpg",
-    activo: true,
-  },
-  {
-    id: 3,
-    nombre: "Jugador #003",
-    goles: 6,
-    partidos: 1,
-    fallas: 0,
-    img: "https://lindamood.net/wp-content/uploads/2019/09/Blank-profile-image.jpg",
-    activo: true,
-  },
-  {
-    id: 4,
-    nombre: "Jugador #004",
-    goles: 10,
-    partidos: 3,
-    fallas: 0,
-    img: "https://lindamood.net/wp-content/uploads/2019/09/Blank-profile-image.jpg",
-    activo: false,
-  },
-  {
-    id: 5,
-    nombre: "Jugador #005",
-    goles: 9,
-    partidos: 2,
-    fallas: 0,
-    img: "https://lindamood.net/wp-content/uploads/2019/09/Blank-profile-image.jpg",
-    activo: false,
-  },
-  {
-    id: 6,
-    nombre: "Jugador #006",
-    goles: 2,
-    partidos: 1,
-    fallas: 1,
-    img: "https://lindamood.net/wp-content/uploads/2019/09/Blank-profile-image.jpg",
-    activo: true,
-  },
-  {
-    id: 7,
-    nombre: "Jugador #007",
-    goles: 0,
-    partidos: 50,
-    fallas: 50,
-    img: "https://lindamood.net/wp-content/uploads/2019/09/Blank-profile-image.jpg",
-    activo: true,
-  },
-];
+export default function DuenoEquipos({ cambiarComponente }) {
 
-const equipos = [
-  {
-    equipoId: 1,
-    nombre: "Chivas",
-    dt: {
-      id: 1,
-      nombre: "Juan Peréz",
-      correo: "juanperez@hotmail.com",
-      img: "https://th.bing.com/th/id/OIP.SVo8-p3WhGOnngP6K6tBsAHaKc?w=115&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7",
-    },
-    jugadores: jugadoresPrueba,
-    img: "https://drive.google.com/uc?export=view&id=1-FOLUn9u4T-D5ggneCO0nZm4jOOVXItI",
-  },
-  {
-    equipoId: 2,
-    nombre: "Cruz Azul",
-    dt: {
-      id: 2,
-      nombre: "Mauro Bahena",
-      correo: "maurodfr@hotmail.com",
-      img: "https://i.pinimg.com/originals/55/45/e2/5545e27dd7441dc888fa6e4669421bdc.png",
-    },
-    jugadores: jugadoresPrueba,
-    img: "https://drive.google.com/uc?export=view&id=1L4y6YuAZuIYWEOlWr0sBKmoutcMFyG54",
-  },
-  {
-    equipoId: 3,
-    nombre: "Monterrey",
-    dt: {
-      id: 1,
-      nombre: "Nick Fury",
-      correo: "vengadores@hotmail.com",
-      img: "https://th.bing.com/th/id/OIP.YoIWYEmDFaQof1wx6j8xBQHaKp?w=132&h=190&c=7&pcl=1b1a19&r=0&o=5&dpr=1.5&pid=1.7",
-    },
-    jugadores: jugadoresPrueba,
-    img: "https://drive.google.com/uc?export=view&id=1L_u5cuRI6pI78YOb-0PIt_vovmV8SLLX",
-  },
-  {
-    equipoId: 4,
-    nombre: "Necaxa",
-    dt: {
-      id: 1,
-      nombre: "Don Ramón",
-      correo: "mochito@gmail.com",
-      img: "https://th.bing.com/th/id/OIP.iox5J2IefKpTqQ3A0PovKwAAAA?rs=1&pid=ImgDetMain",
-    },
-    jugadores: jugadoresPrueba,
-    img: "https://drive.google.com/uc?export=view&id=1_bDUfg2szuTCPy6onk37wSbzOoZGyhWW",
-  },
-  {
-    equipoId: 5,
-    nombre: "Pumas",
-    dt: {
-      id: 1,
-      nombre: "Francisco Pulido",
-      correo: "camarapaino@utez.edu.mx",
-      img: "https://th.bing.com/th/id/OIP.crgqPqen60BHAPwu_jzyAgHaNK?rs=1&pid=ImgDetMain",
-    },
-    jugadores: jugadoresPrueba,
-    img: "https://drive.google.com/uc?export=view&id=1IdFsp723ipbBX95PWsXwpURsO5L4jGei",
-  },
-  {
-    equipoId: 6,
-    nombre: "America",
-    dt: {
-      id: 1,
-      nombre: "Daniel Aguilar",
-      correo: "daniel@aguilar.com",
-      img: "https://th.bing.com/th/id/OIP.9Uh0RFprWijPzuoxR2tcBQHaNL?w=115&h=181&c=7&pcl=1b1a19&r=0&o=5&dpr=1.5&pid=1.7",
-    },
-    jugadores: jugadoresPrueba,
-    img: "https://drive.google.com/uc?export=view&id=1hLeMo386b05HrRd2mruNXZZqlWJ_EbSC",
-  },
-  {
-    equipoId: 7,
-    nombre: "Atlas",
-    dt: {
-      id: 1,
-      nombre: "El piojo Herrera",
-      correo: "elpiojitoxd@gmail.com",
-      img: "https://th.bing.com/th/id/OIP.vEf5l5SjcnsD1mhWGM2uRAAAAA?rs=1&pid=ImgDetMain",
-    },
-    jugadores: jugadoresPrueba,
-    img: "https://drive.google.com/uc?export=view&id=1yeIzWN8Wl6TvIrEtqci874SU7MT6E8cg",
-  },
-  {
-    equipoId: 8,
-    nombre: "Tigres",
-    dt: {
-      id: 1,
-      nombre: "Tigre Toño",
-      correo: "grrriquisimas@hotmail.com",
-      img: "https://tecolotito.elsiglodetorreon.com.mx/i/2010/05/204363.jpeg",
-    },
-    jugadores: jugadoresPrueba,
-    img: "https://drive.google.com/uc?export=view&id=1HMF63odQw9WzQdVmfFbSP1H3_F8qY-uV",
-  },
-];
-
-export default function DuenoEquipos({ cambiarComponent }) {
+  const { getUserId, getToken, api_url } = useContext(AuthContext);
+  const [equipos, setEquipos] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
-  const [equipo, setEquipo] = useState([]);
   const [edit, setEdit] = useState(false);
-  const { getUrl } = useContext(AuthContext);
   const [preview, setPreview] = useState(
-    "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
+    userPlace
   );
-
-  const [load, setLoad] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [newEquipo, setNewEquipo] = useState({
+    nombreEquipo: "",
+    logoEquipo: "",
+    nombreCampo: "",
+    campoId: "",
+  });
+  const [campos, setCampos] = useState([]);
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setNewEquipo({ ...newEquipo, [name]: value });
+  };
+
+  const mostrarEdit = (equipo) => {
+    setEdit(true);
+    setVisible(true);
+    setNewEquipo({
+      nombreEquipo: equipo.nombreEquipo,
+      logoEquipo: equipo.logoEquipo,
+      nombreCampo: equipo.nombreCampo,
+      campoId: equipo.campoId || "",
+    });
+    setPreview(equipo.logoEquipo);
+    setSelectedFile(null);
+  };
+
+  const handleAddTeam = () => {
+    setVisible(true);
+    setEdit(false);
+    setNewEquipo({
+      nombreEquipo: "",
+      logoEquipo: "",
+      nombreCampo: "",
+      campoId: "",
+    });
+    setPreview(userPlace);
+    setSelectedFile(null);
+  };
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
+      console.log("Archivo seleccionado:", file);  // Añadir log para verificar el archivo
       setSelectedFile(file);
       const reader = new FileReader();
       reader.onload = () => setPreview(reader.result);
       reader.readAsDataURL(file);
     }
   };
+  
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+  
+    const formData = new FormData();
+  
+    const equipoData = {
+      nombreEquipo: newEquipo.nombreEquipo,
+      idUsuario: getUserId(),
+      idCampo: newEquipo.campoId,
+    };
+  
+    // Crear el objeto JSON y agregarlo al FormData
+    const equipoBlob = new Blob([JSON.stringify(equipoData)], {
+      type: 'application/json'
+    });
+    formData.append('equipo', equipoBlob, 'equipo.json');
+  
+    // Agregar el archivo de imagen al FormData
+    if (selectedFile) {
+      console.log("Añadiendo archivo al FormData:", selectedFile);  // Verificar el archivo
+      formData.append('imagen', selectedFile);
+    } else if (edit) {
+      try {
+        const response = await fetch(newEquipo.logoEquipo);
+        const blob = await response.blob();
+        formData.append('imagen', blob, 'existing-image.jpg');
+      } catch (error) {
+        console.error("Error al cargar imagen existente:", error);
+      }
+    }
+  
+    try {
+      // Verificar que el FormData tiene el archivo
+      console.log("FormData preparado para enviar:", formData);
+  
+      const response = await axios.post(`${api_url}/api/equipos`, formData, {
+        headers: {
+          'Authorization': `Bearer ${getToken()}`,
+        },
+      });
+  
+      Swal.fire({
+        icon: "success",
+        title: "¡Éxito!",
+        text: "Equipo registrado correctamente"
+      });
+  
+      setVisible(false);
+      setNewEquipo({
+        nombreEquipo: "",
+        campoId: "",
+      });
+      setPreview(userPlace);
+      setSelectedFile(null);
+  
+    } catch (error) {
+      console.error("Error:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error.response?.data?.message || "Error al registrar equipo"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  useEffect(() => {
+    const fetchEquipos = async () => {
+      if (!getUserId() || !getToken()) {
+        console.error("Falta userId o token");
+        setLoading(false);
+        return;
+      }
 
-  function mostrarEdit(){
-    setEdit(true);
-    setVisible(true);
+      try {
+        setLoading(true);
+        const response = await axios.get(`${api_url}/api/equipos/porDueno/${getUserId()}`, {
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
+        });
+
+        if (response.data && Array.isArray(response.data)) {
+          setEquipos(response.data);
+        } else {
+          setEquipos([]);
+        }
+      } catch (error) {
+        console.error("Error al cargar equipos:", error);
+        setEquipos([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEquipos();
+  }, [api_url, getUserId, getToken]);
+
+  useEffect(() => {
+    const fetchCampos = async () => {
+      try {
+        const response = await axios.get(`${api_url}/api/campos/activos`, {
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
+        });
+
+        if (response.data && Array.isArray(response.data)) {
+          setCampos(response.data);
+        } else {
+          setCampos([]);
+        }
+      } catch (error) {
+        console.error("Error al cargar campos:", error);
+        setCampos([]);
+      }
+    };
+
+    fetchCampos();
+  }, [api_url, getToken]);
+
+  if (loading) {
+    return <div className="text-center py-4">Cargando equipos...</div>;
   }
 
   return (
     <div className="container-fluid">
       <div className="duenoBox quitarScroll">
-        <div className="">
-          <div className="d-flex flex-row align-items-center justify-content-left g-2 mb-4">
-            <h2 className="mb-0">Tus equipos</h2>
-            <IconButton
-              onClick={() => {
-                setEdit(false);
-                setVisible(!visible);
-              }}
-            >
-              <Edit color="primary" />
+        <div className="d-flex flex-row align-items-center justify-content-between g-2 mb-4">
+          <h2 className="mb-0">Tus equipos</h2>
+          <Tooltip title="Agregar equipo">
+            <IconButton color="primary" onClick={handleAddTeam} aria-label="add-team">
+              <Add fontSize="large" />
             </IconButton>
+          </Tooltip>
+        </div>
+
+        <div className="row">
+          <div className="col-md-8">
+            <div className="teams-grid quitarScroll">
+              {equipos.length > 0 ? (
+                equipos.map((e) => (
+                  <div className="dueno-container-3 bg-light" key={e.id || e._id}>
+                    <img
+                      src={e.logoEquipo}
+                      alt={e.nombreEquipo}
+                      className="img-fluid"
+                      onError={(e) => {
+                        e.target.src = "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg";
+                      }}
+                    />
+                    <h5 className="w-100">{e.nombreEquipo}</h5>
+                    <div className="_rowo w-100">
+     
+
+
+                      <a className="link" onClick={() => mostrarEdit(e)} style={{ cursor: "pointer" }}>
+                        Editar
+                      </a>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-4">
+                  <p>No tienes equipos registrados.</p>
+                  <button className="btn btn-primary" onClick={handleAddTeam}>
+                    Agregar tu primer equipo
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
-          <div className="row">
-            <div className="col-md-8">
-              <div className="teams-grid quitarScroll">
-                {equipos.map((e) => {
-                  return (
-                    <div
-                      className="dueno-container-3 bg-light"
-                      key={e.equipoId}
-                    >
+          <div className="col-md-4">
+            <div className={`${visible ? "teamsVisible" : "teamsInvisible"}`}>
+              <h3 className="d-flex justify-content-between align-items-center mb-3">
+                <span className="body-small">{edit ? "Editar equipo" : "Registrar equipo"}</span>
+                <IconButton onClick={() => setVisible(false)}>
+                  <i className="fas fa-times"></i>
+                </IconButton>
+              </h3>
+
+              <div className="arbitro-card bg-light rounded mb-4">
+                <form onSubmit={handleSubmit}>
+                  <div className="player-picture">
+                    <div className="fotoPlayer">
                       <img
-                        src={getUrl(e.img)}
-                        alt={e.nombre}
-                        className="img-fluid"
+                        src={preview}
+                        alt="Foto del equipo"
+                        id="selPictPlayer"
+                        style={{ maxWidth: "200px", maxHeight: "200px" }}
                       />
-                      <h5 className="w-100">{e.nombre}</h5>
-                      <div className="_rowo w-100">
-                        <a
-                          className="link"
-                          onClick={() => !visible ? mostrarEdit() : setEdit(true)}
-                        >
-                          Editar
-                        </a>
-                      </div>
+                      <Tooltip title="Elegir una imagen">
+                        <div className="botonDivPlayer" onClick={() => document.getElementById("fileInput").click()}>
+                          <input
+                            id="fileInput"
+                            type="file"
+                            className="botonCamPlayer"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            style={{ display: "none" }}
+                          />
+                          <i className="fa fa-camera"></i>
+                        </div>
+                      </Tooltip>
                     </div>
-                  );
-                })}
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className={`${visible ? "teamsVisible" : "teamsInvisible"}`}>
-                <h3 class="d-flex justify-content-between align-items-center mb-3">
-                  <span class="body-small">
-                    {edit ? "Editar equipo" : "Registrar equipo"}
-                  </span>
-                </h3>
-                <div className="arbitro-card bg-light rounded mb-4">
-                  <form>
-                    <div className="player-picture">
-                      <div className="fotoPlayer">
-                        <img
-                          src={preview}
-                          alt="Foto de perfil nueva"
-                          id="selPictPlayer"
-                        />
-                        <Tooltip title="Elegir una imagen">
-                          <div className="botonDivPlayer">
-                            <input
-                              type="file"
-                              className="botonCamPlayer"
-                              accept="image/*"
-                              onChange={handleFileChange}
-                            />
-                            <i className="fa fa-camera"></i>
-                          </div>
-                        </Tooltip>
-                      </div>
-                    </div>
-                    <TextField
-                      className="txtAr txtCon"
-                      label="Nombre del equipo"
-                      fullWidth
-                      margin="dense"
-                      name="nombre"
+                  </div>
+
+                  <TextField
+                    label="Nombre del equipo"
+                    fullWidth
+                    margin="dense"
+                    name="nombreEquipo"
+                    required
+                    value={newEquipo.nombreEquipo}
+                    onChange={handleInputChange}
+                    sx={{ mb: 2 }}
+                  />
+
+                  <FormControl fullWidth margin="dense" sx={{ mb: 2 }}>
+                    <InputLabel>Selecciona un campo</InputLabel>
+                    <Select
+                      name="campoId"
+                      value={newEquipo.campoId}
+                      onChange={handleInputChange}
                       required
-                      id="arbName"
-                    />
-                    <p className="text-danger"></p>
-                    <select className="form-control mb-2 txtAr">
-                      <option value="">Selecciona un campo</option>
-                      <option value="">Campo 1</option>
-                      <option value="">Campo 2</option>
-                    </select>
-                    {load ? (
-                      <div className="my-spinner"></div>
-                    ) : (
-                      <button
-                        type="submit"
-                        id="submitArb"
-                        className={"text-black"}
-                      >
-                        Registrar
-                      </button>
-                    )}
-                  </form>
-                </div>
+                    >
+                      {campos.map((campo) => (
+                        <MenuItem key={campo.id} value={campo.id}>
+                          {campo.nombre}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  <div className="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" className="btn btn-outline-secondary" onClick={() => setVisible(false)}>
+                      Cancelar
+                    </button>
+                    <button type="submit" className="btn btn-primary">
+                      {edit ? "Actualizar" : "Registrar"}
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>

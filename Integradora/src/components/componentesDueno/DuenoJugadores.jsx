@@ -1,390 +1,246 @@
-import React from "react";
-import { useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  IconButton,
-  TextField,
-  Tooltip,
-} from "@mui/material";
-import { Edit } from "@mui/icons-material";
-import "../../css/sb-admin-2.css";
-
-const jugadoresPrueba = [
-  {
-    id: 1,
-    nombre: "Jugador #001",
-    goles: 9,
-    partidos: 5,
-    fallas: 0,
-    img: "https://lindamood.net/wp-content/uploads/2019/09/Blank-profile-image.jpg",
-    activo: true,
-  },
-  {
-    id: 2,
-    nombre: "Jugador #002",
-    goles: 3,
-    partidos: 8,
-    fallas: 0,
-    img: "https://lindamood.net/wp-content/uploads/2019/09/Blank-profile-image.jpg",
-    activo: true,
-  },
-  {
-    id: 3,
-    nombre: "Jugador #003",
-    goles: 6,
-    partidos: 1,
-    fallas: 0,
-    img: "https://lindamood.net/wp-content/uploads/2019/09/Blank-profile-image.jpg",
-    activo: true,
-  },
-  {
-    id: 4,
-    nombre: "Jugador #004",
-    goles: 10,
-    partidos: 3,
-    fallas: 0,
-    img: "https://lindamood.net/wp-content/uploads/2019/09/Blank-profile-image.jpg",
-    activo: false,
-  },
-  {
-    id: 5,
-    nombre: "Jugador #005",
-    goles: 9,
-    partidos: 2,
-    fallas: 0,
-    img: "https://lindamood.net/wp-content/uploads/2019/09/Blank-profile-image.jpg",
-    activo: false,
-  },
-  {
-    id: 6,
-    nombre: "Jugador #006",
-    goles: 2,
-    partidos: 1,
-    fallas: 1,
-    img: "https://lindamood.net/wp-content/uploads/2019/09/Blank-profile-image.jpg",
-    activo: true,
-  },
-  {
-    id: 7,
-    nombre: "Jugador #007",
-    goles: 0,
-    partidos: 50,
-    fallas: 50,
-    img: "https://lindamood.net/wp-content/uploads/2019/09/Blank-profile-image.jpg",
-    activo: true,
-  },
-];
-
-const equipos = [
-  {
-    equipoId: 1,
-    nombre: "Chivas",
-    dt: {
-      id: 1,
-      nombre: "Juan Peréz",
-      correo: "juanperez@hotmail.com",
-      img: "https://th.bing.com/th/id/OIP.SVo8-p3WhGOnngP6K6tBsAHaKc?w=115&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7",
-    },
-    jugadores: jugadoresPrueba,
-    img: "https://drive.google.com/uc?export=view&id=1-FOLUn9u4T-D5ggneCO0nZm4jOOVXItI",
-  },
-  {
-    equipoId: 2,
-    nombre: "Cruz Azul",
-    dt: {
-      id: 2,
-      nombre: "Mauro Bahena",
-      correo: "maurodfr@hotmail.com",
-      img: "https://i.pinimg.com/originals/55/45/e2/5545e27dd7441dc888fa6e4669421bdc.png",
-    },
-    jugadores: jugadoresPrueba,
-    img: "https://drive.google.com/uc?export=view&id=1L4y6YuAZuIYWEOlWr0sBKmoutcMFyG54",
-  },
-  {
-    equipoId: 3,
-    nombre: "Monterrey",
-    dt: {
-      id: 1,
-      nombre: "Nick Fury",
-      correo: "vengadores@hotmail.com",
-      img: "https://th.bing.com/th/id/OIP.YoIWYEmDFaQof1wx6j8xBQHaKp?w=132&h=190&c=7&pcl=1b1a19&r=0&o=5&dpr=1.5&pid=1.7",
-    },
-    jugadores: jugadoresPrueba,
-    img: "https://drive.google.com/uc?export=view&id=1L_u5cuRI6pI78YOb-0PIt_vovmV8SLLX",
-  },
-  {
-    equipoId: 4,
-    nombre: "Necaxa",
-    dt: {
-      id: 1,
-      nombre: "Don Ramón",
-      correo: "mochito@gmail.com",
-      img: "https://th.bing.com/th/id/OIP.iox5J2IefKpTqQ3A0PovKwAAAA?rs=1&pid=ImgDetMain",
-    },
-    jugadores: jugadoresPrueba,
-    img: "https://drive.google.com/uc?export=view&id=1_bDUfg2szuTCPy6onk37wSbzOoZGyhWW",
-  },
-  {
-    equipoId: 5,
-    nombre: "Pumas",
-    dt: {
-      id: 1,
-      nombre: "Francisco Pulido",
-      correo: "camarapaino@utez.edu.mx",
-      img: "https://th.bing.com/th/id/OIP.crgqPqen60BHAPwu_jzyAgHaNK?rs=1&pid=ImgDetMain",
-    },
-    jugadores: jugadoresPrueba,
-    img: "https://drive.google.com/uc?export=view&id=1IdFsp723ipbBX95PWsXwpURsO5L4jGei",
-  },
-  {
-    equipoId: 6,
-    nombre: "America",
-    dt: {
-      id: 1,
-      nombre: "Daniel Aguilar",
-      correo: "daniel@aguilar.com",
-      img: "https://th.bing.com/th/id/OIP.9Uh0RFprWijPzuoxR2tcBQHaNL?w=115&h=181&c=7&pcl=1b1a19&r=0&o=5&dpr=1.5&pid=1.7",
-    },
-    jugadores: jugadoresPrueba,
-    img: "https://drive.google.com/uc?export=view&id=1hLeMo386b05HrRd2mruNXZZqlWJ_EbSC",
-  },
-  {
-    equipoId: 7,
-    nombre: "Atlas",
-    dt: {
-      id: 1,
-      nombre: "El piojo Herrera",
-      correo: "elpiojitoxd@gmail.com",
-      img: "https://th.bing.com/th/id/OIP.vEf5l5SjcnsD1mhWGM2uRAAAAA?rs=1&pid=ImgDetMain",
-    },
-    jugadores: jugadoresPrueba,
-    img: "https://drive.google.com/uc?export=view&id=1yeIzWN8Wl6TvIrEtqci874SU7MT6E8cg",
-  },
-  {
-    equipoId: 8,
-    nombre: "Tigres",
-    dt: {
-      id: 1,
-      nombre: "Tigre Toño",
-      correo: "grrriquisimas@hotmail.com",
-      img: "https://tecolotito.elsiglodetorreon.com.mx/i/2010/05/204363.jpeg",
-    },
-    jugadores: jugadoresPrueba,
-    img: "https://drive.google.com/uc?export=view&id=1HMF63odQw9WzQdVmfFbSP1H3_F8qY-uV",
-  },
-];
+import { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import { AuthContext } from "../../context/AuthContext";
+import Swal from "sweetalert2";
+import { Button, Tooltip, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import userPlace from '../../assets/images/user-placeholder.png';
 
 export default function DuenoJugadores({ cambiarComponente }) {
-  const [visible, setVisible] = useState(false);
-  const [visible2, setVisible2] = useState(false);
-  const [edit, setEdit] = useState(false);
-  const [preview, setPreview] = useState(
-    "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg"
-  );
+  const { getUserId, getToken, api_url } = useContext(AuthContext);
+  const [equipos, setEquipos] = useState([]);
+  const [jugadores, setJugadores] = useState([]);
+  const [selectedEquipo, setSelectedEquipo] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [selectedJugador, setSelectedJugador] = useState(null); // Estado para el jugador seleccionado
+  const [openDialog, setOpenDialog] = useState(false); // Estado para controlar el modal
 
-  const [load, setLoad] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setSelectedFile(file);
-      const reader = new FileReader();
-      reader.onload = () => setPreview(reader.result);
-      reader.readAsDataURL(file);
-    }
+  // Función para obtener la URL de la imagen de Google Drive
+  const getUrl = (url) => {
+    const match = url.match(/id=([^&]+)/); // Extrae el ID de la imagen
+    return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : url;
   };
+
+  // Fetch equipos del dueño
+  useEffect(() => {
+    const fetchEquipos = async () => {
+      if (!getUserId() || !getToken()) {
+        console.error("Falta userId o token");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const response = await axios.get(`${api_url}/api/equipos/porDueno/${getUserId()}`, {
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
+        });
+
+        if (response.data && Array.isArray(response.data)) {
+          setEquipos(response.data);
+        } else {
+          setEquipos([]);
+        }
+      } catch (error) {
+        console.error("Error al cargar equipos:", error);
+        setEquipos([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEquipos();
+  }, [api_url, getUserId, getToken]);
+
+  // Fetch jugadores cuando se selecciona un equipo
+  useEffect(() => {
+    if (!selectedEquipo) return; // Si no hay equipo seleccionado, no hacer nada
+
+    const fetchJugadores = async () => {
+      if (!getUserId() || !getToken()) {
+        console.error("Falta userId o token");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        console.log("Haciendo solicitud para equipo con ID:", selectedEquipo);
+
+        const response = await axios.get(`${api_url}/api/jugadores/porEquipo/${selectedEquipo}`, {
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
+        });
+
+        if (response.data && Array.isArray(response.data)) {
+          setJugadores(response.data);
+        } else {
+          setJugadores([]);
+        }
+      } catch (error) {
+        console.error("Error al cargar jugadores:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Error al cargar los jugadores del equipo",
+        });
+        setJugadores([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchJugadores();
+  }, [selectedEquipo, api_url, getUserId, getToken]);
+
+  const handleSelectEquipo = (event) => {
+    setSelectedEquipo(event.target.value); // Establece el equipo seleccionado
+  };
+
+  // Función para abrir el diálogo con detalles del jugador
+  const handleVerDetalles = (jugador) => {
+    setSelectedJugador(jugador); // Establece el jugador seleccionado
+    setOpenDialog(true); // Abre el modal
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false); // Cierra el modal
+    setSelectedJugador(null); // Resetea el jugador seleccionado
+  };
+
+  if (loading) {
+    return <div className="text-center py-4">Cargando...</div>;
+  }
+
   return (
-    <div className="w-100">
-      <div className="d-flex flex-row align-items-center justify-content-left g-2 mb-4 container-fluid">
-        <h2 className="mb-0">Menú de jugadores</h2>
-        <IconButton
-          onClick={() => {
-            setEdit(false);
-            setVisible2(!visible2);
-          }}
-        >
-          <Edit color="primary" />
-        </IconButton>
-      </div>
-      <div class="row g-5">
-        <div class="col-md-8">
-          <div className={`${visible ? "teamsVisible" : "teamsInvisible"}`}>
-            <article class="blog-post container-fluid w-100">
-              <div className="players-grid-d player-flow quitarScroll">
-                {jugadoresPrueba.map((j, index) => {
-                  return (
-                    <div className="over-card" key={j.id}>
-                      <div className="kard">
-                        <div className="face card-front">
-                          <div
-                            className={`front-head ${
-                              j.activo ? "aktive" : "inactive"
-                            }`}
-                          >
-                            <img
-                              src={j.img}
-                              alt={j.nombre}
-                              className="jugImg"
-                            />
-                          </div>
-                          <h5 className="h_tz f-col">{j.nombre}</h5>
-                          <div
-                            className={`mini-alert ${
-                              j.activo
-                                ? "aktive activeTxt"
-                                : "inactive inactiveTxt"
-                            }`}
-                          >
-                            {j.activo ? "Activo" : "Inactivo"}
-                          </div>
-                        </div>
-                        <div className="face card-back _col">
-                          <h4 className="text-center mt-2 mb-0">Datos</h4>
-                          <div className="mini-grid">
-                            <div className="para_alla">
-                              <p>Partidos</p>
-                              <p>Goles</p>
-                              <p>t. rojas</p>
-                            </div>
-                            <div className="para_aca">
-                              <p>10</p>
-                              <p>1</p>
-                              <p>N/A</p>
-                            </div>
-                          </div>
-                          <div className="switch-button">
-                            <input
-                              type="checkbox"
-                              name="switch-button"
-                              id={`switch-label-${index}`}
-                              className="switch-button__checkbox"
-                              //checked={j.activo}
-                            />
-                            <label
-                              htmlFor={`switch-label-${index}`}
-                              className="switch-button__label"
-                            ></label>
-                          </div>
-                          <a
-                            className="link"
-                            onClick={() => {
-                              setEdit(true);
-                              setVisible2(true);
-                            }}
-                          >
-                            Editar
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </article>
-          </div>
+    <div className="container-fluid">
+      <div style={{ padding: '20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+          <h2>Selecciona un equipo</h2>
+          <Tooltip title="Regresar">
+            <IconButton color="primary" onClick={() => cambiarComponente('A')}>
+              <ArrowBackIcon fontSize="large" />
+            </IconButton>
+          </Tooltip>
         </div>
 
-        <div class="col-md-4 position-sticky">
-          <div class="position-sticky detallicos">
-            <div class="p-4 mb-3 bg-light rounded">
-              <details>
-                <summary>Elige un equipo para ver sus jugadores</summary>
-                {equipos.map((e) => (
-                  <li>
-                    <a className="link" onClick={() => setVisible(!visible)}>
-                      {e.nombre}
-                    </a>
-                  </li>
-                ))}
-              </details>
-            </div>
+        {/* Selector para elegir equipo */}
+        <div style={{ marginBottom: '20px' }}>
+          <select
+            value={selectedEquipo}
+            onChange={handleSelectEquipo}
+            style={{
+              width: '100%',
+              padding: '15px',
+              fontSize: '18px',
+              borderRadius: '8px',
+              border: '1px solid #ccc',
+              backgroundColor: '#f8f9fa',
+              cursor: 'pointer',
+            }}
+          >
+            <option value="">Selecciona un equipo</option>
+            {equipos.map((equipo) => (
+              <option key={equipo.id} value={equipo.id}>
+                {equipo.nombreEquipo}
+              </option>
+            ))}
+          </select>
+        </div>
 
-            <div
-              className={`p-sm-1 ${
-                visible2 ? "teamsVisible" : "teamsInvisible"
-              }`}
-            >
-              <h4 class="d-flex justify-content-between align-items-center mb-3">
-                <span class="body-small">
-                  {edit ? "Editar jugador" : "Registrar jugador"}
-                </span>
-              </h4>
-              <div className="arbitro-card bg-light rounded mb-4">
-                <form>
-                  <div className="player-picture">
-                    <div className="fotoPlayer">
-                      <img
-                        src={preview}
-                        alt="Foto de perfil nueva"
-                        id="selPictPlayer"
-                      />
-                      <Tooltip title="Elegir una imagen">
-                        <div className="botonDivPlayer">
-                          <input
-                            type="file"
-                            className="botonCamPlayer"
-                            accept="image/*"
-                            onChange={handleFileChange}
-                          />
-                          <i className="fa fa-camera"></i>
-                        </div>
-                      </Tooltip>
+        {/* Si hay un equipo seleccionado, muestra los jugadores */}
+        {selectedEquipo && jugadores.length > 0 && (
+          <div className="row">
+            <div className="col-md-12">
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+                {jugadores.map((jugador) => (
+                  <div
+                    key={jugador.id}
+                    style={{
+                      backgroundColor: '#f8f9fa',
+                      padding: '15px',
+                      borderRadius: '8px',
+                      width: '200px',
+                      textAlign: 'center',
+                      cursor: 'pointer',
+                      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                      transition: 'transform 0.3s ease',
+                    }}
+                  >
+                    <img
+                      src={getUrl(jugador.fotoJugador) || userPlace}
+                      alt={jugador.nombreCompleto}
+                      style={{
+                        height: '100px',
+                        width: '100px',
+                        objectFit: 'cover',
+                        borderRadius: '8px',
+                        marginBottom: '10px',
+                      }}
+                    />
+                    <h5>{jugador.nombreCompleto}</h5>
+                    <p className="text-muted">{jugador.numeroCamiseta}</p>
+                    <div>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => handleVerDetalles(jugador)} // Muestra detalles
+                      >
+                        Ver Detalles
+                      </Button>
                     </div>
                   </div>
-                  <TextField
-                    className="txtAr txtCon"
-                    label="Nombre completo"
-                    fullWidth
-                    margin="dense"
-                    name="nombre"
-                    required
-                    id="arbName"
-                  />
-                  <p className="text-danger"></p>
-                  <TextField
-                    className="txtAr txtCon"
-                    type="date"
-                    placeholder="Fecha de nacimiento"
-                    fullWidth
-                    margin="dense"
-                    name="correo"
-                    required
-                  />
-                  <p className="text-danger"></p>
-                  <TextField
-                    className="txtAr txtCon"
-                    type="number"
-                    label="Número de camiseta"
-                    fullWidth
-                    margin="dense"
-                    name="contra"
-                    required
-                  />
-                  <p className="text-danger"></p>
-                  {load ? (
-                    <div className="my-spinner"></div>
-                  ) : (
-                    <button
-                      type="submit"
-                      id="submitArb"
-                      className={"text-black"}
-                    >
-                      Registrar
-                    </button>
-                  )}
-                </form>
+                ))}
               </div>
             </div>
           </div>
-        </div>
+        )}
+
+        {/* Si no hay jugadores, muestra un mensaje */}
+        {selectedEquipo && jugadores.length === 0 && (
+          <div className="text-center py-4">
+            <p>No hay jugadores registrados en este equipo.</p>
+          </div>
+        )}
       </div>
+
+      {/* Modal con los detalles del jugador */}
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>Detalles del Jugador</DialogTitle>
+        <DialogContent>
+          {selectedJugador && (
+            <div>
+              <img
+                src={getUrl(selectedJugador.fotoJugador) || userPlace}
+                alt={selectedJugador.nombreCompleto}
+                style={{
+                  height: '200px',
+                  width: '200px',
+                  objectFit: 'cover',
+                  borderRadius: '8px',
+                  marginBottom: '20px',
+                }}
+              />
+              <h3>{selectedJugador.nombreCompleto}</h3>
+              <p><strong>Número de camiseta:</strong> {selectedJugador.numeroCamiseta}</p>
+              <p><strong>Fecha de nacimiento:</strong> {selectedJugador.fechaNacimiento}</p>
+              <p><strong>Partidos jugados:</strong> {selectedJugador.partidosJugados}</p>
+              <p><strong>Expulsado:</strong> {selectedJugador.expulsado ? 'Sí' : 'No'}</p>
+              <p><strong>Habilitado:</strong> {selectedJugador.habilitado ? 'Sí' : 'No'}</p>
+              <p><strong>Equipo:</strong> {selectedJugador.equipo.nombreEquipo}</p>
+            </div>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Cerrar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

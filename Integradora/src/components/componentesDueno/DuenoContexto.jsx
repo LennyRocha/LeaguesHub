@@ -4,6 +4,7 @@ import DuenoHome from "./DuenoHome";
 import DuenoEquipos from "./DuenoEquipos";
 import DuenoJugadores from "./DuenoJugadores";
 import DuenoPagos from "./DuenoPagos";
+import Eleccion from "../componentesDueno/EleccionEquipo"
 import DuenoHistorial from "./DuenoHistorial";
 import miImagen from "../../img/logo1.png";
 import "../../css/dueno.css";
@@ -36,7 +37,7 @@ export default function DuenoContexto() {
   const [id, setId] = useState("");
   const [noData, setNoData] = useState(false);
   const tokenCheckInterval = 5 * 60 * 1000; // 5 minutos
-
+// Al obtener el contexto
   useEffect(() => {
     document.title = "Dueños";
   }, []);
@@ -180,12 +181,19 @@ export default function DuenoContexto() {
         return <DuenoHome cambiarComponente={setComponenteActual} />;
       case "B":
         return <DuenoEquipos cambiarComponente={setComponenteActual} />;
-      case "C":
-        return <DuenoJugadores cambiarComponente={setComponenteActual} />;
+        case "C":
+          return (
+            <DuenoJugadores 
+              cambiarComponente={setComponenteActual} 
+            />
+          );
+
       case "D":
         return <DuenoPagos cambiarComponente={setComponenteActual} />;
       case "E":
         return <DuenoHistorial cambiarComponente={setComponenteActual} />;
+        case "F":
+          return <Eleccion scambiarComponente={setComponenteActual} />;
       default:
         return <DuenoHome cambiarComponente={setComponenteActual} />; //Inicia por default en 'home'
     }
