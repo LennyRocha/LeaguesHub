@@ -22,6 +22,8 @@ import Poster1 from "../../assets/templates/poster_back.png";
 import jsPDF from "jspdf";
 import "../../assets/fonts/Oswald-Variable-normal";
 import "../../assets/fonts/3rd Man-normal";
+import Logo2 from '../../img/logo1.png'
+import fotoPlace from "../../assets/images/foto-placeholder.png";
 
 export default function Admin7() {
   const [torneos, setTorneos] = useState([]);
@@ -91,6 +93,7 @@ export default function Admin7() {
           },
         });
         setPoster(res.data);
+        generatePDF(true);
       })
       .catch((error) => {
         console.error(error);
@@ -193,6 +196,86 @@ export default function Admin7() {
     };
   };
 
+  const convertImageToBase64 = async (url) => {
+    const res = await fetch(url);
+    const blob = await res.blob();
+
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  };
+
+  const [imagenPrevisualizada, setImagenPrevisualizada] = useState("");
+
+  const getUrlDrive = (url) => {
+    let idMatch = url.match(/id=([^&]+)/); // para ?id=...
+    if (!idMatch) {
+      idMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/); // para /d/...
+    }
+    return idMatch
+      ? `https://drive.google.com/uc?export=view&id=${idMatch[1]}`
+      : url;
+  };
+
+  const renderToCanvas = (selection) => {
+    const canvas = document.getElementById("previewCanvas");
+    const ctx = canvas.getContext("2d");
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const fondo = new Image();
+    fondo.src = Banner1;
+
+    fondo.onload = async () => {
+      ctx.drawImage(fondo, 0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "white";
+
+      ctx.font = "bold 36px '3rd Man', sans-serif";
+      ctx.fillText(`Torneo ${selection.nombreTorneo}`, 250, 35);
+      ctx.font = "20px '3rd Man', sans-serif";
+      ctx.fillText(`Fecha de inicio: ${selection.fechaInicio}`, 835, 140);
+      ctx.fillStyle = "black";
+      ctx.font = "20px '3rd Man', sans-serif";
+      ctx.fillText(selection.descripcion, 250, 75);
+      ctx.fillStyle = "#9A0000";
+      ctx.font = "18px '3rd Man', sans-serif";
+      ctx.fillText(
+        `¡Sólo ${selection.equiposLiguilla} pasarán a liguilla!`,
+        300,
+        135
+      );
+
+      const logo = new Image();
+
+      //logo.src = getUrlDrive(selection.logoTorneo);
+      console.log(getUrlDrive(selection.logoTorneo)); // Verifica la URL generada
+
+      //logo.src = fotoPlace;
+      logo.crossOrigin = "Anonymous"; // Intentar con CORS habilitado
+
+      logo.src = `https://cors-anywhere.herokuapp.com/${getUrlDrive(
+        selection.logoTorneo
+      )}`;
+
+      logo.onload = () => {
+        ctx.drawImage(logo, 860, 10, 100, 100);
+        const imgUrl = canvas.toDataURL("image/png");
+        setImagenPrevisualizada(imgUrl);
+      };
+
+      logo.onerror = (e) => {
+        console.error("No se pudo cargar la imagen del torneo");
+        logo.src = Logo2
+        const imgUrl = canvas.toDataURL("image/png");
+        setImagenPrevisualizada(imgUrl);
+      };
+    };
+  };
+
   return (
     <div>
       <div className="container-fluid">
@@ -288,7 +371,8 @@ export default function Admin7() {
                             } slide-btn text-black`}
                             onClick={(e) => {
                               e.preventDefault();
-                              generatePDF(false);
+                              renderToCanvas(selection);
+                              //generatePDF(false);
                             }}
                           >
                             Ver
@@ -306,7 +390,6 @@ export default function Admin7() {
                           <button
                             className="slide-btn text-black"
                             onClick={async (e) => {
-                              //generatePDF(true);
                               crearConvocatoria(e);
                             }}
                           >
@@ -336,14 +419,23 @@ export default function Admin7() {
                   ></iframe>
                 )}
               </div>
-              {/* <div className="d-sm-flex align-items-center justify-content-between mb-4">
-                <h3 className="mb-0 mt-1">Vista horizontal</h3>
-              </div>
-              <img
-                src={Banner1}
-                alt="PosterPlantilla"
-                className="d-block w-100 h-peque"
-              /> */}
+              <canvas
+                id="previewCanvas"
+                width="1200px"
+                height="150px"
+                style={{ display: "none" }}
+              ></canvas>
+              {imagenPrevisualizada && (
+                <div>
+                  <h4>Vista horizontal</h4>
+                  <img
+                    src={imagenPrevisualizada}
+                    alt="Vista previa del torneo"
+                    width={"100%"}
+                    height={150}
+                  />
+                </div>
+              )}
             </div>
           ) : (
             <div className="w-100 align-items-center d-flex flex-column gap-1">

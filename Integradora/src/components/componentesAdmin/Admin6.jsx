@@ -57,7 +57,7 @@ export default function Admin6() {
   const [reloadPayments, setReloadPayments] = useState(false);
 
   const changePay = (tipo) => {
-    let respuesta = ''
+    let respuesta = "";
     Swal.fire({
       title: `Ingresa el nuevo monto para el pago de ${tipo}`,
       input: "number",
@@ -73,11 +73,15 @@ export default function Admin6() {
       preConfirm: async (monto) => {
         try {
           const token = await getToken();
-          const response = await axios.put(`${api_url}/api/pagos/admin/precios/${tipo}/${monto}`,{},{
-            headers: {
-              Authorization: `Bearer ${token}`
+          const response = await axios.put(
+            `${api_url}/api/pagos/admin/precios/${tipo}/${monto}`,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             }
-          });
+          );
           respuesta = response.data;
         } catch (error) {
           Swal.showValidationMessage(`
@@ -302,11 +306,39 @@ export default function Admin6() {
   return (
     <div>
       <div className="container-fluid">
+        <nav aria-label="breadcrumb">
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item active" aria-current="page">
+              Pagos
+            </li>
+            <li className={`breadcrumb-item ${!check && 'active'}`}>
+              <a
+                onClick={() => {
+                  setCheck(false);
+                }}
+                className="link"
+              >
+                Lista de pagos
+              </a>
+            </li>
+            <li className={`breadcrumb-item ${check && 'active'}`}>
+              <a
+                onClick={() => {
+                  setCheck(true);
+                }}
+                className="link"
+              >
+                Precios de pagos
+              </a>
+            </li>
+          </ol>
+        </nav>
+
         <div className="d-flex flex-row align-items-center justify-content-left gap-1 mb-4">
           <h2 className="mb-0">Menú de pagos</h2>
-          <IconButton onClick={() => setCheck(!check)}>
+          {/* <IconButton onClick={() => setCheck(!check)}>
             <Edit color="primary" />
-          </IconButton>
+          </IconButton> */}
         </div>
         {!check ? (
           <div>
@@ -444,12 +476,18 @@ export default function Admin6() {
                             {pago.equipo.nombreEquipo}
                           </TableCell>
                           <TableCell>
-                            <button
-                              className="slide-btn-sm w-100 text-black but-black"
-                              onClick={() => confirm(pago.id)}
-                            >
-                              Confirmar
-                            </button>
+                            {pago.estatusPago ? (
+                              <p className="text-exito text-center oswald">
+                                ¡Pagado!
+                              </p>
+                            ) : (
+                              <button
+                                className="slide-btn-sm w-100 text-black but-black"
+                                onClick={() => confirm(pago.id)}
+                              >
+                                Confirmar
+                              </button>
+                            )}
                           </TableCell>
                         </TableRow>
                       ))}

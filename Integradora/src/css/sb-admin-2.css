@@ -1328,6 +1328,10 @@ select:focus {
   background-color: var(--color-acento-3-1) !important;
 }
 
+.text-exito{
+  color: var(--color-acento-3-1);
+}
+
 .centered {
   align-self: center;
   display: flex;

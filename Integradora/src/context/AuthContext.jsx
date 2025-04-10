@@ -105,14 +105,13 @@ export const AuthProvider = ({ children }) => {
   //   return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : url;
   // };
 
-    const getUrl = (url) => {
+  const getUrl = (url) => {
     let idMatch = url.match(/id=([^&]+)/); // para ?id=...
     if (!idMatch) {
       idMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/); // para /d/...
     }
     return idMatch ? `https://lh3.googleusercontent.com/d/${idMatch[1]}` : url;
   };
-  
 
   const login = (username, password) => {
     validate(username.toLowerCase().trim(), password);
