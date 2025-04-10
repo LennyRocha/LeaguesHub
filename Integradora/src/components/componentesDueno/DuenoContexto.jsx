@@ -338,7 +338,7 @@ export default function DuenoContexto() {
             <p className="text-white m-2 p-head">Menú de dueños de equipos</p>
 
             <ul className="navbar-nav ml-auto">
-              <li className="nav-item dropdown no-arrow mx-auto">
+              {/* <li className="nav-item dropdown no-arrow mx-auto">
                 <a
                   className="nav-link dropdown-toggle gray-back ali"
                   id="alertsDropdown"
@@ -527,7 +527,7 @@ export default function DuenoContexto() {
                     Read More Messages
                   </a>
                 </div>
-              </li>
+              </li> */}
 
               <div className="topbar-divider d-none d-sm-block"></div>
 

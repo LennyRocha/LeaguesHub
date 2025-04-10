@@ -529,11 +529,11 @@ export default function DuenoJugadores({ cambiarComponente }) {
           open={openDialogRegistrar}
           onClose={() => setOpenDialogRegistrar(false)}
         >
-          <DialogTitle>Agregar Jugador</DialogTitle>
-          <DialogContent>
+          <DialogTitle className="nunito">Agregar Jugador</DialogTitle>
+          <DialogContent className="py-2">
             <TextField
-            label="Nombre completo"
-            className="txtAr"
+              label="Nombre completo"
+              className="txtAr"
               type="text"
               placeholder="Nombre Completo"
               value={newJugador.nombreCompleto}
@@ -547,7 +547,9 @@ export default function DuenoJugadores({ cambiarComponente }) {
                 borderRadius: 5,
               }}
             />
-            <input
+            <TextField
+              label="Fecha de nacimiento"
+              className="txtAr"
               type="date"
               value={newJugador.fechaNacimiento}
               onChange={(e) =>
@@ -563,7 +565,9 @@ export default function DuenoJugadores({ cambiarComponente }) {
                 borderRadius: 5,
               }}
             />
-            <input
+            <TextField
+              label="# de camiseta"
+              className="txtAr"
               type="number"
               placeholder="Número de Camiseta"
               value={newJugador.numeroCamiseta}
@@ -598,18 +602,18 @@ export default function DuenoJugadores({ cambiarComponente }) {
             )}
           </DialogContent>
           <DialogActions>
-            <Button
+            <button
               onClick={handleRegisterJugador}
-              style={{ backgroundColor: "#FF5958", color: "white" }}
+              className="slide-btn-sm-green text-black w-50"
             >
               Registrar
-            </Button>
-            <Button
+            </button>
+            <button
               onClick={() => setOpenDialogRegistrar(false)}
-              style={{ backgroundColor: "#ccc" }}
+              className="slide-btn-sm text-black w-50"
             >
               Cancelar
-            </Button>
+            </button>
           </DialogActions>
         </Dialog>
 
@@ -619,9 +623,9 @@ export default function DuenoJugadores({ cambiarComponente }) {
           onClose={() => setOpenDialogEditar(false)}
         >
           <DialogTitle>Editar Jugador</DialogTitle>
-          <DialogContent className="quitarScroll">
+          <DialogContent className="quitarScroll py-2">
             <TextField
-            label="Nombre completo"
+              label="Nombre completo"
               type="text"
               placeholder="Nombre Completo"
               value={newJugador.nombreCompleto}
@@ -655,8 +659,8 @@ export default function DuenoJugadores({ cambiarComponente }) {
               }}
             />
             <TextField
-            label="# de camiseta"
-            className="txtAr"
+              label="# de camiseta"
+              className="txtAr"
               type="number"
               placeholder="Número de Camiseta"
               value={newJugador.numeroCamiseta}
