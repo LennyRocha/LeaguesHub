@@ -37,3 +37,5 @@ npm i yup @hookform/resolvers
 npm install @react-pdf/renderer
 # jspdf
 npm i jspdf
+# framer motion
+npm install framer-motion

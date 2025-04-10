@@ -9,7 +9,8 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Switch
+  Switch,
+  TextField,
 } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -99,12 +100,16 @@ export default function DuenoJugadores({ cambiarComponente }) {
     fetchJugadores();
   }, [selectedEquipo, reload, api_url, getUserId, getToken]);
 
-  const handleToggleEstatus = async (jugadorId, currentStatus, jugadorNombre) => {
+  const handleToggleEstatus = async (
+    jugadorId,
+    currentStatus,
+    jugadorNombre
+  ) => {
     try {
       const tokData = await getToken();
       const res = await axios.put(
         `${api_url}/api/jugadores/estatus/${jugadorId}`,
-        { habilitado: !currentStatus },  // Cambiamos a 'habilitado' para coincidir con el API
+        { habilitado: !currentStatus }, // Cambiamos a 'habilitado' para coincidir con el API
         {
           headers: {
             Authorization: `Bearer ${tokData}`,
@@ -112,32 +117,35 @@ export default function DuenoJugadores({ cambiarComponente }) {
           },
         }
       );
-  
+
       Swal.fire({
         icon: "success",
         title: "¡Éxito!",
-        text: `Jugador ${!currentStatus ? 'habilitado' : 'deshabilitado'} correctamente`,
+        text: `Jugador ${
+          !currentStatus ? "habilitado" : "deshabilitado"
+        } correctamente`,
         confirmButtonText: "Aceptar",
         customClass: {
           confirmButton: "btn-confirm",
         },
       });
-  
-      setReload(prev => !prev);
-      
+
+      setReload((prev) => !prev);
     } catch (err) {
       console.error(err);
-      
+
       if (err.response?.status === 400) {
         Swal.fire({
           icon: "error",
           title: "¡Error!",
-          text: err.response?.data?.message || `No se pudo cambiar el estado de ${jugadorNombre}`,
+          text:
+            err.response?.data?.message ||
+            `No se pudo cambiar el estado de ${jugadorNombre}`,
           confirmButtonText: "Aceptar",
         });
         return;
       }
-      
+
       if (err.response?.status === 403) {
         Swal.fire({
           icon: "warning",
@@ -147,7 +155,7 @@ export default function DuenoJugadores({ cambiarComponente }) {
         }).then(() => logout());
         return;
       }
-  
+
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -288,6 +296,15 @@ export default function DuenoJugadores({ cambiarComponente }) {
   };
 
   const handleSelectEquipo = (e) => setSelectedEquipo(e.target.value);
+  function getNum(num) {
+    if (num < 10) {
+      return `00${num}`;
+    } else if (num > 100) {
+      return `${num}`;
+    } else {
+      return `0${num}`;
+    }
+  }
 
   if (loading) return <div className="text-center py-4">Cargando...</div>;
 
@@ -310,7 +327,15 @@ export default function DuenoJugadores({ cambiarComponente }) {
           </Tooltip>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            marginBottom: "20px",
+          }}
+          className="flex-grow flex-row d-flex"
+        >
           <select
             value={selectedEquipo}
             onChange={handleSelectEquipo}
@@ -332,26 +357,108 @@ export default function DuenoJugadores({ cambiarComponente }) {
           </select>
 
           {selectedEquipo && (
-            <Button
-              variant="contained"
+            <button
+              className="slide-btn-sm d-md-block d-none text-black btn-players"
               onClick={() => setOpenDialogRegistrar(true)}
-              style={{
-                backgroundColor: "#FF5958",
-                color: "white",
-                fontWeight: "bold",
-              }}
             >
               Agregar Jugador
-            </Button>
+            </button>
           )}
         </div>
+        {selectedEquipo && (
+          <button
+            className="slide-btn-sm d-md-none d-block text-black btn-players w-100"
+            onClick={() => setOpenDialogRegistrar(true)}
+          >
+            Agregar Jugador
+          </button>
+        )}
 
         {selectedEquipo && jugadores.length > 0 && (
           <div className="row">
             <div className="col-md-12">
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
+              <div className="players-grid">
                 {jugadores.map((jugador) => (
-                  <div
+                  <div className="over-card" key={jugador.id}>
+                    <div className="kard">
+                      <div className="face card-front">
+                        <div
+                          className={`front-head ${
+                            jugador.habilitado ? "aktive" : "inactive"
+                          }`}
+                        >
+                          <img
+                            src={getUrl(jugador.fotoJugador) || userPlace}
+                            alt={jugador.nombreCompleto}
+                            className="jugImg"
+                          />
+                        </div>
+                        <h6 className="h_tz f-col text-center px-2 w-75">
+                          {jugador.nombreCompleto}
+                        </h6>
+                        <p className="text-muted">
+                          #{getNum(jugador.numeroCamiseta)}
+                        </p>
+                        <div
+                          className={`mini-alert ${
+                            jugador.habilitado
+                              ? "aktive activeTxt"
+                              : "inactive inactiveTxt"
+                          }`}
+                        >
+                          {jugador.habilitado ? "Activo" : "Inactivo"}
+                        </div>
+                      </div>
+                      <div className="face card-back _col">
+                        <h3>Opciones</h3>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: "8px",
+                          }}
+                        >
+                          <span>Activo:</span>
+                          <Switch
+                            checked={jugador.habilitado || false}
+                            onChange={() =>
+                              handleToggleEstatus(
+                                jugador.id,
+                                jugador.habilitado,
+                                jugador.nombreCompleto
+                              )
+                            }
+                            color="success"
+                          />
+                        </div>
+                        <div className="d-flex-row gap-5">
+                          <a
+                            className="link mx-1"
+                            onClick={() => handleVerDetalles(jugador)}
+                          >
+                            Detalles
+                          </a>
+                          <a
+                            className="link mx-1"
+                            onClick={() => {
+                              setSelectedJugador(jugador);
+                              setNewJugador({
+                                nombreCompleto: jugador.nombreCompleto,
+                                fechaNacimiento: jugador.fechaNacimiento,
+                                numeroCamiseta: jugador.numeroCamiseta,
+                              });
+                              setOpenDialogEditar(true);
+                            }}
+                          >
+                            Editar
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  /*
+                   <div
                     key={jugador.id}
                     style={{
                       backgroundColor: "#f8f9fa",
@@ -410,6 +517,7 @@ export default function DuenoJugadores({ cambiarComponente }) {
                       </div>
                     </div>
                   </div>
+                   */
                 ))}
               </div>
             </div>
@@ -417,25 +525,43 @@ export default function DuenoJugadores({ cambiarComponente }) {
         )}
 
         {/* Modal Registrar Jugador */}
-        <Dialog open={openDialogRegistrar} onClose={() => setOpenDialogRegistrar(false)}>
+        <Dialog
+          open={openDialogRegistrar}
+          onClose={() => setOpenDialogRegistrar(false)}
+        >
           <DialogTitle>Agregar Jugador</DialogTitle>
           <DialogContent>
-            <input
+            <TextField
+            label="Nombre completo"
+            className="txtAr"
               type="text"
               placeholder="Nombre Completo"
               value={newJugador.nombreCompleto}
               onChange={(e) =>
                 setNewJugador({ ...newJugador, nombreCompleto: e.target.value })
               }
-              style={{ width: "100%", marginBottom: "10px", backgroundColor: "white", borderRadius: 5 }}
+              style={{
+                width: "100%",
+                marginBottom: "10px",
+                backgroundColor: "white",
+                borderRadius: 5,
+              }}
             />
             <input
               type="date"
               value={newJugador.fechaNacimiento}
               onChange={(e) =>
-                setNewJugador({ ...newJugador, fechaNacimiento: e.target.value })
+                setNewJugador({
+                  ...newJugador,
+                  fechaNacimiento: e.target.value,
+                })
               }
-              style={{ width: "100%", marginBottom: "10px", backgroundColor: "white", borderRadius: 5 }}
+              style={{
+                width: "100%",
+                marginBottom: "10px",
+                backgroundColor: "white",
+                borderRadius: 5,
+              }}
             />
             <input
               type="number"
@@ -444,7 +570,12 @@ export default function DuenoJugadores({ cambiarComponente }) {
               onChange={(e) =>
                 setNewJugador({ ...newJugador, numeroCamiseta: e.target.value })
               }
-              style={{ width: "100%", marginBottom: "10px", backgroundColor: "white", borderRadius: 5 }}
+              style={{
+                width: "100%",
+                marginBottom: "10px",
+                backgroundColor: "white",
+                borderRadius: 5,
+              }}
             />
             <input
               type="file"
@@ -483,34 +614,61 @@ export default function DuenoJugadores({ cambiarComponente }) {
         </Dialog>
 
         {/* Modal Editar Jugador */}
-        <Dialog open={openDialogEditar} onClose={() => setOpenDialogEditar(false)}>
+        <Dialog
+          open={openDialogEditar}
+          onClose={() => setOpenDialogEditar(false)}
+        >
           <DialogTitle>Editar Jugador</DialogTitle>
-          <DialogContent>
-            <input
+          <DialogContent className="quitarScroll">
+            <TextField
+            label="Nombre completo"
               type="text"
               placeholder="Nombre Completo"
               value={newJugador.nombreCompleto}
+              className="txtAr"
               onChange={(e) =>
                 setNewJugador({ ...newJugador, nombreCompleto: e.target.value })
               }
-              style={{ width: "100%", marginBottom: "10px", backgroundColor: "white", borderRadius: 5 }}
+              style={{
+                width: "100%",
+                marginBottom: "10px",
+                backgroundColor: "white",
+                borderRadius: 5,
+              }}
             />
-            <input
+            <TextField
+              label="Fecha de nacimiento"
               type="date"
+              className="txtAr"
               value={newJugador.fechaNacimiento}
               onChange={(e) =>
-                setNewJugador({ ...newJugador, fechaNacimiento: e.target.value })
+                setNewJugador({
+                  ...newJugador,
+                  fechaNacimiento: e.target.value,
+                })
               }
-              style={{ width: "100%", marginBottom: "10px", backgroundColor: "white", borderRadius: 5 }}
+              style={{
+                width: "100%",
+                marginBottom: "10px",
+                backgroundColor: "white",
+                borderRadius: 5,
+              }}
             />
-            <input
+            <TextField
+            label="# de camiseta"
+            className="txtAr"
               type="number"
               placeholder="Número de Camiseta"
               value={newJugador.numeroCamiseta}
               onChange={(e) =>
                 setNewJugador({ ...newJugador, numeroCamiseta: e.target.value })
               }
-              style={{ width: "100%", marginBottom: "10px", backgroundColor: "white", borderRadius: 5 }}
+              style={{
+                width: "100%",
+                marginBottom: "10px",
+                backgroundColor: "white",
+                borderRadius: 5,
+              }}
             />
             <input
               type="file"
@@ -520,7 +678,11 @@ export default function DuenoJugadores({ cambiarComponente }) {
 
             {selectedJugador?.fotoJugador || selectedFile ? (
               <img
-                src={selectedFile ? URL.createObjectURL(selectedFile) : getUrl(selectedJugador.fotoJugador)}
+                src={
+                  selectedFile
+                    ? URL.createObjectURL(selectedFile)
+                    : getUrl(selectedJugador.fotoJugador)
+                }
                 alt="Vista previa"
                 style={{
                   width: "100%",
@@ -533,25 +695,25 @@ export default function DuenoJugadores({ cambiarComponente }) {
             ) : null}
           </DialogContent>
           <DialogActions>
-            <Button
+            <button
               onClick={handleEditJugador}
-              style={{ backgroundColor: "#FF5958", color: "white" }}
+              className="slide-btn-sm w-50 text-black"
             >
               Guardar Cambios
-            </Button>
-            <Button
+            </button>
+            <button
               onClick={() => setOpenDialogEditar(false)}
-              style={{ backgroundColor: "#ccc" }}
+              className="slide-btn-sm w-50 text-black"
             >
               Cancelar
-            </Button>
+            </button>
           </DialogActions>
         </Dialog>
 
         {/* Modal Ver Detalles */}
         <Dialog open={openDialogDetalles} onClose={handleCloseDetalles}>
-          <DialogTitle>Detalles del Jugador</DialogTitle>
-          <DialogContent>
+          <DialogTitle className="nunito">Detalles del Jugador</DialogTitle>
+          <DialogContent className="quitarScroll">
             {selectedJugador && (
               <div>
                 <img
@@ -565,22 +727,39 @@ export default function DuenoJugadores({ cambiarComponente }) {
                     marginBottom: "10px",
                   }}
                 />
-                <p><strong>Nombre:</strong> {selectedJugador.nombreCompleto}</p>
-                <p><strong>Fecha de nacimiento:</strong> {selectedJugador.fechaNacimiento}</p>
-                <p><strong>Número de camiseta:</strong> {selectedJugador.numeroCamiseta}</p>
-                <p><strong>Estatus:</strong> {selectedJugador.habilitado ? "Habilitado" : "Deshabilitado"}</p>       
-                   <p><strong>Partidos Jugados:</strong> {selectedJugador.partidosJugados}</p>
-                <p><strong>Expulsado:</strong> {selectedJugador.expulsado ? "Sí" : "No"}</p>
+                <p>
+                  <strong>Nombre:</strong> {selectedJugador.nombreCompleto}
+                </p>
+                <p>
+                  <strong>Fecha de nacimiento:</strong>{" "}
+                  {selectedJugador.fechaNacimiento}
+                </p>
+                <p>
+                  <strong>Número de camiseta:</strong>{" "}
+                  {selectedJugador.numeroCamiseta}
+                </p>
+                <p>
+                  <strong>Estatus:</strong>{" "}
+                  {selectedJugador.habilitado ? "Habilitado" : "Deshabilitado"}
+                </p>
+                <p>
+                  <strong>Partidos Jugados:</strong>{" "}
+                  {selectedJugador.partidosJugados}
+                </p>
+                <p>
+                  <strong>Expulsado:</strong>{" "}
+                  {selectedJugador.expulsado ? "Sí" : "No"}
+                </p>
               </div>
             )}
           </DialogContent>
           <DialogActions>
-            <Button
+            <button
               onClick={handleCloseDetalles}
-              style={{ backgroundColor: "#ccc" }}
+              className="slide-btn-sm-green text-black"
             >
               Cerrar
-            </Button>
+            </button>
           </DialogActions>
         </Dialog>
       </div>

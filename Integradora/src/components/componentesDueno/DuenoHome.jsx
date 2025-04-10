@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useCallback } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
-import { Button, Modal, Select, MenuItem, CircularProgress, FormControl, InputLabel } from "@mui/material";
+import { Button, Modal, Select, MenuItem, CircularProgress, FormControl, InputLabel, Box } from "@mui/material";
 import Swal from "sweetalert2";
 
 export default function DuenoHome({ cambiarComponente }) {
@@ -17,13 +17,11 @@ export default function DuenoHome({ cambiarComponente }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
 
-  // Función para transformar la URL de Google Drive
   const getUrl = (url) => {
-    const match = url.match(/id=([^&]+)/); // Extrae el ID de la imagen
+    const match = url.match(/id=([^&]+)/);
     return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : url;
   };
 
-  // Función para cargar convocatoria
   const getConvocatoria = async () => {
     try {
       setLoading(true);
@@ -40,7 +38,6 @@ export default function DuenoHome({ cambiarComponente }) {
     }
   };
 
-  // Función para cargar los equipos del usuario
   const fetchEquipos = async () => {
     try {
       const userId = await getUserId();
@@ -54,7 +51,6 @@ export default function DuenoHome({ cambiarComponente }) {
     }
   };
 
-  // Función para cargar los torneos en espera
   const fetchTorneos = async () => {
     try {
       const response = await axios.get(`${api_url}/api/torneos/espera`, {
@@ -67,7 +63,6 @@ export default function DuenoHome({ cambiarComponente }) {
     }
   };
 
-  // Función para manejar la inscripción
   const handleInscribir = async () => {
     if (!selectedEquipo || !selectedTorneo) {
       Swal.fire("Error", "Debes seleccionar un equipo y un torneo", "error");
@@ -79,28 +74,33 @@ export default function DuenoHome({ cambiarComponente }) {
       await axios.post(`${api_url}/api/solicitudes/${selectedEquipo}/${selectedTorneo}`, {}, {
         headers: { Authorization: `Bearer ${getToken()}` }
       });
-      Swal.fire("Éxito", "Solicitud enviada correctamente", "success");
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Solicitud enviada correctamente',
+        showConfirmButton: false,
+        timer: 1500
+      });
       setModalVisible(false);
+      setSelectedEquipo('');
+      setSelectedTorneo('');
     } catch (error) {
       console.error("Error enviando solicitud:", error);
-      Swal.fire("Error", "No se pudo enviar la solicitud", "error");
+      Swal.fire("Error", error.response?.data?.message || "No se pudo enviar la solicitud", "error");
     } finally {
       setModalLoading(false);
     }
   };
 
-  // Efecto para carga inicial
   useEffect(() => {
     getConvocatoria();
   }, []);
 
-  // Función para manejar el refresh
   const onRefresh = useCallback(() => {
     setLoading(true);
     getConvocatoria();
   }, []);
 
-  // Función para abrir el modal y cargar los datos
   const openInscripcionModal = async () => {
     setModalVisible(true);
     await fetchEquipos();
@@ -199,7 +199,6 @@ export default function DuenoHome({ cambiarComponente }) {
           </div>
         </div>
 
-        {/* Sección de Convocatoria */}
         <div className="row mb-4 align-items-center justify-content-center">
           <div className="w-80">
             <div className="row g-0 p-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm position-relative bg-light">
@@ -251,54 +250,75 @@ export default function DuenoHome({ cambiarComponente }) {
         </div>
       </div>
 
-      {/* Modal para Inscripción */}
-      <Modal open={modalVisible} onClose={() => setModalVisible(false)}>
-        <div className="modal-content p-4">
-          <h3>Inscripción a torneo</h3>
-          <div className="form-group mb-3">
-            <FormControl fullWidth>
-              <InputLabel>Selecciona un equipo</InputLabel>
-              <Select
-                value={selectedEquipo}
-                onChange={(e) => setSelectedEquipo(e.target.value)}
-                label="Selecciona un equipo"
-              >
-                {equipos.map((equipo) => (
-                  <MenuItem key={equipo.id} value={equipo.id}>
-                    {equipo.nombreEquipo}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </div>
+      {/* Improved Modal */}
+      <Modal 
+        open={modalVisible} 
+        onClose={() => setModalVisible(false)}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backdropFilter: 'blur(3px)'
+        }}
+      >
+        <Box sx={{
+          width: 400,
+          bgcolor: 'background.paper',
+          boxShadow: 24,
+          p: 4,
+          borderRadius: 2,
+          outline: 'none'
+        }}>
+          <h3 className="text-center mb-4" style={{ color: '#333', fontWeight: 'bold' }}>Inscripción a torneo</h3>
+          
+          <FormControl fullWidth sx={{ mb: 3 }}>
+            <InputLabel>Selecciona un equipo</InputLabel>
+            <Select
+              value={selectedEquipo}
+              onChange={(e) => setSelectedEquipo(e.target.value)}
+              label="Selecciona un equipo"
+            >
+              {equipos.map((equipo) => (
+                <MenuItem key={equipo.id} value={equipo.id}>
+                  {equipo.nombreEquipo}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-          <div className="form-group mb-3">
-            <FormControl fullWidth>
-              <InputLabel>Selecciona un torneo</InputLabel>
-              <Select
-                value={selectedTorneo}
-                onChange={(e) => setSelectedTorneo(e.target.value)}
-                label="Selecciona un torneo"
-              >
-                {torneos.map((torneo) => (
-                  <MenuItem key={torneo.id} value={torneo.id}>
-                    {torneo.nombreTorneo}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </div>
+          <FormControl fullWidth sx={{ mb: 4 }}>
+            <InputLabel>Selecciona un torneo</InputLabel>
+            <Select
+              value={selectedTorneo}
+              onChange={(e) => setSelectedTorneo(e.target.value)}
+              label="Selecciona un torneo"
+            >
+              {torneos.map((torneo) => (
+                <MenuItem key={torneo.id} value={torneo.id}>
+                  {torneo.nombreTorneo}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-          {modalLoading ? (
-            <div className="d-flex justify-content-center">
-              <CircularProgress />
-            </div>
-          ) : (
-            <div className="text-center">
-              <Button variant="contained" color="primary" onClick={handleInscribir}>Enviar Solicitud</Button>
-            </div>
-          )}
-        </div>
+          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+            <Button 
+              variant="outlined" 
+              onClick={() => setModalVisible(false)}
+              sx={{ width: 120 }}
+            >
+              Cancelar
+            </Button>
+            <Button 
+              variant="contained" 
+              onClick={handleInscribir}
+              disabled={modalLoading}
+              sx={{ width: 120 }}
+            >
+              {modalLoading ? <CircularProgress size={24} /> : 'Enviar'}
+            </Button>
+          </Box>
+        </Box>
       </Modal>
     </div>
   );

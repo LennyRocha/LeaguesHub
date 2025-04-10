@@ -46,7 +46,6 @@ export default function UsuarioCarrusel() {
             }).then((resutlt) => logout());
             return;
           }
-          setTorEspera(0);
         })
         .finally(() => {
           setLoad(false);
@@ -96,7 +95,7 @@ export default function UsuarioCarrusel() {
         logo.crossOrigin = "Anonymous"; // Intentar con CORS habilitado
 
         logo.src = `https://cors-anywhere.herokuapp.com/${getUrlDrive(
-          selection.logoTorneo
+          torneo.logoTorneo
         )}`;
 
         logo.onload = () => {
