@@ -220,10 +220,10 @@ export default function DuenoHome({ cambiarComponente }) {
                       objectFit: "cover",
                       maxHeight: "350px",
                     }}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = "https://via.placeholder.com/250x300?text=Imagen+no+disponible";
-                    }}
+                    // onError={(e) => {
+                    //   e.target.onerror = null;
+                    //   e.target.src = "https://via.placeholder.com/250x300?text=Imagen+no+disponible";
+                    // }}
                   />
                 </div>
               ) : (
