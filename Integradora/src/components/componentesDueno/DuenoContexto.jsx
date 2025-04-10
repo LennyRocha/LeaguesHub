@@ -4,11 +4,13 @@ import DuenoHome from "./DuenoHome";
 import DuenoEquipos from "./DuenoEquipos";
 import DuenoJugadores from "./DuenoJugadores";
 import DuenoPagos from "./DuenoPagos";
-import Eleccion from "../componentesDueno/EleccionEquipo"
+import Eleccion from "../componentesDueno/EleccionEquipo";
 import DuenoHistorial from "./DuenoHistorial";
 import miImagen from "../../img/logo1.png";
+import userPlace from "../../assets/images/user-placeholder.png";
 import "../../css/dueno.css";
 import "../../css/fonts.css";
+import axios from "axios";
 
 import LoadingScreen from "../LoadingScreen";
 import TokenPage from "../componentesExternos/TokenPage";
@@ -23,8 +25,40 @@ import { AuthContext } from "../../context/AuthContext";
 export default function DuenoContexto() {
   const { getToken, decodeToken, getUserEmail, getUserRole, getUserId } =
     useContext(AuthContext);
-  const { logout, getout, removeToken, removeUser, getUrl, api_url, clearData } =
-    useContext(AuthContext);
+  const {
+    logout,
+    getout,
+    removeToken,
+    removeUser,
+    getUrl,
+    api_url,
+    clearData,
+  } = useContext(AuthContext);
+
+  const [dueno, setDueno] = useState({});
+  const [foto, setFoto] = useState("");
+
+  const getData = async (id, tok) => {
+    await axios
+      .get(`${api_url}/api/duenos/porusuario/${id}`, {
+        headers: {
+          Authorization: `Bearer ${tok}`,
+        },
+      })
+      .then((res) => {
+        setDueno(res.data);
+        setFoto(getUrl(res.data.imagenUrl));
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          text: "No se pudierón recuperar tus datos",
+          timer: 2500,
+          showConfirmButton: false,
+        });
+        console.error(err);
+      });
+  };
   //getUrl la vas a usar para cargar las imagenes si sin de Google Drive, porque no deja
   //api_url es la url base de la api del .env
 
@@ -37,7 +71,7 @@ export default function DuenoContexto() {
   const [id, setId] = useState("");
   const [noData, setNoData] = useState(false);
   const tokenCheckInterval = 5 * 60 * 1000; // 5 minutos
-// Al obtener el contexto
+  // Al obtener el contexto
   useEffect(() => {
     document.title = "Dueños";
   }, []);
@@ -79,6 +113,7 @@ export default function DuenoContexto() {
           setTokenData(fetchedToken);
           tokenRef.current = fetchedToken; // Actualizar el token más reciente
           validateToken(fetchedToken); //Verifica que el token esté disponible
+          getData(id, fetchedToken);
           programarAlertaExpiracion(fetchedToken); // 👈 aquí
           setRol(rol);
           setCorreo(correo);
@@ -179,19 +214,15 @@ export default function DuenoContexto() {
         return <DuenoHome cambiarComponente={setComponenteActual} />;
       case "B":
         return <DuenoEquipos cambiarComponente={setComponenteActual} />;
-        case "C":
-          return (
-            <DuenoJugadores 
-              cambiarComponente={setComponenteActual} 
-            />
-          );
+      case "C":
+        return <DuenoJugadores cambiarComponente={setComponenteActual} />;
 
       case "D":
         return <DuenoPagos cambiarComponente={setComponenteActual} />;
       case "E":
         return <DuenoHistorial cambiarComponente={setComponenteActual} />;
-        case "F":
-          return <Eleccion scambiarComponente={setComponenteActual} />;
+      case "F":
+        return <Eleccion scambiarComponente={setComponenteActual} />;
       default:
         return <DuenoHome cambiarComponente={setComponenteActual} />; //Inicia por default en 'home'
     }
@@ -511,12 +542,12 @@ export default function DuenoContexto() {
                   aria-expanded="false"
                 >
                   <span className="mr-3 d-none d-lg-inline small text-white-600">
-                    Usuario #0000000001
+                    {Object.keys(dueno).length === 0 ? "Dueño de equipos" : dueno.nombreCompleto}
                   </span>
                   <img
                     className="img-profile rounded-circle"
-                    src="https://www.meme-arsenal.com/memes/a513f913ef43476bd2b494da4e599cbc.jpg"
-                    alt="..."
+                    src={foto !== '' ? foto : userPlace}
+                    alt="Foto de perfil"
                   />
                 </a>
 
@@ -530,7 +561,7 @@ export default function DuenoContexto() {
                   </a>
                   <div className="dropdown-divider"></div>
                   <a
-                    className="dropdown-item"
+                    className="dropdown-item d-item-red"
                     data-toggle="modal"
                     data-target="#logoutModal"
                     onClick={() => logout()}

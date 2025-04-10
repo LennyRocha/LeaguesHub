@@ -68,7 +68,6 @@ export default function DuenoJugadores({ cambiarComponente }) {
 
       try {
         setLoading(true);
-        console.log("Haciendo solicitud para equipo con ID:", selectedEquipo);
 
         const response = await axios.get(`${api_url}/api/jugadores/porEquipo/${selectedEquipo}`, {
           headers: {

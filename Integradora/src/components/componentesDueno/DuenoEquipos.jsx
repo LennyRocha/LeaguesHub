@@ -67,7 +67,6 @@ export default function DuenoEquipos({ cambiarComponente }) {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      console.log("Archivo seleccionado:", file); // Añadir log para verificar el archivo
       setSelectedFile(file);
       const reader = new FileReader();
       reader.onload = () => setPreview(reader.result);
@@ -92,7 +91,6 @@ export default function DuenoEquipos({ cambiarComponente }) {
 
     // Agregar el archivo de imagen al FormData
     if (selectedFile) {
-      console.log("Añadiendo archivo al FormData:", selectedFile); // Verificar el archivo
       formData.append("imagen", selectedFile);
     } else if (edit) {
       try {
@@ -105,9 +103,6 @@ export default function DuenoEquipos({ cambiarComponente }) {
     }
 
     try {
-      // Verificar que el FormData tiene el archivo
-      console.log("FormData preparado para enviar:", formData);
-
       const response = await axios.post(`${api_url}/api/equipos`, formData, {
         headers: {
           Authorization: `Bearer ${getToken()}`,
@@ -157,16 +152,12 @@ export default function DuenoEquipos({ cambiarComponente }) {
 
     // Agregar el archivo de imagen al FormData
     if (selectedFile) {
-      console.log("Añadiendo archivo al FormData:", selectedFile); // Verificar el archivo
       formData.append("imagen", selectedFile);
     } else if (edit) {
       formData.append("imagen", null);
     }
 
     try {
-      // Verificar que el FormData tiene el archivo
-      console.log("FormData preparado para enviar:", formData);
-
       const response = await axios.put(`${api_url}/api/equipos/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${getToken()}`,
