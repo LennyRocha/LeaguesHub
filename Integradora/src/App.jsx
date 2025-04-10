@@ -17,7 +17,6 @@ function App() {
         <Routes>
           <Route path='/' element={<User />} />
           <Route path='/admin' element={<AdminDashboard />} />
-          <Route path='/admins' element={<AdminDashboard />} />
           <Route path='/acceder' element={<ContextoAcceso />} />
           <Route path='/arbitro' element={<ArbitroContexto />} />
           <Route path='/dueno' element={<DuenoContexto />} />
