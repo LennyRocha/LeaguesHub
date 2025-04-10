@@ -22,7 +22,7 @@ import Poster1 from "../../assets/templates/poster_back.png";
 import jsPDF from "jspdf";
 import "../../assets/fonts/Oswald-Variable-normal";
 import "../../assets/fonts/3rd Man-normal";
-import Logo2 from '../../img/logo1.png'
+import Logo2 from "../../img/logo1.png";
 import fotoPlace from "../../assets/images/foto-placeholder.png";
 
 export default function Admin7() {
@@ -35,6 +35,7 @@ export default function Admin7() {
   const [loadBtn, setLoadBtn] = useState(false);
   const [loadCon, setLoadCon] = useState(false);
   const [blob, setBlob] = useState("");
+  const [bob, setBob] = useState("");
   useEffect(() => {
     const getTorneos = async () => {
       axios
@@ -165,9 +166,9 @@ export default function Admin7() {
       doc.text(`${selection.equiposLiguilla} pasan a liguilla`, 125, 234);
 
       // Colocar el premio
-      doc.setFontSize(25);
+      doc.setFontSize(30);
       doc.setTextColor(255, 255, 255);
-      doc.text(`Premio: ${selection.premio}`, 65, 268);
+      doc.text(`Premio: ${selection.premio}`, 80, 269);
 
       // Si quieres agregar otra imagen (además de la de fondo)
       const logo = new Image();
@@ -181,7 +182,7 @@ export default function Admin7() {
           doc.addImage(logo, "PNG", 68, 45, 75, 75);
 
           if (descarga) {
-            doc.save("documento_con_datos.pdf");
+            doc.save(`${selection.nombreTorneo}.pdf`);
           } else {
             const blobUrl = doc.output("bloburl");
             window.open(blobUrl);
@@ -269,9 +270,66 @@ export default function Admin7() {
 
       logo.onerror = (e) => {
         console.error("No se pudo cargar la imagen del torneo");
-        logo.src = Logo2
+        logo.src = Logo2;
         const imgUrl = canvas.toDataURL("image/png");
         setImagenPrevisualizada(imgUrl);
+      };
+    };
+  };
+
+  const renderToCanvasPoster = (selection) => {
+    const canvas = document.getElementById("previewPoster");
+    const ctx = canvas.getContext("2d");
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const fondo = new Image();
+    fondo.src = Poster1;
+
+    fondo.onload = async () => {
+      ctx.drawImage(fondo, 0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "white";
+      ctx.font = "bold 16px '3rd Man', sans-serif";
+      ctx.fillText(`Torneo ${selection.nombreTorneo}`, 50, 32);
+      ctx.fillStyle = "#9A0000";
+      ctx.font = "14px '3rd Man', sans-serif";
+      ctx.fillText(`${selection.fechaInicio}`, 160, 80);
+      ctx.fillStyle = "black";
+      ctx.font = "12px '3rd Man', sans-serif";
+      ctx.fillText(selection.descripcion, 40, 145);
+
+      ctx.fillStyle = "white";
+      ctx.font = "10px '3rd Man', sans-serif";
+      ctx.fillText(`Máximo ${selection.maxEquipos} equipos`, 34, 234);
+      ctx.fillText(`${selection.equiposLiguilla} pasan a liguilla`, 120, 234);
+
+      ctx.font = "13px '3rd Man', sans-serif";
+      ctx.fillText(`Premio: ${selection.premio}`, 75, 270);
+
+      const logo = new Image();
+
+      //logo.src = getUrlDrive(selection.logoTorneo);
+      console.log(getUrlDrive(selection.logoTorneo)); // Verifica la URL generada
+
+      //logo.src = fotoPlace;
+      logo.crossOrigin = "Anonymous"; // Intentar con CORS habilitado
+
+      logo.src = `https://cors-anywhere.herokuapp.com/${getUrlDrive(
+        selection.logoTorneo
+      )}`;
+
+      logo.onload = () => {
+        ctx.drawImage(logo, 68, 45, 75, 75);
+        const imgUrl = canvas.toDataURL("image/png");
+        setBob(imgUrl);
+      };
+
+      logo.onerror = (e) => {
+        console.error("No se pudo cargar la imagen del torneo");
+        logo.src = Logo2;
+        const imgUrl = canvas.toDataURL("image/png");
+        setBob(imgUrl);
       };
     };
   };
@@ -372,6 +430,7 @@ export default function Admin7() {
                             onClick={(e) => {
                               e.preventDefault();
                               renderToCanvas(selection);
+                              renderToCanvasPoster(selection);
                               //generatePDF(false);
                             }}
                           >
@@ -403,9 +462,15 @@ export default function Admin7() {
               </div>
               <div className="col-lg-4 div-margin">
                 <h5 className="mb-1">Vista vértical</h5>
+                <canvas
+                  id="previewPoster"
+                  width="210px"
+                  height="297px"
+                  style={{ display: "none" }}
+                ></canvas>
                 {blob === "" ? (
                   <img
-                    src={poster === "" ? Poster1 : getUrl(poster)}
+                    src={bob === "" ? Poster1 : bob}
                     alt="BannerPlantilla"
                     className="img-fluid d-block w-100"
                   />
