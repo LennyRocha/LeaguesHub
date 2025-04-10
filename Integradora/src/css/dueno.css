@@ -617,6 +617,10 @@ footer {
   background-color: transparent;
 }
 
+.hc-30{
+  width: 10rem !important;
+}
+
 #selPictPlayer {
   width: 10em;
   height: 10em;
@@ -642,11 +646,12 @@ footer {
 
 .botonCamPlayer {
   position: absolute;
-  transform: scale(1);
+  transform: scale(1.2);
   margin-top: 6.25rem;
   margin-left: -6.75rem;
   width: 40%;
   opacity: 0;
+  z-index: 1;
   top: 10px;
   left: 120px;
 }

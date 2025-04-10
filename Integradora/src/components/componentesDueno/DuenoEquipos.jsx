@@ -2,21 +2,25 @@ import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../context/AuthContext";
-import { TextField, FormControl, InputLabel, Select, MenuItem, Tooltip } from "@mui/material";
+import {
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Tooltip,
+} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
-import Add from "@mui/icons-material/Add";  
-import userPlace from '../../assets/images/user-placeholder.png'
+import Add from "@mui/icons-material/Add";
+import userPlace from "../../assets/images/user-placeholder.png";
 
 export default function DuenoEquipos({ cambiarComponente }) {
-
-  const { getUserId, getToken, api_url } = useContext(AuthContext);
+  const { getUserId, getToken, api_url, getUrl } = useContext(AuthContext);
   const [equipos, setEquipos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [edit, setEdit] = useState(false);
-  const [preview, setPreview] = useState(
-    userPlace
-  );
+  const [preview, setPreview] = useState(userPlace);
   const [selectedFile, setSelectedFile] = useState(null);
   const [newEquipo, setNewEquipo] = useState({
     nombreEquipo: "",
@@ -24,7 +28,9 @@ export default function DuenoEquipos({ cambiarComponente }) {
     nombreCampo: "",
     campoId: "",
   });
+  const [id, setId] = useState(0);
   const [campos, setCampos] = useState([]);
+  const [reload, setReload] = useState(false);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -38,9 +44,10 @@ export default function DuenoEquipos({ cambiarComponente }) {
       nombreEquipo: equipo.nombreEquipo,
       logoEquipo: equipo.logoEquipo,
       nombreCampo: equipo.nombreCampo,
-      campoId: equipo.campoId || "",
+      campoId: equipo.idCampo || "",
     });
-    setPreview(equipo.logoEquipo);
+    setId(equipo.id)
+    setPreview(getUrl(equipo.logoEquipo));
     setSelectedFile(null);
   };
 
@@ -60,62 +67,59 @@ export default function DuenoEquipos({ cambiarComponente }) {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      console.log("Archivo seleccionado:", file);  // Añadir log para verificar el archivo
+      console.log("Archivo seleccionado:", file); // Añadir log para verificar el archivo
       setSelectedFile(file);
       const reader = new FileReader();
       reader.onload = () => setPreview(reader.result);
       reader.readAsDataURL(file);
     }
   };
-  
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-  
+
+  const postEquipo = async () => {
     const formData = new FormData();
-  
+
     const equipoData = {
       nombreEquipo: newEquipo.nombreEquipo,
       idUsuario: getUserId(),
       idCampo: newEquipo.campoId,
     };
-  
+
     // Crear el objeto JSON y agregarlo al FormData
     const equipoBlob = new Blob([JSON.stringify(equipoData)], {
-      type: 'application/json'
+      type: "application/json",
     });
-    formData.append('equipo', equipoBlob, 'equipo.json');
-  
+    formData.append("equipo", equipoBlob, "equipo.json");
+
     // Agregar el archivo de imagen al FormData
     if (selectedFile) {
-      console.log("Añadiendo archivo al FormData:", selectedFile);  // Verificar el archivo
-      formData.append('imagen', selectedFile);
+      console.log("Añadiendo archivo al FormData:", selectedFile); // Verificar el archivo
+      formData.append("imagen", selectedFile);
     } else if (edit) {
       try {
         const response = await fetch(newEquipo.logoEquipo);
         const blob = await response.blob();
-        formData.append('imagen', blob, 'existing-image.jpg');
+        formData.append("imagen", blob, "existing-image.jpg");
       } catch (error) {
         console.error("Error al cargar imagen existente:", error);
       }
     }
-  
+
     try {
       // Verificar que el FormData tiene el archivo
       console.log("FormData preparado para enviar:", formData);
-  
+
       const response = await axios.post(`${api_url}/api/equipos`, formData, {
         headers: {
-          'Authorization': `Bearer ${getToken()}`,
+          Authorization: `Bearer ${getToken()}`,
         },
       });
-  
+
       Swal.fire({
         icon: "success",
         title: "¡Éxito!",
-        text: "Equipo registrado correctamente"
+        text: "Equipo registrado correctamente",
       });
-  
+
       setVisible(false);
       setNewEquipo({
         nombreEquipo: "",
@@ -123,19 +127,86 @@ export default function DuenoEquipos({ cambiarComponente }) {
       });
       setPreview(userPlace);
       setSelectedFile(null);
-  
+      setReload(!reload)
     } catch (error) {
       console.error("Error:", error);
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error.response?.data?.message || "Error al registrar equipo"
+        text: error.response?.data?.message || "Error al registrar equipo",
       });
     } finally {
       setLoading(false);
     }
   };
-  
+
+  const putEquipo = async () => {
+    const formData = new FormData();
+
+    const equipoData = {
+      nombreEquipo: newEquipo.nombreEquipo,
+      idUsuario: getUserId(),
+      idCampo: newEquipo.campoId,
+    };
+
+    // Crear el objeto JSON y agregarlo al FormData
+    const equipoBlob = new Blob([JSON.stringify(equipoData)], {
+      type: "application/json",
+    });
+    formData.append("equipo", equipoBlob, "equipo.json");
+
+    // Agregar el archivo de imagen al FormData
+    if (selectedFile) {
+      console.log("Añadiendo archivo al FormData:", selectedFile); // Verificar el archivo
+      formData.append("imagen", selectedFile);
+    } else if (edit) {
+      formData.append("imagen", null);
+    }
+
+    try {
+      // Verificar que el FormData tiene el archivo
+      console.log("FormData preparado para enviar:", formData);
+
+      const response = await axios.put(`${api_url}/api/equipos/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+      });
+
+      Swal.fire({
+        icon: "success",
+        title: "¡Éxito!",
+        text: "Equipo actualizado correctamente",
+      });
+
+      setVisible(false);
+      setNewEquipo({
+        nombreEquipo: "",
+        campoId: "",
+      });
+      setPreview(userPlace);
+      setSelectedFile(null);
+      setId(0);
+      setReload(!reload);
+      setEdit(false);
+    } catch (error) {
+      console.error("Error:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error.response?.data?.message || "Error al actualizar equipo",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    edit ? putEquipo() : postEquipo();
+  };
+
   useEffect(() => {
     const fetchEquipos = async () => {
       if (!getUserId() || !getToken()) {
@@ -146,11 +217,14 @@ export default function DuenoEquipos({ cambiarComponente }) {
 
       try {
         setLoading(true);
-        const response = await axios.get(`${api_url}/api/equipos/porDueno/${getUserId()}`, {
-          headers: {
-            Authorization: `Bearer ${getToken()}`,
-          },
-        });
+        const response = await axios.get(
+          `${api_url}/api/equipos/porDueno/${getUserId()}`,
+          {
+            headers: {
+              Authorization: `Bearer ${getToken()}`,
+            },
+          }
+        );
 
         if (response.data && Array.isArray(response.data)) {
           setEquipos(response.data);
@@ -166,7 +240,7 @@ export default function DuenoEquipos({ cambiarComponente }) {
     };
 
     fetchEquipos();
-  }, [api_url, getUserId, getToken]);
+  }, [reload]);
 
   useEffect(() => {
     const fetchCampos = async () => {
@@ -189,7 +263,7 @@ export default function DuenoEquipos({ cambiarComponente }) {
     };
 
     fetchCampos();
-  }, [api_url, getToken]);
+  }, []);
 
   if (loading) {
     return <div className="text-center py-4">Cargando equipos...</div>;
@@ -201,7 +275,11 @@ export default function DuenoEquipos({ cambiarComponente }) {
         <div className="d-flex flex-row align-items-center justify-content-between g-2 mb-4">
           <h2 className="mb-0">Tus equipos</h2>
           <Tooltip title="Agregar equipo">
-            <IconButton color="primary" onClick={handleAddTeam} aria-label="add-team">
+            <IconButton
+              color="primary"
+              onClick={handleAddTeam}
+              aria-label="add-team"
+            >
               <Add fontSize="large" />
             </IconButton>
           </Tooltip>
@@ -212,21 +290,22 @@ export default function DuenoEquipos({ cambiarComponente }) {
             <div className="teams-grid quitarScroll">
               {equipos.length > 0 ? (
                 equipos.map((e) => (
-                  <div className="dueno-container-3 bg-light" key={e.id || e._id}>
+                  <div
+                    className="dueno-container-3 bg-light"
+                    key={e.id || e._id}
+                  >
                     <img
-                      src={e.logoEquipo}
+                      src={getUrl(e.logoEquipo)}
                       alt={e.nombreEquipo}
-                      className="img-fluid"
-                      onError={(e) => {
-                        e.target.src = "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg";
-                      }}
+                      className="img-fluid w-75"
                     />
                     <h5 className="w-100">{e.nombreEquipo}</h5>
                     <div className="_rowo w-100">
-     
-
-
-                      <a className="link" onClick={() => mostrarEdit(e)} style={{ cursor: "pointer" }}>
+                      <a
+                        className="link"
+                        onClick={() => mostrarEdit(e)}
+                        style={{ cursor: "pointer" }}
+                      >
                         Editar
                       </a>
                     </div>
@@ -244,11 +323,15 @@ export default function DuenoEquipos({ cambiarComponente }) {
           </div>
 
           <div className="col-md-4">
-            <div className={`${visible ? "teamsVisible" : "teamsInvisible"}`}>
-              <h3 className="d-flex justify-content-between align-items-center mb-3">
-                <span className="body-small">{edit ? "Editar equipo" : "Registrar equipo"}</span>
+            <div
+              className={`w-100 ${visible ? "teamsVisible" : "teamsInvisible"}`}
+            >
+              <h3 className="d-flex flex-row justify-content-between align-items-center">
+                <span className="body-small">
+                  {edit ? "Editar equipo" : "Registrar equipo"}
+                </span>
                 <IconButton onClick={() => setVisible(false)}>
-                  <i className="fas fa-times"></i>
+                  <i className="fas en-fa fa-times"></i>
                 </IconButton>
               </h3>
 
@@ -263,14 +346,13 @@ export default function DuenoEquipos({ cambiarComponente }) {
                         style={{ maxWidth: "200px", maxHeight: "200px" }}
                       />
                       <Tooltip title="Elegir una imagen">
-                        <div className="botonDivPlayer" onClick={() => document.getElementById("fileInput").click()}>
+                        <div className="botonDivPlayer">
                           <input
                             id="fileInput"
                             type="file"
                             className="botonCamPlayer"
                             accept="image/*"
                             onChange={handleFileChange}
-                            style={{ display: "none" }}
                           />
                           <i className="fa fa-camera"></i>
                         </div>
@@ -283,13 +365,19 @@ export default function DuenoEquipos({ cambiarComponente }) {
                     fullWidth
                     margin="dense"
                     name="nombreEquipo"
+                    className="txtAr"
                     required
                     value={newEquipo.nombreEquipo}
                     onChange={handleInputChange}
                     sx={{ mb: 2 }}
                   />
 
-                  <FormControl fullWidth margin="dense" sx={{ mb: 2 }}>
+                  <FormControl
+                    className="txtAr"
+                    fullWidth
+                    margin="dense"
+                    sx={{ mb: 2 }}
+                  >
                     <InputLabel>Selecciona un campo</InputLabel>
                     <Select
                       name="campoId"
@@ -305,11 +393,15 @@ export default function DuenoEquipos({ cambiarComponente }) {
                     </Select>
                   </FormControl>
 
-                  <div className="d-flex justify-content-end gap-2 mt-3">
-                    <button type="button" className="btn btn-outline-secondary" onClick={() => setVisible(false)}>
+                  <div className="d-flex flex-row flex-md-column gap-1 justify-content-center align-items-center flex-grow w-100">
+                    <button
+                      type="button"
+                      className="slide-btn-sm-green text-black"
+                      onClick={() => setVisible(false)}
+                    >
                       Cancelar
                     </button>
-                    <button type="submit" className="btn btn-primary">
+                    <button type="submit" className="slide-btn-sm text-black">
                       {edit ? "Actualizar" : "Registrar"}
                     </button>
                   </div>

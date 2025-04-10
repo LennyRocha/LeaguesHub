@@ -134,14 +134,14 @@ export default function DuenoJugadores({ cambiarComponente }) {
             value={selectedEquipo}
             onChange={handleSelectEquipo}
             style={{
-              width: '100%',
-              padding: '15px',
+              padding: '10px',
               fontSize: '18px',
               borderRadius: '8px',
               border: '1px solid #ccc',
-              backgroundColor: '#f8f9fa',
               cursor: 'pointer',
+              width: '50rem'
             }}
+            className="hc-30"
           >
             <option value="">Selecciona un equipo</option>
             {equipos.map((equipo) => (

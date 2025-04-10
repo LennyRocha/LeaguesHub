@@ -23,7 +23,7 @@ import { AuthContext } from "../../context/AuthContext";
 export default function DuenoContexto() {
   const { getToken, decodeToken, getUserEmail, getUserRole, getUserId } =
     useContext(AuthContext);
-  const { logout, getout, removeToken, removeUser, getUrl, api_url } =
+  const { logout, getout, removeToken, removeUser, getUrl, api_url, clearData } =
     useContext(AuthContext);
   //getUrl la vas a usar para cargar las imagenes si sin de Google Drive, porque no deja
   //api_url es la url base de la api del .env
@@ -212,6 +212,7 @@ export default function DuenoContexto() {
         removeUser={removeUser}
         logout={logout}
         getout={getout}
+        clearData={clearData}
       />
     );
   }
