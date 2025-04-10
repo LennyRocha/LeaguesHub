@@ -33,14 +33,41 @@
     animation-delay: -0.16s;
   }
 
-  .centered {
+  .normalWeight{
+    font-weight: normal !important;
+  }
+
+  .err-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
-    height:100vh;
-    gap: 2rem
+    min-height:100vh;
+    gap: 2rem;
+    background-image: linear-gradient(
+      135deg,
+      rgb(233, 233, 233),
+      rgb(179, 189, 198)
+    ) !important;
+    padding: 1rem;
+  }
+
+  .img404{
+    width: 95%;
+    height: auto;
+  }
+
+  .logo {
+    width: 28rem;
+    height: 14rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    .logo {
+      width: 16rem;
+      height: 8rem;
+    }
   }
 
   .balon {
@@ -61,4 +88,3 @@
       transform: rotate(360deg) scale(1);
     }
   }
-  

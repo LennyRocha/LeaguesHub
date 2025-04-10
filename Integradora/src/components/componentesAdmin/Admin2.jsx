@@ -62,7 +62,6 @@ export default function Admin2({ cambiarComponent, setDueno }) {
 
   const [load, setLoad] = useState(false);
   const desactivarDueño = async (id, name) => {
-    console.log(id);
     setLoad(true);
     try {
       const tokData = await getToken();
@@ -76,7 +75,6 @@ export default function Admin2({ cambiarComponent, setDueno }) {
           },
         }
       );
-      console.log("Registro exitoso:", res.data);
       Swal.fire({
         icon: "success",
         title: "¡Exito!",
@@ -92,7 +90,6 @@ export default function Admin2({ cambiarComponent, setDueno }) {
     } catch (err) {
       console.error(err);
       if (err.response.status === 400) {
-        console.log(err.response.data.message);
         Swal.fire({
           icon: "error",
           title: "¡Fallo!",

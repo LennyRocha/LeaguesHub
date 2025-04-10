@@ -7,7 +7,6 @@ import DuenoContexto from "./components/componentesDueno/DuenoContexto";
 import ErrorPage from "./components/componentesExternos/ErrorPage";
 import User from "./User";
 import { AuthContext, AuthProvider } from "./context/AuthContext";
-import TestComponent from "./components/TestComponent";
 import "bootstrap";
 import './App.css'
 
@@ -22,7 +21,6 @@ function App() {
           <Route path='/arbitro' element={<ArbitroContexto />} />
           <Route path='/dueno' element={<DuenoContexto />} />
           <Route path='/perfil' element={<Perfil />} />
-          <Route path='/test' element={<TestComponent />} />
           <Route path='*' element={<ErrorPage />} />
         </Routes>
       </Router>

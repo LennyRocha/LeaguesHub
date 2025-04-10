@@ -15,7 +15,5 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById('lottie').addEventListener('mouseleave', function() {
         animation.playSegments([0, 50], true);  // Transita entre los frames de la animación de "hamburguesa"
       });
-    } else {
-      console.error("Lottie no está definido.");
     }
   });

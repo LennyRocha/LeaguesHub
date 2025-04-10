@@ -23,7 +23,6 @@ function Signup({ cambiarComponente }) {
       const reader = new FileReader();
       reader.onload = () => setPreview(reader.result);
       reader.readAsDataURL(file);
-      console.log(file.name);
     }
   };
 

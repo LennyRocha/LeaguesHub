@@ -92,7 +92,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
     });
 
     // Verificar que Bootstrap collapse y jQuery se están cargando correctamente
-    console.log("Bootstrap collapse:", typeof jQuery.fn.collapse); // Debe imprimir "function"
-    console.log("jQuery version:", jQuery.fn.jquery); // Debe imprimir "3.7.1"
+    // console.log("Bootstrap collapse:", typeof jQuery.fn.collapse); // Debe imprimir "function"
+    // console.log("jQuery version:", jQuery.fn.jquery); // Debe imprimir "3.7.1"
   });
 })(jQuery); // End of use strict

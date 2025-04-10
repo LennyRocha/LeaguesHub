@@ -44,7 +44,6 @@ export const AuthProvider = ({ children }) => {
       });
       saveToken(res.data.token);
       saveUser(res.data.roles, res.data.id, res.data.correo);
-      console.log(res.data);
 
       switch (res.data.roles) {
         case "ROLE_ADMIN":
@@ -64,15 +63,12 @@ export const AuthProvider = ({ children }) => {
 
       setFailure(false);
     } catch (err) {
-      console.log(err, err.message);
       if (err.message) {
         setMensaje(err.message);
         Swal.fire({
           icon: "error",
           title: "¡Denegado!",
-          text:
-            err.message ||
-            "Algo salió mal, inténtalo nuevamente",
+          text: err.message || "Algo salió mal, inténtalo nuevamente",
           customClass: {
             confirmButton: "btn-confirm",
             cancelButton: "btn-cancel",
@@ -88,8 +84,6 @@ export const AuthProvider = ({ children }) => {
 
   function decodeToken(token) {
     try {
-      console.log(token);
-
       if (token !== null) {
         const base64Url = token.split(".")[1]; // Extraer el payload (segunda parte del token)
         const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/"); // Corregir formato base64
@@ -99,27 +93,26 @@ export const AuthProvider = ({ children }) => {
         const expirationDate = new Date(decodedPayload.exp * 1000);
         const currentDate = new Date();
 
-        console.log("Expiración del token:", expirationDate);
-
-        // Validar si el token ha expirado
-        if (expirationDate < currentDate) {
-          console.log("El token ha expirado.");
-        } else {
-          console.log("El token aún es válido.");
-        }
-
         return expirationDate;
       }
     } catch (error) {
-      console.error("Error al decodificar el token:", error);
       return null;
     }
   }
 
-  const getUrl = (url) => {
-    const match = url.match(/id=([^&]+)/); // Extrae el ID de la imagen
-    return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : url;
+  // const getUrl = (url) => {
+  //   const match = url.match(/id=([^&]+)/); // Extrae el ID de la imagen
+  //   return match ? `https://lh3.googleusercontent.com/d/${match[1]}` : url;
+  // };
+
+    const getUrl = (url) => {
+    let idMatch = url.match(/id=([^&]+)/); // para ?id=...
+    if (!idMatch) {
+      idMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/); // para /d/...
+    }
+    return idMatch ? `https://lh3.googleusercontent.com/d/${idMatch[1]}` : url;
   };
+  
 
   const login = (username, password) => {
     validate(username.toLowerCase().trim(), password);
@@ -176,7 +169,7 @@ export const AuthProvider = ({ children }) => {
         decodeToken,
         getUrl,
         getout,
-        clearData
+        clearData,
       }}
     >
       {children}

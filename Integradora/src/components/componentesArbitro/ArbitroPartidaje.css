@@ -1,101 +1,301 @@
 .contenedor-partidaje {
-    padding: 1.5rem;
-    background-color: #f5f8fc;
-  }
-  
-  .inputs-header, .default-checkbox {
-    margin: 1rem 0;
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  
-  .inputs-header input {
-    width: 50px;
-    padding: 5px;
-    background: white;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-  }
-  
-  .botones-superiores {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-bottom: 1.2rem;
-  }
-  
-  .jugadores-contenedor {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-  }
-  
-  .jugador-card {
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    width: 320px;
-  }
-  
-  .jugador-card img {
-    width: 50px;
-    height: 50px;
-    border-radius: 0.75rem;
-    object-fit: cover;
-    margin-right: 0.5rem;
-  }
-  
-  .jugador-card input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    margin-right: 5px;
-  }
-  
-  .stats {
-    margin-top: 10px;
-  }
-  
-  .stats input[type="number"],
-  .stats select,
-  .stats textarea {
-    width: 100%;
-    margin-top: 5px;
-    padding: 5px;
-    background-color: white;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-  }
-  
-  .info-top {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-  
-  .info-top img {
-    width: 40px;
-    height: 40px;
-    object-fit: contain;
-  }
+  padding: 1.5rem;
+}
 
-  select {
-    background-color: white;
-    color: black;
-    border: 1px solid #ccc;
-    padding: 5px;
-    border-radius: 5px;
-    font-size: 14px;
+.inputs-header,
+.default-checkbox {
+  margin: 1rem 0;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.w-15{
+  width: 12%;
+}
+
+.checkbox-mui {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #9A0000;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.checkbox-mui:checked {
+  background-color: #fd0605;
+  border-color: #fd0605;
+}
+
+.checkbox-mui:checked::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 6px;
+  width: 4px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.inputs-header input {
+  width: 50px;
+  padding: 5px;
+  background: white;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.botones-superiores {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1.2rem;
+}
+
+.jugadores-contenedor {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.jugador-card {
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  width: 320px;
+}
+
+.jugador-card img {
+  width: 50px;
+  height: 50px;
+  border-radius: 0.75rem;
+  object-fit: cover;
+  margin-right: 0.5rem;
+}
+
+.jugador-card input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-right: 5px;
+}
+
+.stats {
+  margin-top: 10px;
+  gap: 5px !important;
+}
+
+.stats .checkbox-mui{
+  margin-left: 4px;
+  margin-top: -1rem !important;
+}
+
+.stats select{
+  margin-left: 2px !important;
+  margin-right: 2px !important;
+}
+
+.stats input[type="number"],
+.stats select,
+.stats textarea {
+  width: 100%;
+  margin-top: 5px;
+  padding: 5px;
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.info-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.info-top img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+select {
+  background-color: white;
+  color: black;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.h-jugadores {
+  max-height: 50vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.checkbox-wrapper-19 {
+  box-sizing: border-box;
+  --background-color: #fff;
+  --checkbox-height: 25px;
+}
+
+@-moz-keyframes dothabottomcheck-19 {
+  0% {
+    height: 0;
   }
-  
-  
-  
+  100% {
+    height: calc(var(--checkbox-height) / 2);
+  }
+}
+
+@-webkit-keyframes dothabottomcheck-19 {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: calc(var(--checkbox-height) / 2);
+  }
+}
+
+@keyframes dothabottomcheck-19 {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: calc(var(--checkbox-height) / 2);
+  }
+}
+
+@keyframes dothatopcheck-19 {
+  0% {
+    height: 0;
+  }
+  50% {
+    height: 0;
+  }
+  100% {
+    height: calc(var(--checkbox-height) * 1.2);
+  }
+}
+
+@-webkit-keyframes dothatopcheck-19 {
+  0% {
+    height: 0;
+  }
+  50% {
+    height: 0;
+  }
+  100% {
+    height: calc(var(--checkbox-height) * 1.2);
+  }
+}
+
+@-moz-keyframes dothatopcheck-19 {
+  0% {
+    height: 0;
+  }
+  50% {
+    height: 0;
+  }
+  100% {
+    height: calc(var(--checkbox-height) * 1.2);
+  }
+}
+
+.checkbox-wrapper-19 input[type="checkbox"] {
+  display: none;
+}
+
+.checkbox-wrapper-19 .check-box {
+  height: var(--checkbox-height);
+  width: var(--checkbox-height);
+  background-color: transparent;
+  border: calc(var(--checkbox-height) * 0.1) solid var(--color-base-3-1);
+  border-radius: 5px;
+  position: relative;
+  display: inline-block;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-transition: border-color ease 0.2s;
+  -o-transition: border-color ease 0.2s;
+  -webkit-transition: border-color ease 0.2s;
+  transition: border-color ease 0.2s;
+  cursor: pointer;
+}
+.checkbox-wrapper-19 .check-box::before,
+.checkbox-wrapper-19 .check-box::after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  position: absolute;
+  height: 0;
+  width: calc(var(--checkbox-height) * 0.2);
+  background-color: #34b93d;
+  display: inline-block;
+  -moz-transform-origin: left top;
+  -ms-transform-origin: left top;
+  -o-transform-origin: left top;
+  -webkit-transform-origin: left top;
+  transform-origin: left top;
+  border-radius: 5px;
+  content: " ";
+  -webkit-transition: opacity ease 0.5;
+  -moz-transition: opacity ease 0.5;
+  transition: opacity ease 0.5;
+}
+.checkbox-wrapper-19 .check-box::before {
+  top: calc(var(--checkbox-height) * 0.72);
+  left: calc(var(--checkbox-height) * 0.41);
+  box-shadow: 0 0 0 calc(var(--checkbox-height) * 0.05) var(--background-color);
+  -moz-transform: rotate(-135deg);
+  -ms-transform: rotate(-135deg);
+  -o-transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+  transform: rotate(-135deg);
+}
+.checkbox-wrapper-19 .check-box::after {
+  top: calc(var(--checkbox-height) * 0.37);
+  left: calc(var(--checkbox-height) * 0.05);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+.checkbox-wrapper-19 input[type="checkbox"]:checked + .check-box,
+.checkbox-wrapper-19 .check-box.checked {
+  border-color: var(--color-acento-3-1);;
+}
+.checkbox-wrapper-19 input[type="checkbox"]:checked + .check-box::after,
+.checkbox-wrapper-19 .check-box.checked::after {
+  height: calc(var(--checkbox-height) / 2);
+  -moz-animation: dothabottomcheck-19 0.2s ease 0s forwards;
+  -o-animation: dothabottomcheck-19 0.2s ease 0s forwards;
+  -webkit-animation: dothabottomcheck-19 0.2s ease 0s forwards;
+  animation: dothabottomcheck-19 0.2s ease 0s forwards;
+}
+.checkbox-wrapper-19 input[type="checkbox"]:checked + .check-box::before,
+.checkbox-wrapper-19 .check-box.checked::before {
+  height: calc(var(--checkbox-height) * 1.2);
+  -moz-animation: dothatopcheck-19 0.4s ease 0s forwards;
+  -o-animation: dothatopcheck-19 0.4s ease 0s forwards;
+  -webkit-animation: dothatopcheck-19 0.4s ease 0s forwards;
+  animation: dothatopcheck-19 0.4s ease 0s forwards;
+}

@@ -51,7 +51,6 @@ const Access = ({ cambiarComponente }) => {
       const reader = new FileReader();
       reader.onload = () => setPreview(reader.result); // Crea la vista previa
       reader.readAsDataURL(file);
-      console.log("Archivo seleccionado:", file.name, file);
     }
   };
 
@@ -149,7 +148,7 @@ const Access = ({ cambiarComponente }) => {
 
         setFailure(false);
       } catch (err) {
-        console.log(err, err.message);
+        console.error(err);
         if (err.response) {
           setMensaje(err.response.data.message);
           Swal.fire({
@@ -223,7 +222,6 @@ const Access = ({ cambiarComponente }) => {
       userS.email === "" ||
       userS.name === ""
     ) {
-      console.log(userS);
       Swal.fire({
         icon: "error",
         title: "Campos vacios",
@@ -288,7 +286,6 @@ const Access = ({ cambiarComponente }) => {
             // "Content-Type": "multipart/form-data",
           },
         });
-        console.log("Respuesta del servidor:", response.data);
         Swal.fire({
           icon: "success",
           title: "¡OK!",

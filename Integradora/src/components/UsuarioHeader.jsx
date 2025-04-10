@@ -31,14 +31,14 @@ export default function Usuario0({ cambiarComponente }) {
   }, []);
 
   return (
-    <div className="sticky-header">
+    <div>
       <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
         <a
           className="d-flex text-center align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none"
           id="logoHead"
         >
           <img src={miImagen} width={40} height={50} alt="Logo" />
-          <span class="fs-4 text-white">Leagues Hub</span>
+          <span className="fs-4 text-white">Leagues Hub</span>
         </a>
         <ul
           className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0"

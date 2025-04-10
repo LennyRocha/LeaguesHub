@@ -3,6 +3,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import Swal from "sweetalert2";
 import "./ArbitroPartidaje.css";
+import Checkbox from "@mui/material/Checkbox";
 
 export default function ArbitroPartidaje({
   cambiarComponente,
@@ -132,7 +133,8 @@ export default function ArbitroPartidaje({
         : estadisticasVisitante,
       tipoDesempate: criterioDesempate, // Aquí agregamos el tipo de desempate
       golesLocalPenales: criterioDesempate === "PENALES" ? penalesLocal : 0, // Solo si es PENALES
-      golesVisitantePenales: criterioDesempate === "PENALES" ? penalesVisitante : 0, // Solo si es PENALES
+      golesVisitantePenales:
+        criterioDesempate === "PENALES" ? penalesVisitante : 0, // Solo si es PENALES
     };
 
     try {
@@ -146,6 +148,7 @@ export default function ArbitroPartidaje({
       Swal.fire("¡Éxito!", "Resultado registrado correctamente", "success");
       cambiarComponente("A");
     } catch (err) {
+      console.error(err);
       Swal.fire(
         "Error",
         err.response?.data?.message || "No se pudo registrar",
@@ -225,6 +228,7 @@ export default function ArbitroPartidaje({
         <div className="jugador-card" key={j.id}>
           <input
             type="checkbox"
+            className="checkbox-mui"
             checked={checked}
             onChange={(e) => manejarCheckbox(j, equipo, e.target.checked)}
           />
@@ -246,6 +250,7 @@ export default function ArbitroPartidaje({
                     parseInt(e.target.value)
                   )
                 }
+                min={0}
               />
               <label>Amarillas:</label>
               <select
@@ -268,6 +273,7 @@ export default function ArbitroPartidaje({
               <label>Roja:</label>
               <input
                 type="checkbox"
+                className="checkbox-mui"
                 checked={estad.rojas === 1}
                 onChange={(e) =>
                   manejarEstadistica(
@@ -300,7 +306,7 @@ export default function ArbitroPartidaje({
 
   return (
     <div className="contenedor-partidaje">
-      <button className="btn btn-danger" onClick={() => cambiarComponente("A")}>
+      <button className="slide-btn-sm-accent w-15 text-black" onClick={() => cambiarComponente("A")}>
         ← VOLVER
       </button>
       <h2>Registrar resultado</h2>
@@ -342,35 +348,53 @@ export default function ArbitroPartidaje({
           value={autogolesVisitante}
           onChange={(e) => setAutogolesVisitante(Number(e.target.value))}
         />
-        
-        {/* Mostrar solo para liguilla vuelta */}
-        {partidoSeleccionado.tipoPartido === "LIGUILLA" && partidoSeleccionado.idaVuelta === "VUELTA" && (
-          <div>
-            <label>Seleccione criterio de desempate:</label>
-            <select value={criterioDesempate} onChange={(e) => setCriterioDesempate(e.target.value)}>
-              <option value="NORMAL">Normal</option>
-              <option value="TIEMPO_EXTRA">Tiempo Extra</option>
-              <option value="PENALES">Penales</option>
-            </select>
 
-            {criterioDesempate === "PENALES" && (
-              <div>
-                <label>Goles de penalti Local:</label>
-                <input type="number" value={penalesLocal} onChange={(e) => setPenalesLocal(Number(e.target.value))} />
-                <label>Goles de penalti Visitante:</label>
-                <input type="number" value={penalesVisitante} onChange={(e) => setPenalesVisitante(Number(e.target.value))} />
-              </div>
-            )}
-          </div>
-        )}
+        {/* Mostrar solo para liguilla vuelta */}
+        {partidoSeleccionado.tipoPartido === "LIGUILLA" &&
+          partidoSeleccionado.idaVuelta === "VUELTA" && (
+            <div>
+              <label>Seleccione criterio de desempate:</label>
+              <select
+                value={criterioDesempate}
+                onChange={(e) => setCriterioDesempate(e.target.value)}
+              >
+                <option value="NORMAL">Normal</option>
+                <option value="TIEMPO_EXTRA">Tiempo Extra</option>
+                <option value="PENALES">Penales</option>
+              </select>
+
+              {criterioDesempate === "PENALES" && (
+                <div>
+                  <label>Goles de penalti Local:</label>
+                  <input
+                    type="number"
+                    value={penalesLocal}
+                    onChange={(e) => setPenalesLocal(Number(e.target.value))}
+                  />
+                  <label>Goles de penalti Visitante:</label>
+                  <input
+                    type="number"
+                    value={penalesVisitante}
+                    onChange={(e) =>
+                      setPenalesVisitante(Number(e.target.value))
+                    }
+                  />
+                </div>
+              )}
+            </div>
+          )}
       </div>
 
       <div className="default-checkbox">
-        <input
-          type="checkbox"
-          checked={partidoDefault}
-          onChange={() => setPartidoDefault(!partidoDefault)}
-        />
+        <div className="checkbox-wrapper-19">
+          <input
+            type="checkbox"
+            checked={partidoDefault}
+            id="cbtest-19"
+            onChange={() => setPartidoDefault(!partidoDefault)}
+          />
+          <label for="cbtest-19" class="check-box"></label>
+        </div>
         Partido ganado por default
         {partidoDefault && (
           <select
@@ -383,24 +407,29 @@ export default function ArbitroPartidaje({
         )}
       </div>
 
-      <div className="botones-superiores">
-        <button className="btn btn-success" onClick={registrarResultado}>
-          REGISTRAR
-        </button>
-        <button
-          className="btn btn-danger"
-          onClick={() => cambiarComponente("A")}
-        >
-          CANCELAR
-        </button>
+      <div className="w-100 justify-content-center d-flex">
+        <div className="botones-superiores w-50">
+          <button
+            className="slide-btn-sm-green text-black w-25"
+            onClick={registrarResultado}
+          >
+            REGISTRAR
+          </button>
+          <button
+            className="slide-btn-sm text-black w-25"
+            onClick={() => cambiarComponente("A")}
+          >
+            CANCELAR
+          </button>
+        </div>
       </div>
 
       <div className="jugadores-contenedor">
-        <div>
+        <div className="quitarScroll h-jugadores">
           <h4>Jugadores {partidoSeleccionado.equipoLocal.nombreEquipo}</h4>
           {renderJugadores(jugadoresLocal, "local")}
         </div>
-        <div>
+        <div className="quitarScroll h-jugadores">
           <h4>Jugadores {partidoSeleccionado.equipoVisitante.nombreEquipo}</h4>
           {renderJugadores(jugadoresVisitante, "visitante")}
         </div>

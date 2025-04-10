@@ -155,7 +155,7 @@ i {
 
 #back_div {
   width: 100%;
-  min-height: 150px;
+  min-height:200px;
   padding: 40px 0px;
   background-image: url("../assets/images/campo.jpg");
   background-repeat: no-repeat;
@@ -208,6 +208,10 @@ i {
   background-color: var(--color-base-1-2);
   border-color: var(--color-acento-1-1) !important;
   color: var(--color-acento-1-1);
+}
+
+.h-min{
+  min-height: 100vh;
 }
 
 .role0{

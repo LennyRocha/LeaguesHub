@@ -17,7 +17,8 @@ import {
   Tooltip,
   Button,
 } from "@mui/material";
-import { Edit, Delete, Map, FilterList } from "@mui/icons-material";
+import { Edit, Delete, Map } from "@mui/icons-material";
+import { ReportProblem } from "@mui/icons-material";
 import Swal from "sweetalert2";
 import logo1 from "../../img/logo1.png";
 const hereApiKey = import.meta.env.VITE_HERE_MAPS_API_KEY;
@@ -47,6 +48,7 @@ export default function Admin4() {
     cancha: "",
   });
   const [loadBtn, setLoadBtn] = useState(false);
+  const [campoEd, setCampoEd] = useState({});
 
   useEffect(() => {
     if ("geolocation" in navigator) {
@@ -92,6 +94,30 @@ export default function Admin4() {
     toast.show(); // 👈 muestra el toast
   };
 
+  const onEdit = (campo) => {
+    setId(campo.id);
+    // Usamos setValue para rellenar el formulario con los valores de miCampo
+    setValue("id", campo.id);
+    setValue("nombre", campo.nombre);
+    setValue("direccion", campo.direccion);
+    setValue("latitud", campo.latitud);
+    setValue("longitud", campo.longitud);
+    setValue("cancha", campo.canchas[0].descripcion);
+    setCanchas(campo.canchas);
+    trigger();
+    setSelection({
+      nombre: campo.nombre,
+      direccion: campo.direccion,
+      latitud: campo.latitud,
+      longitud: campo.longitud,
+      cancha: campo.canchas[0].descripcion,
+    });
+    setSrc(
+      `https://www.google.com/maps?q=${campo.latitud},${campo.longitud}&z=15&output=embed`
+    );
+    setEdit(true);
+  };
+
   // Función para obtener sugerencias de direcciones
   const handleSearchPlaces = async (query) => {
     setFinding(true);
@@ -123,7 +149,9 @@ export default function Admin4() {
           });
         }
       } catch (error) {
-        console.error("Error obteniendo lugares:", error);
+        console.error("Error obteniendo campos:", error);
+        if (error.message === "Network Error")
+          mostrarError("Error de conexión");
         setSuggestions([]);
       } finally {
         setFinding(false);
@@ -137,7 +165,6 @@ export default function Admin4() {
 
   // Función para seleccionar un lugar y obtener coordenadas
   const handleSelect = async (place) => {
-    console.log(place);
     // Separar el nombre del lugar y la dirección
     const addressParts = place.display_name.split(",");
     const name = addressParts[0]; // Nombre del lugar
@@ -164,6 +191,20 @@ export default function Admin4() {
     );
   };
 
+  const handleDisEdit = () => {
+    setEdit(false);
+    reset();
+    clearErrors();
+    setSelection({
+      nombre: "",
+      direccion: "",
+      latitud: "",
+      longitud: "",
+      cancha: "",
+    });
+    setCanchas([]);
+  };
+
   // Función para deseleccionar un lugar
   const handleDiselect = () => {
     setSearch(""); // Limpia la búsqueda
@@ -185,15 +226,12 @@ export default function Admin4() {
     setInputs({});
     setCounter(1);
     setFound(false);
-  };
-  const submitCampo = (e) => {
-    e.preventDefault();
-    console.log("Guardando campo");
+    setCampoEd({});
+    if (edit) handleDisEdit();
   };
 
   // 🔹 Función para manejar clics en el mapa
   const handleMapClick = (event) => {
-    console.log(event, "Si");
     const [lat, lng] = event.latLng.split(",").map(Number);
     setLocation2({ lat, lng });
   };
@@ -215,9 +253,7 @@ export default function Admin4() {
   const [address2, setAddress2] = useState("");
   const [campos, setCampos] = useState([]);
   //const [canchas, setCanchas] = useState([]);
-  const [canchas, setCanchas] = useState([
-    { id: Date.now(), pos: 0, desc: "" },
-  ]); // Fila por defecto
+  const [canchas, setCanchas] = useState([]); // Fila por defecto
   const [canchasDesc, setCanchasDesc] = useState([]);
   const [loadCamps, setLoadCamps] = useState(false);
   const [fallo1, setFallo1] = useState("");
@@ -227,6 +263,8 @@ export default function Admin4() {
   const [rowsEdit, setRowsEdit] = useState(1);
 
   const [id, setId] = useState(0);
+  const [currentId, setCurrentId] = useState(0);
+  const [loadCancha, setLoadCancha] = useState(false);
 
   const [reload, setReload] = useState(false);
 
@@ -259,9 +297,6 @@ export default function Admin4() {
     setValue("cancha", cancha);
     setCanchasEdit(canchas);
     trigger();
-    canchas.map((c) => {
-      console.log(c);
-    });
   };
 
   // Al momento de editar, puedes establecer estos valores como predeterminados
@@ -312,10 +347,8 @@ export default function Admin4() {
           },
         }
       );
-      console.log(res.data);
       if (res.data.id) {
         Object.entries(inputs).forEach(([key, value]) => {
-          console.log(`Clave: ${key}, Valor: ${value}`);
           registrarCancha(value, key + 1, res.data.id);
         });
       }
@@ -332,8 +365,7 @@ export default function Admin4() {
       setReload(!reload);
       handleDiselect();
     } catch (err) {
-      console.log(err)
-      console.error(err, err.response?.message);
+      console.error(err);
       if (err.response.status === 403) {
         console.log("⚠️ Token expirado, redirigiendo a login...");
         Swal.fire({
@@ -370,10 +402,8 @@ export default function Admin4() {
           },
         }
       );
-      console.log(res.data);
     } catch (err) {
-      console.log(err);
-      console.error(err, err.response?.message);
+      console.error(err);
       if (err.response.status === 403) {
         console.log("⚠️ Token expirado, redirigiendo a login...");
         Swal.fire({
@@ -394,6 +424,8 @@ export default function Admin4() {
   };
 
   const quitarCancha = async (id) => {
+    setCurrentId(id);
+    setLoadCancha(true);
     try {
       const res = await axios.put(
         `${api_url}/api/canchas/estatus/${id}`,
@@ -405,22 +437,23 @@ export default function Admin4() {
           },
         }
       );
-      console.log(res.data);
+      onEdit(campoEd);
 
       Swal.fire({
         icon: "success",
         title: "¡Éxito!",
         text: res.data || "Operación exitosa",
+        footer: "Si no se ven los cambios, recarga la página",
+        timer: 2000,
+        showConfirmButton: false,
         customClass: {
           confirmButton: "btn-confirm",
           cancelButton: "btn-cancel",
           denyButton: "btn-deny",
         },
       });
-      setReload(!reload);
     } catch (err) {
-      console.log(err.toJSON());
-      console.error(err, err.response.message);
+      console.error(err);
       if (err.response.status === 403) {
         console.log("⚠️ Token expirado, redirigiendo a login...");
         Swal.fire({
@@ -437,11 +470,13 @@ export default function Admin4() {
         return;
       }
     } finally {
-      setModalCancha(false);
+      setCurrentId(0);
+      setLoadCancha(false);
     }
   };
 
   const updateCampo = async (data) => {
+    setLoadBtn(true);
     const token = await getToken();
     try {
       const res = await axios.put(
@@ -459,12 +494,27 @@ export default function Admin4() {
           },
         }
       );
-      console.log(res.data);
       if (res.data.id) {
-        canchasEdit.map((c) => {
-          updateCancha(c.descripcion, c.numeroCancha, res.data.id, c.id);
-          console.log(c);
-        });
+        try {
+          canchas.map((c) => {
+            updateCancha(c.descripcion, c.numeroCancha, res.data.id, c.id);
+          });
+        } catch (e) {
+          console.error(err);
+          console.log("⚠️ Token expirado, redirigiendo a login...");
+          Swal.fire({
+            icon: "warning",
+            title: "¡Error!",
+            text: "Error al modifcar campo",
+            confirmButtonText: "Aceptar",
+            customClass: {
+              confirmButton: "btn-confirm",
+              cancelButton: "btn-cancel",
+              denyButton: "btn-deny",
+            },
+          });
+          return;
+        }
       }
       Swal.fire({
         icon: "success",
@@ -480,8 +530,9 @@ export default function Admin4() {
       removeEdicion();
       setCampoEdit({});
       setCanchasEdit([]);
+      handleDisEdit();
     } catch (err) {
-      console.error(err, err.response.message, err.toJSON());
+      console.error(err);
       if (err.response.status === 403) {
         console.log("⚠️ Token expirado, redirigiendo a login...");
         Swal.fire({
@@ -497,6 +548,8 @@ export default function Admin4() {
         }).then((resutlt) => logout());
         return;
       }
+    } finally {
+      setLoadBtn(false);
     }
   };
 
@@ -517,10 +570,8 @@ export default function Admin4() {
           },
         }
       );
-      console.log(res.data);
     } catch (err) {
-      console.log(err.toJSON());
-      console.error(err, err.response.message);
+      console.error(err);
       if (err.response.status === 403) {
         console.log("⚠️ Token expirado, redirigiendo a login...");
         Swal.fire({
@@ -539,6 +590,14 @@ export default function Admin4() {
     }
   };
 
+  const [errorMsj, setErrorMsj] = useState("");
+  function mostrarError(mensaje) {
+    setErrorMsj(mensaje);
+    setTimeout(() => {
+      setErrorMsj("");
+    }, 3000);
+  }
+
   function extraerCoordenadas(url) {
     // Expresión regular para extraer coordenadas de una URL de Google Maps
     const regex = /@(-?\d+\.\d+),(-?\d+\.\d+)/;
@@ -548,7 +607,6 @@ export default function Admin4() {
       const latitud = resultado[1];
       const longitud = resultado[2];
 
-      console.log("Coordenadas extraídas: ", latitud, longitud);
       setValue("longitud", longitud); // Establece la longitud
       setValue("latitud", latitud); // Establece la latitud
       trigger();
@@ -601,10 +659,9 @@ export default function Admin4() {
         .then((res) => {
           if (res.data.length === 0) setFallo1("No hay campos registrados");
           else setCampos(res.data);
-          console.log(res.data);
         })
         .catch((e) => {
-          console.error(e, e.response.message);
+          console.error(e);
           if (e.response.status === 403) {
             console.log("⚠️ Token expirado, redirigiendo a login...");
             Swal.fire({
@@ -626,13 +683,25 @@ export default function Admin4() {
         .finally(() => setLoadCamps(false));
     };
     getCampos();
-    setCanchas([{ id: Date.now(), pos: 0, desc: "" }]);
+    setCanchas([]);
   }, [reload]);
 
   const onSubmit = async (data) => {
-    console.log(data);
-    console.log(inputs);
     !edit ? crearCampo(data) : updateCampo(data);
+  };
+
+  const updateDescriptionWithCount = (id, text) => {
+    setCanchas((prevCanchas) => {
+      // Verificamos si realmente hubo un cambio en la descripción
+      const updatedCanchas = prevCanchas.map((cancha) => {
+        if (cancha.id === id && cancha.descripcion !== text) {
+          return { ...cancha, descripcion: text };
+        }
+        return cancha;
+      });
+
+      return updatedCanchas;
+    });
   };
 
   return (
@@ -668,7 +737,12 @@ export default function Admin4() {
                       <TableCell>{d.direccion}</TableCell>
                       <TableCell>{d.canchas.length}</TableCell>
                       <TableCell>
-                        <IconButton onClick={() => onEdit(d)}>
+                        <IconButton
+                          onClick={() => {
+                            onEdit(d);
+                            setCampoEd(d);
+                          }}
+                        >
                           <Edit color="primary" />
                         </IconButton>
                         <IconButton
@@ -735,7 +809,7 @@ export default function Admin4() {
           <div className="card bg-light shadow p-4 h-100">
             <div className="card-header bg-red d-flex justify-content-between align-items-center flex-row container-fluid">
               <p className="font-weight-bold body-small text-white">
-                Registrar campo
+                {edit ? "Editar campo" : "Registrar campo"}
               </p>
               {finding ? (
                 <div className="my-spinner-sm"></div>
@@ -784,15 +858,6 @@ export default function Admin4() {
 
               {suggestions.length > 0 && (
                 <div>
-                  <a
-                    className="link"
-                    onClick={() => {
-                      setLinkVis(true);
-                      setSuggestions([]);
-                    }}
-                  >
-                    Ingresar manualmente
-                  </a>
                   <ul className="suggestions-list quitarScroll w-100">
                     {suggestions.map((place) => (
                       <li key={place.id} onClick={() => handleSelect(place)}>
@@ -823,6 +888,15 @@ export default function Admin4() {
               {errors.direccion && (
                 <p className="text-danger">{errors.direccion.message}</p>
               )}
+              <a
+                className="link"
+                onClick={() => {
+                  setLinkVis(true);
+                  setSuggestions([]);
+                }}
+              >
+                Ingresar coordenadas manualmente
+              </a>
               {found && (
                 <TextField
                   className="txtAr mt-1 mb-1"
@@ -905,11 +979,20 @@ export default function Admin4() {
                   disabled={!isValid}
                   className={`${isValid ? "" : "opa-0"} text-black`}
                 >
-                  Registrar
+                  {edit ? "Actualizar" : "Registrar"}
                 </button>
               )}
               {errors.cancha && (
                 <p className="text-danger">{errors.cancha.message}</p>
+              )}
+              {errorMsj !== "" && (
+                <div
+                  class="alert alert-warning d-flex align-items-center mt-1 gap-1"
+                  role="alert"
+                >
+                  <ReportProblem />
+                  <div>{errorMsj}</div>
+                </div>
               )}
             </form>
           </div>
@@ -920,103 +1003,216 @@ export default function Admin4() {
           </div>
         </div>
         <div className="canchas-group bg-light quitarScroll">
-          {Array.from({ length: counter }).map((_, index) => {
-            const handleInputChange = (i, text) => {
-              setInputs((prev) => ({
-                ...prev,
-                [i]: text,
-              }));
-            };
+          {!edit
+            ? Array.from({ length: counter }).map((_, index) => {
+                const handleInputChange = (i, text) => {
+                  setInputs((prev) => ({
+                    ...prev,
+                    [i]: text,
+                  }));
+                };
 
-            const handleRemove = (i) => {
-              if (!inputs[i]) {
-                setCounter((prev) => prev - 1);
-                const updatedInputs = { ...inputs };
-                delete updatedInputs[i];
-                setInputs(updatedInputs);
-              }
-            };
+                const handleRemove = (i) => {
+                  if (!inputs[i]) {
+                    setCounter((prev) => prev - 1);
+                    const updatedInputs = { ...inputs };
+                    delete updatedInputs[i];
+                    setInputs(updatedInputs);
+                  }
+                };
 
-            return (
-              <div className="w-100 mb-2" key={index}>
-                <div className="row align-items-center gap-0 justify-content-center container-fluid">
-                  <div className="col-1 text-center p-1 hide-when">
-                    <TextField
-                      className="txtAr canchaName inputo hide-when"
-                      margin="dense"
-                      name="nombre"
-                      disabled
-                      value={`#${index + 1}`}
-                      fullWidth
-                      variant="outlined"
-                    />
-                  </div>
-                  <div
-                    className={
-                      window.innerWidth >= 991 ? "col-8 p-1" : "col-10"
-                    }
-                  >
-                    {index === 0 ? (
-                      <TextField
-                        className="txtAr canchaDesc inputo"
-                        type="text"
-                        label="Descripción"
-                        margin="dense"
-                        name="correo"
-                        required
-                        value={selection.cancha}
-                        fullWidth
-                        variant="outlined"
-                        {...register("cancha")}
-                        onInput={(e) => {
-                          setSelection({
-                            ...selection,
-                            cancha: e.target.value,
-                          });
-                          handleInputChange(index, e.target.value);
-                        }}
-                      />
-                    ) : (
-                      <TextField
-                        className="txtAr canchaDesc inputo"
-                        type="text"
-                        label="Descripción"
-                        margin="dense"
-                        name="correo"
-                        required
-                        fullWidth
-                        variant="outlined"
-                        onInput={(e) =>
-                          handleInputChange(index, e.target.value)
+                return (
+                  <div className="w-100 mb-2" key={index}>
+                    <div className="row align-items-center gap-0 justify-content-center container-fluid">
+                      <div className="col-1 text-center p-1 hide-when">
+                        <TextField
+                          className="txtAr canchaName inputo hide-when"
+                          margin="dense"
+                          name="nombre"
+                          disabled
+                          value={`#${index + 1}`}
+                          fullWidth
+                          variant="outlined"
+                        />
+                      </div>
+                      <div
+                        className={
+                          window.innerWidth >= 991 ? "col-8 p-1" : "col-10"
                         }
-                      />
-                    )}
+                      >
+                        {index === 0 ? (
+                          <TextField
+                            className="txtAr canchaDesc inputo"
+                            type="text"
+                            label="Descripción"
+                            margin="dense"
+                            required
+                            value={selection.cancha}
+                            fullWidth
+                            variant="outlined"
+                            {...register("cancha")}
+                            onInput={(e) => {
+                              setSelection({
+                                ...selection,
+                                cancha: e.target.value,
+                              });
+                              handleInputChange(index, e.target.value);
+                            }}
+                          />
+                        ) : (
+                          <TextField
+                            className="txtAr canchaDesc inputo"
+                            type="text"
+                            label="Descripción"
+                            margin="dense"
+                            required
+                            fullWidth
+                            variant="outlined"
+                            onInput={(e) =>
+                              handleInputChange(index, e.target.value)
+                            }
+                          />
+                        )}
+                      </div>
+                      <div className="col-2 d-flex justify-content-center p-1">
+                        <Button
+                          className={`butWidth mb-1 text-white ${
+                            index === 0 ? "btn-blue" : "btn-red"
+                          }`}
+                          onClick={() => {
+                            if (index === 0) {
+                              setCounter((prev) => prev + 1);
+                            } else {
+                              handleRemove(index);
+                            }
+                          }}
+                          fullWidth
+                        >
+                          {index === 0 ? (
+                            <i
+                              className="fa fa-plus icon"
+                              aria-hidden="true"
+                            ></i>
+                          ) : (
+                            <i
+                              className="fa fa-minus icon"
+                              aria-hidden="true"
+                            ></i>
+                          )}
+                        </Button>
+                      </div>
+                    </div>
                   </div>
-                  <div className="col-2 d-flex justify-content-center p-1">
-                    <Button
-                      className={`butWidth mb-1 text-white ${
-                        index === 0 ? "btn-blue" : "btn-red"
-                      }`}
-                      onClick={() => {
-                        if (index === 0) {
-                          setCounter((prev) => prev + 1);
-                        } else {
-                          handleRemove(index);
+                );
+              })
+            : canchas.map((c, index) => {
+                return (
+                  <div className="w-100 mb-2" key={index}>
+                    <div className="row align-items-center gap-0 justify-content-center container-fluid">
+                      <div className="col-1 text-center p-1 hide-when">
+                        <TextField
+                          className="txtAr canchaName inputo hide-when"
+                          margin="dense"
+                          name="nombre"
+                          disabled
+                          value={`#${index + 1}`}
+                          fullWidth
+                          variant="outlined"
+                        />
+                      </div>
+                      <div
+                        className={
+                          window.innerWidth >= 991 ? "col-8 p-1" : "col-10"
                         }
-                      }}
-                      fullWidth
-                    >
-                      {index === 0 ? (
-                        <i className="fa fa-plus icon" aria-hidden="true"></i>
-                      ) : (
-                        <i className="fa fa-minus icon" aria-hidden="true"></i>
-                      )}
-                    </Button>
+                      >
+                        {index === 0 ? (
+                          <TextField
+                            className="txtAr canchaDesc inputo"
+                            type="text"
+                            label="Descripción"
+                            margin="dense"
+                            required
+                            value={selection.cancha}
+                            fullWidth
+                            variant="outlined"
+                            {...register("cancha")}
+                            onInput={(e) => {
+                              setSelection({
+                                ...selection,
+                                cancha: e.target.value,
+                              });
+                              updateDescriptionWithCount(c.id, e.target.value);
+                            }}
+                          />
+                        ) : (
+                          <TextField
+                            className="txtAr canchaDesc inputo"
+                            type="text"
+                            label="Descripción"
+                            margin="dense"
+                            required
+                            fullWidth
+                            variant="outlined"
+                            value={c.descripcion}
+                            onInput={(e) =>
+                              updateDescriptionWithCount(c.id, e.target.value)
+                            }
+                          />
+                        )}
+                      </div>
+                      <div className="col-2 d-flex justify-content-center p-1">
+                        {loadCancha && currentId === c.id ? (
+                          <div className="my-spinner"></div>
+                        ) : (
+                          <Button
+                            className={`butWidth mb-1 text-white ${
+                              index === 0
+                                ? "btn-blue"
+                                : !c.estatusCancha
+                                ? "btn-red"
+                                : "btn-green"
+                            }`}
+                            onClick={() => {
+                              if (index === 0) {
+                                Swal.fire({
+                                  icon: "info",
+                                  text: "Puedes desactivar las canchas que no se requieran, pero al menos una debe estar activa",
+                                  confirmButtonText: "Ok",
+                                  customClass: {
+                                    confirmButton: "btn-confirm",
+                                    cancelButton: "btn-cancel",
+                                    denyButton: "btn-deny",
+                                  },
+                                });
+                              } else {
+                                quitarCancha(c.id);
+                              }
+                            }}
+                            fullWidth
+                          >
+                            {index === 0 ? (
+                              <i
+                                className="fa fa-info icon"
+                                aria-hidden="true"
+                              ></i>
+                            ) : !c.estatusCancha ? (
+                              <i
+                                className="fa fa-trash-arrow-up icon"
+                                aria-hidden="true"
+                              ></i>
+                            ) : (
+                              <i
+                                className="fa fa-trash-can icon"
+                                aria-hidden="true"
+                              ></i>
+                            )}
+                          </Button>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            );
-          })}
+                );
+              })}
         </div>
         <div
           className="position-fixed bottom-0 end-0 p-3"

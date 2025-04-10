@@ -4,7 +4,7 @@ import Balon from '../assets/templates/balon.png'
 
 export default function LoadingScreen() {
   return (
-    <div className="centered">
+    <div className="err-container">
       <img src={Balon} alt="logo-balon" className="balon" />
       <div className="span-col">
         <span className="span-load"></span>

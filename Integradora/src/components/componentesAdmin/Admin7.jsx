@@ -19,6 +19,9 @@ import Swal from "sweetalert2";
 import "bootstrap";
 import Banner1 from "../../assets/templates/banner_back.png";
 import Poster1 from "../../assets/templates/poster_back.png";
+import jsPDF from "jspdf";
+import "../../assets/fonts/Oswald-Variable-normal";
+import "../../assets/fonts/3rd Man-normal";
 
 export default function Admin7() {
   const [torneos, setTorneos] = useState([]);
@@ -28,6 +31,8 @@ export default function Admin7() {
   const [selection, setSelection] = useState(null);
   const [poster, setPoster] = useState("");
   const [loadBtn, setLoadBtn] = useState(false);
+  const [loadCon, setLoadCon] = useState(false);
+  const [blob, setBlob] = useState("");
   useEffect(() => {
     const getTorneos = async () => {
       axios
@@ -64,12 +69,8 @@ export default function Admin7() {
     };
     getTorneos();
   }, []);
-  useEffect(() => {
-    console.log(selection);
-  }, [selection]);
   async function crearConvocatoria(e) {
     e.preventDefault();
-    console.log("Creando");
     setLoadBtn(true);
     const tokData = await getToken();
     await axios
@@ -89,12 +90,10 @@ export default function Admin7() {
             denyButton: "btn-deny",
           },
         });
-        console.log(res.data);
         setPoster(res.data);
       })
       .catch((error) => {
-        console.error(error, error.response?.data?.message);
-        console.log(error.toJSON());
+        console.error(error);
         if (error.response?.status === 403) {
           console.log("⚠️ Token expirado, redirigiendo a login...");
           Swal.fire({
@@ -126,6 +125,74 @@ export default function Admin7() {
       })
       .finally(() => setLoadBtn(false));
   }
+
+  const generatePDF = (descarga) => {
+    setLoadCon(true);
+    const doc = new jsPDF();
+    const imagen = getUrl(selection.logoTorneo);
+
+    // Cargar imagen de fondo
+    const img = new Image();
+    img.src = Poster1; // Ruta de la imagen de fondo
+    img.onload = () => {
+      // Agregar la imagen de fondo (ajusta el tamaño de la imagen si es necesario)
+      doc.addImage(img, "PNG", 0, 0, 210, 297); // Tamaño A4: 210x297 mm
+
+      // Agregar texto al PDF
+      doc.setFont("3rd Man", "normal");
+      doc.setFontSize(40); // Tamaño de la fuente
+
+      doc.setTextColor(255, 255, 255);
+      doc.text(`Torneo ${selection.nombreTorneo}`, 56, 32); // Posición X, Y
+
+      doc.setFontSize(35);
+      doc.setTextColor(0, 0, 0);
+      doc.text(`${selection.descripcion}`, 45, 145);
+
+      doc.setFontSize(28);
+      doc.setTextColor(154, 0, 0);
+      doc.text(`${selection.fechaInicio}`, 165, 80);
+
+      doc.setFontSize(24);
+      doc.setTextColor(255, 255, 255);
+      doc.text(`Máximo ${selection.maxEquipos} equipos`, 37, 234);
+
+      doc.setFontSize(24);
+      doc.setTextColor(255, 255, 255);
+      doc.text(`${selection.equiposLiguilla} pasan a liguilla`, 125, 234);
+
+      // Colocar el premio
+      doc.setFontSize(25);
+      doc.setTextColor(255, 255, 255);
+      doc.text(`Premio: ${selection.premio}`, 65, 268);
+
+      // Si quieres agregar otra imagen (además de la de fondo)
+      const logo = new Image();
+      logo.src = getUrl(selection.logoTorneo); // Ruta de la segunda imagen
+      logo.onload = () => {
+        try {
+          if (logo.width === 0 || logo.height === 0) {
+            throw new Error("La imagen no se cargó correctamente.");
+          }
+
+          doc.addImage(logo, "PNG", 68, 45, 75, 75);
+
+          if (descarga) {
+            doc.save("documento_con_datos.pdf");
+          } else {
+            const blobUrl = doc.output("bloburl");
+            window.open(blobUrl);
+            setBlob(blobUrl);
+          }
+        } catch (err) {
+          console.error("Error al agregar la imagen:", err.message);
+        } finally {
+          setLoadCon(false);
+        }
+      };
+    };
+  };
+
   return (
     <div>
       <div className="container-fluid">
@@ -206,15 +273,42 @@ export default function Admin7() {
                         value={selection.descripcion}
                       />
                       <div className="button-group">
-                        <button className={`${loadBtn && 'w-50'} slide-btn text-black`} onClick={(e) => {e.preventDefault(); console.log("Quitar si no funciona react canvas")}}>Ver</button>
+                        {loadCon ? (
+                          <div
+                            className={`${
+                              loadBtn && "w-50"
+                            } align-items-center d-flex justify-content-center`}
+                          >
+                            <div className="my-spinner"></div>
+                          </div>
+                        ) : (
+                          <button
+                            className={`${
+                              loadCon && "w-50"
+                            } slide-btn text-black`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              generatePDF(false);
+                            }}
+                          >
+                            Ver
+                          </button>
+                        )}
                         {loadBtn ? (
-                          <div className={`${loadBtn && 'w-50'} align-items-center d-flex justify-content-center`}>
+                          <div
+                            className={`${
+                              loadBtn && "w-100"
+                            } align-items-center d-flex justify-content-center`}
+                          >
                             <div className="my-spinner"></div>
                           </div>
                         ) : (
                           <button
                             className="slide-btn text-black"
-                            onClick={async (e) => crearConvocatoria(e)}
+                            onClick={async (e) => {
+                              //generatePDF(true);
+                              crearConvocatoria(e);
+                            }}
                           >
                             Crear
                           </button>
@@ -226,20 +320,30 @@ export default function Admin7() {
               </div>
               <div className="col-lg-4 div-margin">
                 <h5 className="mb-1">Vista vértical</h5>
-                <img
-                  src={poster === "" ? Poster1 : getUrl(poster)}
-                  alt="BannerPlantilla"
-                  className="img-fluid d-block w-100"
-                />
+                {blob === "" ? (
+                  <img
+                    src={poster === "" ? Poster1 : getUrl(poster)}
+                    alt="BannerPlantilla"
+                    className="img-fluid d-block w-100"
+                  />
+                ) : (
+                  <iframe
+                    src={blob}
+                    width="100%"
+                    height="100%"
+                    title="Preview Vértical"
+                    allowFullScreen
+                  ></iframe>
+                )}
               </div>
-              <div className="d-sm-flex align-items-center justify-content-between mb-4">
+              {/* <div className="d-sm-flex align-items-center justify-content-between mb-4">
                 <h3 className="mb-0 mt-1">Vista horizontal</h3>
               </div>
               <img
                 src={Banner1}
                 alt="PosterPlantilla"
                 className="d-block w-100 h-peque"
-              />
+              /> */}
             </div>
           ) : (
             <div className="w-100 align-items-center d-flex flex-column gap-1">

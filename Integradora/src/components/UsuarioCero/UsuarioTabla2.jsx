@@ -67,32 +67,36 @@ export default function UsuarioTabla2() {
 
   return (
     <div className="my-5">
-      <h1 id="goleo" className="d-none d-md-block">Tabla de Goleo</h1>
-      <h2 id="goleo-sm" className="d-block d-md-none">Tabla de Goleo</h2>
+      <h1 id="goleo" className="d-none d-md-block">
+        Tabla de Goleo
+      </h1>
+      <h2 id="goleo-sm" className="d-block d-md-none">
+        Tabla de Goleo
+      </h2>
 
-      <div className="partidoFilter">
-        <select
-          value={torneoSeleccionado}
-          onChange={(e) => {
-            setTorneoSeleccionado(e.target.value);
-            setPaginaActual(0);
-          }}
-          className="mb-1"
-        >
-          <option value={""}>Selecciona un torneo</option>
-          {torneos.map((torneo) => (
-            <option key={torneo.id} value={torneo.id}>
-              {torneo.nombreTorneo}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {error && <p className="text-danger">{error}</p>}
       {loading ? (
         <MiniLoadingScreen />
+      ) : error ? (
+        <p className="text-danger body-small">{error}</p>
       ) : (
         <>
+          <div className="partidoFilter">
+            <select
+              value={torneoSeleccionado}
+              onChange={(e) => {
+                setTorneoSeleccionado(e.target.value);
+                setPaginaActual(0);
+              }}
+              className="mb-1"
+            >
+              <option value={""}>Selecciona un torneo</option>
+              {torneos.map((torneo) => (
+                <option key={torneo.id} value={torneo.id}>
+                  {torneo.nombreTorneo}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="over-auto quitarScroll">
             <table className="table">
               <thead className="myThead">

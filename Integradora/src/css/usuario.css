@@ -107,6 +107,8 @@
 
 .centered{
     align-self: center !important;
+    align-items: center;
+    width: 100%;
 }
 
 .img{

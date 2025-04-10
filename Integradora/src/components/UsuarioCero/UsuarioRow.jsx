@@ -19,7 +19,7 @@ export default function UsuarioRow({ getUrl, api }) {
         else setTeams(res.data);
       })
       .catch((e) => {
-        console.error(e, e.response.message);
+        console.error(e);
       })
       .finally(() => setLoad(false));
   }, []);

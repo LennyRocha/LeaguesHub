@@ -23,7 +23,6 @@ export default function UsuarioTabla1({ api }) {
       try {
         const res = await axios.get(`${api}/api/torneos/iniciados`);
         setTorneos(res.data);
-        console.log(res.data, "X");
         if (res.data.length > 0) {
           setSelectedTorneo(res.data[0].id);
         }
@@ -87,28 +86,29 @@ export default function UsuarioTabla1({ api }) {
       <h2 id="clasif-sm" className="d-block d-md-none">
         Tabla de Clasificación
       </h2>
-      <div className="partidoFilter">
-        <select
-          value={selectedTorneo}
-          onChange={(e) => {
-            setSelectedTorneo(e.target.value);
-            setCurrentPage(0);
-          }}
-          className="mb-1"
-        >
-          <option value="">Selecciona un torneo</option>
-          {torneos.map((torneo) => (
-            <option key={torneo.id} value={torneo.id}>
-              {torneo.nombreTorneo}
-            </option>
-          ))}
-        </select>
-      </div>
-      {error && <p className="error-text">{error}</p>}
       {loading ? (
         <MiniLoadingScreen />
+      ) : error ? (
+        <p className="text-danger body-small">{error}</p>
       ) : (
         <div>
+          <div className="partidoFilter">
+            <select
+              value={selectedTorneo}
+              onChange={(e) => {
+                setSelectedTorneo(e.target.value);
+                setCurrentPage(0);
+              }}
+              className="mb-1"
+            >
+              <option value="">Selecciona un torneo</option>
+              {torneos.map((torneo) => (
+                <option key={torneo.id} value={torneo.id}>
+                  {torneo.nombreTorneo}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="over-auto quitarScroll">
             <table className="table">
               <thead className="myThead">

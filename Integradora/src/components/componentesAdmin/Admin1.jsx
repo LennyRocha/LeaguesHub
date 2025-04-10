@@ -17,17 +17,12 @@ function Admin1({ cambiarComponent, setTeam }) {
     // Convertir la fecha seleccionada a 'YYYY-MM-DD' en zona horaria local
     const formattedNewDate = newDate.toLocaleDateString("sv-SE"); // Formato sueco (ISO-compatible)
 
-    console.log("Fecha seleccionada:", formattedNewDate);
-
     // Buscar los partidos para la fecha seleccionada
     const partidosDelDia = partidos.filter(
       (p) => p.fechaPartido === formattedNewDate
     );
 
-    console.log(partidosDelDia);
-
     if (partidosDelDia.length > 0) {
-      console.log("Partidos del día:", partidosDelDia);
 
       Swal.fire({
         title: `Partidos programados el ${formattedNewDate}`,

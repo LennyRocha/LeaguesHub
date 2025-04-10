@@ -5,9 +5,6 @@ import "bootstrap";
 
 export default function Admin9({ cambiarComponent, team, setTeam }) {
   const [visible, setVisible] = useState(true);
-  useEffect(() => {
-    console.log(team, team.nombreEquipo);
-  }, []);
 
   const [teams, setTeams] = useState([]);
   const [loadTeams, setLoadTeams] = useState(false);
@@ -35,7 +32,7 @@ export default function Admin9({ cambiarComponent, team, setTeam }) {
         setNombreTeam(name);
       })
       .catch((e) => {
-        console.error(e, e.response?.message);
+        console.error(e);
         if (e.response.status === 403) {
           console.log("⚠️ Token expirado, redirigiendo a login...");
           Swal.fire({
@@ -73,7 +70,7 @@ export default function Admin9({ cambiarComponent, team, setTeam }) {
           else setTeams(res.data);
         })
         .catch((e) => {
-          console.error(e, e.response?.message);
+          console.error(e);
           if (e.response.status === 403) {
             console.log("⚠️ Token expirado, redirigiendo a login...");
             Swal.fire({
@@ -162,7 +159,6 @@ export default function Admin9({ cambiarComponent, team, setTeam }) {
           ) : falloJ === "" ? (
             <div className="players-grid">
               {players.map((j) => {
-                console.log(j.expulsado);
                 return (
                   <div className="over-card" key={j.id}>
                     <div className="kard">

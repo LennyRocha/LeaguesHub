@@ -21,14 +21,6 @@ import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 
-const onEdit = (arbitro) => {
-  console.log("Editando ", arbitro);
-};
-
-const onDelete = (arbitro) => {
-  console.log("Eliminando ", arbitro);
-};
-
 //Arbitros
 export default function Admin5() {
   const [reload, setReload] = useState(false);
@@ -70,7 +62,6 @@ export default function Admin5() {
   } = useForm({ resolver: yupResolver(arbitro), mode: "onChange" });
 
   const desactivarArbitro = async (id, name) => {
-    console.log(id);
     try {
       const tokData = await getToken();
       const res = await axios.put(
@@ -98,7 +89,6 @@ export default function Admin5() {
     } catch (err) {
       console.error(err);
       if (err.response.status === 400) {
-        console.log(err.response.data.message);
         Swal.fire({
           icon: "error",
           title: "¡Denegado!",
@@ -114,7 +104,6 @@ export default function Admin5() {
         return;
       }
       if (err.response.status === 403) {
-        console.log("⚠ Token expirado, redirigiendo a login...");
         console.log("⚠️ Token expirado, redirigiendo a login...");
         Swal.fire({
           icon: "warning",
@@ -215,8 +204,9 @@ export default function Admin5() {
       clearErrors();
       setPreview(userPlace);
       setSelectedFile(null);
+      setReload(!reload);
     } catch (err) {
-      console.log(err, err.message);
+      console.error(err);
       if (err.response) {
         Swal.fire({
           icon: "error",
@@ -230,6 +220,21 @@ export default function Admin5() {
             denyButton: "btn-deny",
           },
         });
+      }
+      if (err.response.status === 403) {
+        console.log("⚠️ Token expirado, redirigiendo a login...");
+        Swal.fire({
+          icon: "warning",
+          title: "¡Denegado!",
+          text: "Su sesión ha expirado, ingrese sesión nuevamente para continuar",
+          confirmButtonText: "Aceptar",
+          customClass: {
+            confirmButton: "btn-confirm",
+            cancelButton: "btn-cancel",
+            denyButton: "btn-deny",
+          },
+        }).then((resutlt) => logout());
+        return;
       }
     } finally {
       setLoadArbit(false);

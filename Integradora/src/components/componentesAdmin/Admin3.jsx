@@ -315,7 +315,6 @@ export default function Admin3() {
       })
       .catch((error) => {
         if (error.response.status === 400) {
-          console.log(error.response.data.message);
           Swal.fire({
             icon: "error",
             title: "¡Denegado!",
@@ -349,7 +348,6 @@ export default function Admin3() {
 
   const cancelarTorneo = async (id) => {
     const tokData = await getToken();
-    console.log(id);
     Swal.fire({
       title: "¿Cancelar torneo?",
       text: "Esta acción es irreversible, de confirmarlo, especifica un motivo para su cancelación",
@@ -364,7 +362,6 @@ export default function Admin3() {
         denyButton: "btn-deny",
       },
     }).then(async (result) => {
-      console.log(result, result.value);
       if (result.isConfirmed) {
         await axios
           .patch(
@@ -380,7 +377,6 @@ export default function Admin3() {
             }
           )
           .then((res) => {
-            console.log(res.data);
             Swal.fire({
               icon: "success",
               title: "¡OK!",
@@ -394,7 +390,6 @@ export default function Admin3() {
             setReload(!reload);
           })
           .catch((error) => {
-            console.log(error.response);
             Swal.fire({
               icon: "error",
               title: "¡Denegado!",
@@ -407,7 +402,6 @@ export default function Admin3() {
               },
             });
             if (error.response.status === 400) {
-              console.log(error.response.data.message);
               Swal.fire({
                 icon: "error",
                 title: "¡Denegado!",
@@ -489,7 +483,6 @@ export default function Admin3() {
 
   async function submitTorneo(data, image) {
     const validationErrors = validateFields(data);
-    console.log(data.nombreTorneo);
 
     if (Object.keys(validationErrors).length > 0) {
       return;
@@ -521,7 +514,6 @@ export default function Admin3() {
             Authorization: `Bearer ${tokData}`,
           },
         });
-        console.log("Respuesta del servidor:", response.data);
         Swal.fire({
           icon: "success",
           title: "¡OK!",
@@ -553,8 +545,9 @@ export default function Admin3() {
         clearErrors();
         resetField("descripcion");
         setValue("descripcion", "");
+        setReload(!reload);
       } catch (err) {
-        console.log(err, err.message, err.response);
+        console.error(err);
         if (err.response) {
           Swal.fire({
             icon: "error",
@@ -616,7 +609,6 @@ export default function Admin3() {
             },
           }
         );
-        console.log("Respuesta del servidor:", response.data);
         Swal.fire({
           icon: "success",
           title: "¡OK!",
@@ -647,8 +639,9 @@ export default function Admin3() {
         clearErrors();
         resetField("descripcion");
         setValue("descripcion", "");
+        setReload(!reload);
       } catch (err) {
-        console.log(err, err.message);
+        console.error(err);
         if (err.response) {
           Swal.fire({
             icon: "error",
@@ -670,8 +663,6 @@ export default function Admin3() {
   }
 
   const onSubmit = async (data) => {
-    console.log(data);
-
     !editar
       ? await submitTorneo(data, selectedFile)
       : await updateTorneo(data, selectedFile);
@@ -704,7 +695,6 @@ export default function Admin3() {
           else setTorneos(res.data);
         })
         .catch((err) => {
-          console.log(err.response.data.message);
           Swal.fire({
             icon: "error",
             title: "¡Oops!",
