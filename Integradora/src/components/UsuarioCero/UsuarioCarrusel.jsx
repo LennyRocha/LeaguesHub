@@ -2,11 +2,12 @@ import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import "bootstrap";
 import { AuthContext } from "../../context/AuthContext";
+import Banner1 from "../../assets/templates/banner_back.png";
+import "../../assets/fonts/Oswald-Variable-normal";
+import "../../assets/fonts/3rd Man-normal";
+import Logo2 from "../../img/logo1.png";
 
-// Asegúrate de importar tu imagen base (el fondo)
-import Banner1 from "./ruta/tuImagenFondo.jpg"; // ajusta la ruta
-
-export default function UsuarioCarrusel({ torneos }) {
+export default function UsuarioCarrusel() {
   const getUrlDrive = (url) => {
     let idMatch = url.match(/id=([^&]+)/);
     if (!idMatch) {
@@ -16,14 +17,17 @@ export default function UsuarioCarrusel({ torneos }) {
       ? `https://drive.google.com/uc?export=view&id=${idMatch[1]}`
       : url;
   };
-  
+
+  const [torneos, setTorneos] = useState([]);
+  const [load, setLoad] = useState(false);
+
   useEffect(() => {
     const getTorneos = async () => {
+      setLoad(true);
       axios
         .get(`${api_url}/api/torneos/espera`)
         .then((res) => {
-          if (res.data.length === 0) setTorEspera(0);
-          else setTorEspera(res.data.length);
+          setTorneos(res.data);
         })
         .catch((e) => {
           console.error(e, e.response.message);
@@ -45,7 +49,7 @@ export default function UsuarioCarrusel({ torneos }) {
           setTorEspera(0);
         })
         .finally(() => {
-          setLoad4(false);
+          setLoad(false);
         });
     };
     getTorneos();
@@ -53,24 +57,30 @@ export default function UsuarioCarrusel({ torneos }) {
 
   const renderTorneoToDataURL = (torneo) => {
     return new Promise((resolve) => {
-      const canvas = document.getElementById("canvasBase");
+      const canvas = document.createElement("canvas");
+      canvas.width = 1200;
+      canvas.height = 150;
       const ctx = canvas.getContext("2d");
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const fondo = new Image();
       fondo.src = Banner1;
 
-      fondo.onload = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      fondo.onload = async () => {
         ctx.drawImage(fondo, 0, 0, canvas.width, canvas.height);
 
         ctx.fillStyle = "white";
-        ctx.font = "bold 36px sans-serif";
+
+        ctx.font = "bold 36px '3rd Man', sans-serif";
         ctx.fillText(`Torneo ${torneo.nombreTorneo}`, 250, 35);
-        ctx.font = "20px sans-serif";
+        ctx.font = "20px '3rd Man', sans-serif";
         ctx.fillText(`Fecha de inicio: ${torneo.fechaInicio}`, 835, 140);
         ctx.fillStyle = "black";
+        ctx.font = "20px '3rd Man', sans-serif";
         ctx.fillText(torneo.descripcion, 250, 75);
         ctx.fillStyle = "#9A0000";
+        ctx.font = "18px '3rd Man', sans-serif";
         ctx.fillText(
           `¡Sólo ${torneo.equiposLiguilla} pasarán a liguilla!`,
           300,
@@ -78,17 +88,26 @@ export default function UsuarioCarrusel({ torneos }) {
         );
 
         const logo = new Image();
-        logo.crossOrigin = "anonymous";
-        logo.src = getUrlDrive(torneo.logoTorneo);
+
+        //logo.src = getUrlDrive(selection.logoTorneo);
+        console.log(getUrlDrive(torneo.logoTorneo)); // Verifica la URL generada
+
+        //logo.src = fotoPlace;
+        logo.crossOrigin = "Anonymous"; // Intentar con CORS habilitado
+
+        logo.src = `https://cors-anywhere.herokuapp.com/${getUrlDrive(
+          selection.logoTorneo
+        )}`;
 
         logo.onload = () => {
           ctx.drawImage(logo, 860, 10, 100, 100);
-          resolve(canvas.toDataURL("image/png"));
+          const imgUrl = canvas.toDataURL("image/png");
         };
 
-        logo.onerror = () => {
-          console.error("Error al cargar el logo");
-          resolve(canvas.toDataURL("image/png")); // sin logo
+        logo.onerror = (e) => {
+          console.error("No se pudo cargar la imagen del torneo");
+          logo.src = Logo2;
+          const imgUrl = canvas.toDataURL("image/png");
         };
       };
 
@@ -117,13 +136,6 @@ export default function UsuarioCarrusel({ torneos }) {
 
   return (
     <>
-      <canvas
-        id="canvasBase"
-        width="1024"
-        height="200"
-        style={{ display: "none" }}
-      ></canvas>
-
       <div id="torneos" className="carousel slide" data-bs-ride="carousel">
         <div className="carousel-indicators">
           {imagenes.map((_, index) => (
