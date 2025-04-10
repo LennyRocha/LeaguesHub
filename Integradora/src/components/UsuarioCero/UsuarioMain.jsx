@@ -47,7 +47,7 @@ export default function UsuarioMain() {
         />
       )}
 
-      <UsuarioCarrusel />
+      {/* <UsuarioCarrusel /> */}
       <UsuarioTabla1 api={api} />
       {/* <UsuarioDestac /> */}
       <UsuarioTabla2 />
