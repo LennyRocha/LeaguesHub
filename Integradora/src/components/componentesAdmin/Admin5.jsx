@@ -292,13 +292,13 @@ export default function Admin5() {
             <div className="arbitro-card">
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="fotoContainer">
-                  <img className="img-fluid img" src={preview} alt="..." />
-                  <Tooltip title="Elegir una imagen">
-                    <div className="botonDiv">
-                      <i className="fa fa-camera"></i>
+                  <img className="img-fluid img my-img" src={preview} alt="..." />
+                  <Tooltip title="Elegir foto">
+                    <div className="botonDiv-2">
+                      <i className="fa fa-images"></i>
                       <input
                         type="file"
-                        className="botonCam"
+                        className="botonCamArb"
                         accept="image/*"
                         onChange={handleFileChange}
                         id="btnCam"
@@ -388,7 +388,7 @@ export default function Admin5() {
               className="quitarScroll table-height"
             >
               <Table>
-                <TableHead className="myThead">
+                <TableHead className="myThead2">
                   <TableRow>
                     <TableCell className="cell">#</TableCell>
                     <TableCell className="cell">Nombre</TableCell>

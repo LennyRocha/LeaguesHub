@@ -1,7 +1,6 @@
 import React from 'react'
 import { useState } from 'react';
 import Access from './Access';
-import Password from './password';
 
 export default function ContextoAcceso() {
   const [componenteActual, setComponenteActual] = useState("A");

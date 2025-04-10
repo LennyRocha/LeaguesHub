@@ -336,7 +336,7 @@ const Access = ({ cambiarComponente }) => {
   };
 
   return (
-    <div className="container" id="container">
+    <div className="container access-cont" id="container">
       <div className="form-container sign-up-container">
         <form onSubmit={handleSubmit2}>
           <h3 className="bld">Crea tu Cuenta</h3>

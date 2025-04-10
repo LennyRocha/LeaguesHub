@@ -11,7 +11,7 @@ export default function TokenPage({ removeToken, removeUser, logout, getout, cle
       <p className="body-small text-center">Tu sesión ha expirado, inicia sesión nuevamente</p>
       <div className="gap-2 w-100 justify-content-center d-flex">
       <button className="slide-btn-sm w-25 text-black" onClick={() => getout()}>Menú principal</button>
-      <button className="slide-btn-sm w-25 text-black" onClick={() => {clearData(); window.location.href="/acceso"}}>Iniciar sesión</button>
+      <button className="slide-btn-sm w-25 text-black" onClick={() => {clearData(); window.location.href="/acceder"}}>Iniciar sesión</button>
       </div>
     </div>
   );

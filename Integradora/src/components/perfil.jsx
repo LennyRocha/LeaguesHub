@@ -152,7 +152,7 @@ export default function Perfil({ cambiarComponente }) {
             vibrate: [200, 100, 200],
           });
           notif.onclick = () => {
-            window.location.href = "/acceso";
+            window.location.href = "/acceder";
           };
         }
       } else {

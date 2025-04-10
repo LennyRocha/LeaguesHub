@@ -32,7 +32,7 @@ export default function Usuario0({ cambiarComponente }) {
 
   return (
     <div>
-      <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+      <header className="d-flex head flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
         <a
           className="d-flex text-center align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none"
           id="logoHead"
@@ -71,7 +71,7 @@ export default function Usuario0({ cambiarComponente }) {
           </li>
         </ul>
         <div className="col-md-3 text-end">
-          <a type="button" className="btn red-b" href="/acceso">
+          <a type="button" className="btn red-b" href="/acceder">
             Acceder
           </a>
         </div>

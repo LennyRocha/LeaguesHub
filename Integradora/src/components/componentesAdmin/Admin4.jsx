@@ -719,7 +719,7 @@ export default function Admin4() {
         ) : fallo1 === "" ? (
           <TableContainer component={Paper}>
             <Table>
-              <TableHead className="myThead theadContainer">
+              <TableHead className="myThead2 theadContainer">
                 <TableRow>
                   <TableCell className="cell">#</TableCell>
                   <TableCell className="cell">Nombre</TableCell>
@@ -738,6 +738,10 @@ export default function Admin4() {
                       <TableCell>{d.canchas.length}</TableCell>
                       <TableCell>
                         <IconButton
+                          style={{
+                            backgroundColor: "transparent",
+                            border: "none",
+                          }}
                           onClick={() => {
                             onEdit(d);
                             setCampoEd(d);
@@ -746,6 +750,10 @@ export default function Admin4() {
                           <Edit color="primary" />
                         </IconButton>
                         <IconButton
+                          style={{
+                            backgroundColor: "transparent",
+                            border: "none",
+                          }}
                           onClick={() =>
                             setLocation({ lat: d.latitud, lng: d.longitud })
                           }

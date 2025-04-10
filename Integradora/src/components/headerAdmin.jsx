@@ -50,6 +50,8 @@ function AdminDashboard() {
   const { logout, removeToken, removeUser, getout, clearData } =
     useContext(AuthContext);
 
+  useEffect(() => {document.title = "Administrador"}, [])
+
   const [tokenData, setTokenData] = useState("");
   const [expire, setExpire] = useState(false);
   const [switcht, setSwitcht] = useState(false);
@@ -132,7 +134,7 @@ function AdminDashboard() {
             vibrate: [200, 100, 200],
           });
           notif.onclick = () => {
-            window.location.href = "/acceso";
+            window.location.href = "/acceder";
           };
         }
       } else {
@@ -805,7 +807,7 @@ function AdminDashboard() {
 
           {/* Footer */}
           <footer className="sticky-footer bg-base">
-            <div className="container my-auto">
+            <div className="my-3">
               <div className="copyright text-center text-white my-auto">
                 <span>Copyright &copy; Leagues Hub 2025</span>
                 <br />

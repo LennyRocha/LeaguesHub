@@ -1,82 +1,82 @@
-.rowTeams{
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    gap: 2rem;
-    overflow: auto;
-    padding: 1rem;
-    padding-top: 2px !important;
+.rowTeams {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 2rem;
+  overflow: auto;
+  padding: 1rem;
+  padding-top: 2px !important;
 }
 
-.half-round{
-    border-radius: 50%;
+.half-round {
+  border-radius: 50%;
 }
 
 .rowTeams {
-    scrollbar-width: none;  /* Firefox */
-    -ms-overflow-style: none;  /* Internet Explorer y Edge */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer y Edge */
 }
 
 .rowTeams::-webkit-scrollbar {
-    display: none;  /* Chrome, Safari y Edge */
-}
- 
-.rowTeams div{
-    flex: 0 0 auto;
+  display: none; /* Chrome, Safari y Edge */
 }
 
-.partidoFilter{
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    gap: 5px;
-    margin-top: 10px;
+.rowTeams div {
+  flex: 0 0 auto;
 }
 
-.partidoFilter :nth-child(2), 
-.partidoFilter :nth-child(3){
-    background-color: white;
-    color: var(--color-base-3-1);
-    border-radius: .25rem;
+.partidoFilter {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 5px;
+  margin-top: 10px;
 }
 
-.partidoRow{
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    overflow-y: hidden;
-    gap: .5rem;
-    height: 100%;
-    padding-top: 1.5rem !important;
-    padding: 1px;
-    scrollbar-width: none;  /* Firefox */
-    -ms-overflow-style: none;  /* Internet Explorer y Edge */
+.partidoFilter :nth-child(2),
+.partidoFilter :nth-child(3) {
+  background-color: white;
+  color: var(--color-base-3-1);
+  border-radius: 0.25rem;
+}
+
+.partidoRow {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  overflow-y: hidden;
+  gap: 0.5rem;
+  height: 100%;
+  padding-top: 1.5rem !important;
+  padding: 1px;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer y Edge */
 }
 
 .partidoRow::-webkit-scrollbar {
-    display: none;  /* Chrome, Safari y Edge */
-}
-  
-.partidoDataRow{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 1em
+  display: none; /* Chrome, Safari y Edge */
 }
 
-.partidoCard{
-    background-color: white;
-    align-items: center;
-    cursor: pointer;
-    border-radius: 10px;
-    width: 250px;
-    flex: 0 0 auto;
+.partidoDataRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
 }
 
-.partidoCardBody{
-    gap: 1em;
-    padding: .5rem;
+.partidoCard {
+  background-color: white;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 10px;
+  width: 250px;
+  flex: 0 0 auto;
+}
+
+.partidoCardBody {
+  gap: 1em;
+  padding: 0.5rem;
 }
 
 /* .partidoCard:hover{
@@ -84,171 +84,175 @@
     transition: all .25s;
 } */
 
-.partidoCardHeader{
-    padding: .75rem;
-    gap: 3px;
-    display: flex;
-    flex-direction: row;
-    background-color: var(--color-domin-2-3);
-    height: 75px;
-    justify-content: center;
-    align-items: center;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    width: 100%;
+.partidoCardHeader {
+  padding: 0.75rem;
+  gap: 3px;
+  display: flex;
+  flex-direction: row;
+  background-color: var(--color-domin-2-3);
+  height: 75px;
+  justify-content: center;
+  align-items: center;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  width: 100%;
 }
 
-.partidoCardHeader h5{
-    color: white;
-    font-weight: bold;
-    text-align:center;
-    margin-top: .25rem;
+.partidoCardHeader h5 {
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 0.25rem;
 }
 
-.centered{
-    align-self: center !important;
-    align-items: center;
-    width: 100%;
+.centered {
+  align-self: center !important;
+  align-items: center;
+  width: 100%;
 }
 
-.img{
-    width: 100%;
-    height: 400px !important;
-    margin-top: 50px;
+.my-carr {
+  max-height: 200px;
+}
+
+.my-carr img {
+  max-height: 200px;
+  width: 100%;
+  object-fit: contain;
 }
 
 .overlay-dk {
-    position: absolute;
-    bottom: 0;
-    /*background: rgba(51, 51, 51, 0.5); /* Fondo oscuro y transparente */
-    background: linear-gradient(to top, rgba(255, 0, 0, 0.6), rgba(255, 0, 0, 0)); 
-    color: #f1f1f1 !important; /* Color del texto */
-    width: 100%;
-    text-align: center;
-    padding: 10px;
-    height: 150px;
+  position: absolute;
+  bottom: 0;
+  /*background: rgba(51, 51, 51, 0.5); /* Fondo oscuro y transparente */
+  background: linear-gradient(to top, rgba(255, 0, 0, 0.6), rgba(255, 0, 0, 0));
+  color: #f1f1f1 !important; /* Color del texto */
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  height: 150px;
 }
 
-#theBest{
-    background-color: white;
-    border-radius: 20px;
-    margin: 5px;
+#theBest {
+  background-color: white;
+  border-radius: 20px;
+  margin: 5px;
 }
 
-.bestCol{
-    padding-top: 1rem;
+.bestCol {
+  padding-top: 1rem;
 }
 
-.img-back-no{
-    background: transparent;
+.img-back-no {
+  background: transparent;
 }
 
-.myThead th{
-    padding: 1rem;
-    background-color: var(--color-domin-1-1);
-    color: white;
+.myThead th {
+  padding: 1rem;
+  background-color: var(--color-domin-1-1);
+  color: white;
 }
 
-.imgCell{
-    max-width: 36px;
+.imgCell {
+  max-width: 36px;
 }
 
-.over-auto{
-    overflow: auto !important;
-    max-height: 1000px;
+.over-auto {
+  overflow: auto !important;
+  max-height: 1000px;
 }
 
-.jg{
-    color: var(--color-acento-3-1) !important;
+.jg {
+  color: var(--color-acento-3-1) !important;
 }
 
-.je{
-    color: var(--color-acento-2-1) !important;
+.je {
+  color: var(--color-acento-2-1) !important;
 }
 
-.jp{
-    color: var(--color-domin-1-1) !important;
+.jp {
+  color: var(--color-domin-1-1) !important;
 }
 
-.diff{
-    background-color: rgb(0, 77, 115, 0.5) !important;
-    color: white !important;
+.diff {
+  background-color: rgb(0, 77, 115, 0.5) !important;
+  color: white !important;
 }
 
-.pts{
-    background-color: rgb(154, 0, 0, 0.5) !important;
-    color: white !important;
+.pts {
+  background-color: rgb(154, 0, 0, 0.5) !important;
+  color: white !important;
 }
 
-.goles{
-    background-color: rgb(60, 179, 113, 0.5) !important;
-    color: white !important;
+.goles {
+  background-color: rgb(60, 179, 113, 0.5) !important;
+  color: white !important;
 }
 
-.mj{
-    background-color: rgb(255, 195, 0, 0.5) !important;
-    color: white !important;
+.mj {
+  background-color: rgb(255, 195, 0, 0.5) !important;
+  color: white !important;
 }
 
-.jugadorCell{
-    width: 700px !important;
+.jugadorCell {
+  width: 700px !important;
 }
 
-.jugadorTh{
-    text-align: start;
+.jugadorTh {
+  text-align: start;
 }
 
-#clasif table{
-    width: 100%;
-    margin-top: 10px;
+#clasif table {
+  width: 100%;
+  margin-top: 10px;
 }
 
-#goleo{
-    width: 100%;
+#goleo {
+  width: 100%;
 }
 
-td{
-    border-color: var(--color-base-2-1);
+td {
+  border-color: var(--color-base-2-1);
 }
 
 /* Enlace default */
 .loginLink {
-    color: var(--color-acento-2-1);
+  color: var(--color-acento-2-1);
 }
 
 /* Enlace no visitado */
 .loginLink:link {
-    color: var(--color-acento-2-1);
+  color: var(--color-acento-2-1);
 }
-  
+
 /* Enlace visitado */
 .loginLink:visited {
-   color: var(--color-acento-1-5);
+  color: var(--color-acento-1-5);
 }
 
 /* Enlace cuando el cursor pasa sobre él */
 .loginLink:hover {
-    color: var(--color-acento-2-5);
+  color: var(--color-acento-2-5);
 }
-  
+
 /* Enlace cuando está siendo clickeado */
 .loginLink:active {
-    color: var(--color-domin-2-4);
+  color: var(--color-domin-2-4);
 }
 
-.accordion-header button:focus{
-    background-color: var(--color-domin-1-5) !important;
-    border-color: var(--color-acento-1-5) !important;
-    color: var(--color-acento-1-5);
-    transition: all 0.25s ease-in-out !important;
+.accordion-header button:focus {
+  background-color: var(--color-domin-1-5) !important;
+  border-color: var(--color-acento-1-5) !important;
+  color: var(--color-acento-1-5);
+  transition: all 0.25s ease-in-out !important;
 }
 
-.accordion-item .accordion-header .accordion-button:not(.collapsed){
-    background-color: var(--color-domin-1-1) !important;
-    color: white;
+.accordion-item .accordion-header .accordion-button:not(.collapsed) {
+  background-color: var(--color-domin-1-1) !important;
+  color: white;
 }
 
-.accordion-button:focus{
-    border-color: var(--color-acento-1-5);
-    box-shadow: 0 0 0 0.25rem rgba(51, 51, 51, 0.25);;
+.accordion-button:focus {
+  border-color: var(--color-acento-1-5);
+  box-shadow: 0 0 0 0.25rem rgba(51, 51, 51, 0.25);
 }

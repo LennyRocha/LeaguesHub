@@ -36,17 +36,17 @@ footer > * {
   color: white;
 }
 
-.nav-link:active {
+.head .nav-link:active {
   color: var(--color-acento-3-1) !important;
 }
 
-.nav-link:hover {
+.head .nav-link:hover {
   color: var(--color-acento-1-4) !important;
   background-color: var(--color-domin-1-2);
   border-radius: 10%;
 }
 
-.nav-link:focus {
+.head .nav-link:focus {
   color: var(--color-acento-4-1);
   border-color: transparent;
   border-width: 0;

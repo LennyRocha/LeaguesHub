@@ -207,7 +207,7 @@ h1 {
   width: 250px;
 }
 
-button {
+.access-cont button {
   border-radius: 20px;
   border: 1px solid #ff4b2b;
   background: #ff4b2b;

@@ -21,38 +21,47 @@ export default function UsuarioCarrusel() {
   const [torneos, setTorneos] = useState([]);
   const [load, setLoad] = useState(false);
 
+  // 1. Cargar los torneos al inicio
   useEffect(() => {
     const getTorneos = async () => {
       setLoad(true);
-      axios
-        .get(`${api_url}/api/torneos/espera`)
-        .then((res) => {
-          setTorneos(res.data);
-        })
-        .catch((e) => {
-          console.error(e, e.response.message);
-          if (e.response.status === 403) {
-            console.log("⚠️ Token expirado, redirigiendo a login...");
-            Swal.fire({
-              icon: "warning",
-              title: "¡Denegado!",
-              text: "Su sesión ha expirado, ingrese sesión nuevamente para continuar",
-              confirmButtonText: "Aceptar",
-              customClass: {
-                confirmButton: "btn-confirm",
-                cancelButton: "btn-cancel",
-                denyButton: "btn-deny",
-              },
-            }).then((resutlt) => logout());
-            return;
-          }
-        })
-        .finally(() => {
-          setLoad(false);
-        });
+      try {
+        const res = await axios.get(`${api_url}/api/torneos/espera`);
+        setTorneos(res.data);
+      } catch (e) {
+        console.error(e, e.response?.message);
+        if (e.response?.status === 403) {
+          Swal.fire({
+            icon: "warning",
+            title: "¡Denegado!",
+            text: "Su sesión ha expirado, ingrese sesión nuevamente para continuar",
+            confirmButtonText: "Aceptar",
+            customClass: {
+              confirmButton: "btn-confirm",
+              cancelButton: "btn-cancel",
+              denyButton: "btn-deny",
+            },
+          }).then(() => logout());
+        }
+      } finally {
+        setLoad(false);
+      }
     };
+
     getTorneos();
   }, []);
+
+  // 2. Cuando torneos se actualiza, genera las imágenes
+  useEffect(() => {
+    const renderAll = async () => {
+      const dataUrls = await Promise.all(torneos.map(renderTorneoToDataURL));
+      setImagenes(dataUrls);
+    };
+
+    if (torneos.length > 0) {
+      renderAll();
+    }
+  }, [torneos]); // ✅ Se ejecuta cada vez que torneos cambie
 
   const renderTorneoToDataURL = (torneo) => {
     return new Promise((resolve) => {
@@ -101,12 +110,18 @@ export default function UsuarioCarrusel() {
         logo.onload = () => {
           ctx.drawImage(logo, 860, 10, 100, 100);
           const imgUrl = canvas.toDataURL("image/png");
+          resolve(imgUrl); // ✅ agrega esto
         };
 
-        logo.onerror = (e) => {
+        logo.onerror = () => {
           console.error("No se pudo cargar la imagen del torneo");
-          logo.src = Logo2;
-          const imgUrl = canvas.toDataURL("image/png");
+          const fallbackLogo = new Image();
+          fallbackLogo.src = Logo2;
+          fallbackLogo.onload = () => {
+            ctx.drawImage(fallbackLogo, 860, 10, 100, 100);
+            const imgUrl = canvas.toDataURL("image/png");
+            resolve(imgUrl); // ✅ agrega esto
+          };
         };
       };
 
@@ -122,21 +137,10 @@ export default function UsuarioCarrusel() {
   const { getUserId, getUserRole, getToken, logout, api_url, getUrl } =
     useContext(AuthContext);
 
-  useEffect(() => {
-    const renderAll = async () => {
-      const dataUrls = await Promise.all(torneos.map(renderTorneoToDataURL));
-      setImagenes(dataUrls);
-    };
-
-    if (torneos.length > 0) {
-      renderAll();
-    }
-  }, [torneos]);
-
   return (
     <>
       <div id="torneos" className="carousel slide" data-bs-ride="carousel">
-        <div className="carousel-indicators">
+        <div className="carousel-indicators ">
           {imagenes.map((_, index) => (
             <button
               key={index}
@@ -150,23 +154,26 @@ export default function UsuarioCarrusel() {
           ))}
         </div>
 
-        <div className="carousel-inner">
-          {imagenes.map((src, index) => (
-            <div
-              key={index}
-              className={`carousel-item ${index === 0 ? "active" : ""}`}
-              data-bs-interval="3000"
-            >
-              <img
-                src={src}
-                className="d-block w-100 img"
-                alt={`Torneo ${index + 1}`}
-              />
-              <div className="overlay-dk">
-                <h1>Torneo {index + 1}</h1>
+        <div className="carousel-inner my-carr">
+          {imagenes.map((src, index) => {
+            console.error(src);
+            return (
+              <div
+                key={index}
+                className={`carousel-item ${index === 0 ? "active" : ""}`}
+                data-bs-interval="3000"
+              >
+                <img
+                  src={src}
+                  className="d-block w-100 img"
+                  alt={`Torneo ${index + 1}`}
+                />
+                <div className="overlay-dk">
+                  <h1>Torneo {index + 1}</h1>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <button

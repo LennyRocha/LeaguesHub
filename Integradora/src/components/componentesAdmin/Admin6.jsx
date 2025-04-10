@@ -355,6 +355,7 @@ export default function Admin6() {
                     value={selectedValue}
                     exclusive
                     onChange={handleAlignment}
+                    style={{all: 'unset'}}
                   >
                     <ToggleButton value="todos">
                       <GridView />
@@ -386,7 +387,7 @@ export default function Admin6() {
                         className="text-black mb-2"
                       >
                         <option value="">Todos</option>
-                        <option value="Inscripcion">Inscripción</option>
+                        <option value="Inscripción">Inscripción</option>
                         <option value="Arbitraje">Arbitraje</option>
                         <option value="Cancha">Cancha</option>
                       </select>
@@ -451,7 +452,7 @@ export default function Admin6() {
                 </div>
                 <TableContainer component={Paper} className="my-1">
                   <Table>
-                    <TableHead className="myThead">
+                    <TableHead className="myThead2">
                       <TableRow>
                         <TableCell className="cell">Descripción</TableCell>
                         <TableCell className="cell">Tipo de pago</TableCell>
